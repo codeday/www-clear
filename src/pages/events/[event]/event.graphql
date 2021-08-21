@@ -1,0 +1,13 @@
+query getEvent($data: EventWhereUniqueInput!) {
+    event(where: $data) {
+        id
+        name
+        startDate
+        endDate
+        managers
+        registrationCutoff
+        eventGroup {
+            name
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "www-clear",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@codeday/topo": "^4.1.0",
+    "@codeday/topocons": "^1.5.0",
+    "@wojtekmaj/react-daterange-picker": "^3.3.0",
+    "babel-plugin-import-graphql": "^2.8.1",
+    "graphql": "^15.5.1",
+    "graphql-request": "^3.5.0",
+    "lodash.get": "^4.4.2",
+    "moment": "^2.29.1",
+    "next": "11.1.0",
+    "next-auth": "^3.28.0",
+    "next-seo": "^4.26.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-date-picker": "^8.3.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.0"
+  }
+}

@@ -1,0 +1,17 @@
+mutation EventAddMutation ($data: EventCreateInput!) {
+    createEvent(data: $data) {
+    id
+}
+
+}
+query getEvents {
+    events{
+        id
+        name
+        startDate
+        endDate
+        eventGroup {
+            name
+        }
+    }
+}
