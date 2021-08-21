@@ -8,8 +8,7 @@ query getEvents {
     events{
         id
         name
-        startDate
-        endDate
+        displayDate
         eventGroup {
             name
         }

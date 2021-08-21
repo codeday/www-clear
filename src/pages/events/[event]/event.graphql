@@ -4,6 +4,7 @@ query getEvent($data: EventWhereUniqueInput!) {
         name
         startDate
         endDate
+        displayDate
         managers
         registrationCutoff
         eventGroup {
