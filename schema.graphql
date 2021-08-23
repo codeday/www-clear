@@ -2368,6 +2368,7 @@ input PersonWhereInput {
 }
 
 input PersonWhereUniqueInput {
+    email: String
     id: String
 }
 
