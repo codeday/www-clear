@@ -1,36 +1,38 @@
 import React from 'react';
-import Page from "../../../../components/Page";
-import Ticket from "../../../../components/Ticket"
-import {useLocalhostFetcher} from "../../../../fetch";
-import {print} from "graphql";
-import { getEventWithTickets } from "./tickets.graphql";
+import {print} from 'graphql';
 import {Heading} from '@codeday/topo/Atom/Text';
-import Button from '@codeday/topo/Atom/Button';
-import Content from '@codeday/topo/Molecule/Content';
-import {UiAdd} from '@codeday/topocons/Icon'
-import {Flex} from '@codeday/topo/Atom/Box'
+import {Flex} from '@codeday/topo/Atom/Box';
+import {getSession} from 'next-auth/client';
+import {getEventWithTickets} from './index.gql';
+import Breadcrumbs from '../../../../components/Breadcrumbs';
+import Ticket from '../../../../components/Ticket';
+import Page from '../../../../components/Page';
+import {useFetcher} from '../../../../fetch';
+import {CreateTicketModal} from '../../../../components/forms/Ticket';
 
 export default function Tickets({event}) {
-
+    if (!event) return <Page/>;
     return (
         <Page title={event.name}>
-            <Content>
-                <Heading>{event.name} Tickets</Heading>
-                <Button as="a" href="tickets/create"><UiAdd />New ticket</Button>
-                <Flex m={4} wrap="wrap">
-                    {event.tickets.map((ticket) => (
-                        <Ticket ticket={ticket} />) )}
-                </Flex>
-            </Content>
-        </Page>)
+            <Breadcrumbs event={event}/>
+            <Heading>{event.name} Tickets</Heading>
+            <CreateTicketModal event={event}/>
+            <Flex m={4} wrap="wrap">
+                {event.tickets.map((ticket) => (
+                    <Ticket ticket={ticket}/>))}
+            </Flex>
+        </Page>
+    );
 }
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
-    const fetch = useLocalhostFetcher();
-    const eventResult = await fetch(print(getEventWithTickets), {data: {id: eventId}})
+    const session = await getSession({req});
+    const fetch = useFetcher(session);
+    if (!session) return {props: {}};
+    const eventResult = await fetch(print(getEventWithTickets), {data: {id: eventId}});
     return {
         props: {
-            event: eventResult.event
-        }
-    }
+            event: eventResult.clear.event,
+        },
+    };
 }

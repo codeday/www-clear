@@ -1,0 +1,16 @@
+#import "./forms/Notes.gql"
+#import "./forms/Sponsor.gql"
+
+fragment SponsorBoxFragment on ClearSponsor {
+    id
+    name
+    amount
+    description
+    perks
+    logoImageUri
+    contactName
+    contactEmail
+    contactPhone
+    ...SponsorNotesFragment
+    ...SponsorFormFragment
+}

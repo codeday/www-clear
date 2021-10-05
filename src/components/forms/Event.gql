@@ -1,0 +1,42 @@
+fragment EventFormFragment on ClearEvent {
+    name
+    startDate
+    endDate
+    ticketPrice
+    earlyBirdPrice
+    earlyBirdCutoff
+    registrationCutoff
+    managers
+}
+
+fragment CreateEventGroupPrefillFragment on ClearEventGroup {
+    startDate
+    endDate
+    ticketPrice
+    earlyBirdPrice
+    earlyBirdCutoff
+    registrationCutoff
+}
+mutation CreateEventMutation($data: ClearEventCreateInput!) {
+    clear {
+        createEvent(data: $data) {
+            id
+        }
+    }
+}
+
+mutation UpdateEventMutation($where: ClearEventWhereUniqueInput!, $data: ClearEventUpdateInput!) {
+    clear {
+        updateEvent(where: $where, data: $data) {
+            id
+        }
+    }
+}
+
+mutation DeleteEventMutation($where: ClearEventWhereUniqueInput!) {
+    clear {
+        deleteEvent(where: $where) {
+            id
+        }
+    }
+}

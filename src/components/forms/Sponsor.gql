@@ -1,0 +1,33 @@
+fragment SponsorFormFragment on ClearSponsor {
+    name
+    description
+    amount
+    perks
+    contactName
+    contactPhone
+    contactEmail
+}
+
+mutation CreateSponsorMutation($data: ClearSponsorCreateInput!) {
+    clear {
+        createSponsor(data: $data) {
+            id
+        }
+    }
+}
+
+mutation UpdateSponsorMutation($where: ClearSponsorWhereUniqueInput!, $data: ClearSponsorUpdateInput!) {
+    clear {
+        updateSponsor(where: $where, data: $data) {
+            id
+        }
+    }
+}
+
+mutation DeleteSponsorMutation($where: ClearSponsorWhereUniqueInput!) {
+    clear {
+        deleteSponsor(where: $where) {
+            id
+        }
+    }
+}

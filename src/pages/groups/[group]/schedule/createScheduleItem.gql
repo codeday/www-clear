@@ -1,0 +1,15 @@
+query getEventGroup($data: ClearEventGroupWhereUniqueInput!) {
+    clear {
+        eventGroup(where: $data) {
+            id
+            name
+        }
+    }
+}
+mutation createScheduleItem($data: ClearScheduleItemCreateInput!) {
+    clear {
+        createScheduleItem(data: $data) {
+            id
+        }
+    }
+}

@@ -1,0 +1,10 @@
+#import "../../../../components/Calendar.gql"
+query getEventWithSchedule($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            id
+            name
+            ...EventCalendarFragment
+        }
+    }
+}

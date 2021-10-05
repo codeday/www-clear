@@ -1,0 +1,17 @@
+#import "../../../components/Event.gql"
+#import "../../../components/forms/Event.gql"
+#import "../../../components/forms/EventGroup.gql"
+
+query getEventGroup($data: ClearEventGroupWhereUniqueInput!) {
+    clear {
+        eventGroup(where: $data) {
+            id
+            name
+            events {
+                ...EventFragment
+            }
+            ...CreateEventGroupPrefillFragment
+            ...EventGroupFormFragment
+        }
+    }
+}

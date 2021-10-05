@@ -1,0 +1,9 @@
+query GetAccountRolesQuery ($username: String!) {
+    account {
+        getUser(where: {username: $username}) {
+            roles {
+                id
+            }
+        }
+    }
+}

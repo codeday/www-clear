@@ -1,0 +1,7 @@
+fragment ScheduleBoxFragment on ClearEvent {
+    schedule {
+        id
+        finalized
+        internal
+    }
+}

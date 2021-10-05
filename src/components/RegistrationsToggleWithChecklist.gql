@@ -1,0 +1,26 @@
+fragment RegistrationsToggleWithChecklistFragment on ClearEvent {
+    id
+    venue {
+        capacity
+        contactName
+        contactEmail
+        contactPhone
+        address
+        mapLink
+    }
+    schedule {
+        finalized
+    }
+    sponsors {
+        id
+    }
+    registrationsOpen
+}
+
+mutation RegistrationsToggleMutation($eventWhere: ClearEventWhereUniqueInput!, $data: Boolean!) {
+    clear {
+        updateEvent(where: $eventWhere, data: {registrationsOpen: {set: $data}}) {
+            id
+        }
+    }
+}

@@ -1,0 +1,10 @@
+fragment EventGroup on ClearEventGroup {
+    id
+    name
+    displayDate
+    startDate
+    endDate
+    events {
+        id
+    }
+}

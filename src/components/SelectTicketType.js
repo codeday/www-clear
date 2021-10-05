@@ -7,17 +7,19 @@ const options = {
     STAFF: 'Staff',
     JUDGE: 'Judge',
     MENTOR: 'Mentor',
-    VIP: 'VIP'
-}
+    VIP: 'VIP',
+};
 
-export default function SelectTicketType({value, placeholder, onChange, ...props}) {
+export default function SelectTicketType({
+                                             value, placeholder, onChange, ...props
+                                         }) {
     return (
         <Box d="inline-block" {...props}>
-        <Select d="inline-block" onChange={onChange} placeholder={placeholder}>
-            {Object.keys(options).map((k) => (
-                <option selected={value === k} value={k}>{options[k]}</option>
-            ))}
-        </Select>
+            <Select d="inline-block" onChange={onChange} placeholder={placeholder}>
+                {Object.keys(options).map((k) => (
+                    <option selected={value === k} value={k}>{options[k]}</option>
+                ))}
+            </Select>
         </Box>
-    )
+    );
 }

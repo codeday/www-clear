@@ -1,0 +1,9 @@
+#import "../../components/EventGroup.gql"
+
+query getEventGroups {
+    clear {
+        eventGroups {
+            ...EventGroup
+        }
+    }
+}

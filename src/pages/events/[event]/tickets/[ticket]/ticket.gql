@@ -1,0 +1,16 @@
+#import "../../../../../components/Ticket.gql"
+#import "../../../../../components/forms/Ticket.gql"
+
+query getTicket($data: ClearTicketWhereUniqueInput!) {
+    clear {
+        ticket(where: $data) {
+            event {
+                id
+                name
+                displayDate
+            }
+            ...Ticket
+            ...TicketFormFragment
+        }
+    }
+}

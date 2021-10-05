@@ -1,0 +1,22 @@
+mutation createEventMutation($data: ClearEventCreateInput!) {
+    clear {
+        createEvent(data: $data) {
+            id
+        }
+    }
+}
+
+query getEventGroup($data: ClearEventGroupWhereUniqueInput!) {
+    clear {
+        eventGroup(where: $data) {
+            id
+            name
+            startDate
+            endDate
+            ticketPrice
+            earlyBirdPrice
+            earlyBirdCutoff
+            registrationCutoff
+        }
+    }
+}

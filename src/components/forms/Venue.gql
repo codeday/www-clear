@@ -1,0 +1,32 @@
+fragment VenueFormFragment on ClearVenue {
+    name
+    capacity
+    address
+    mapLink
+    contactName
+    contactEmail
+    contactPhone
+}
+mutation CreateVenueMutation($data: ClearVenueCreateInput!) {
+    clear {
+        createVenue(data: $data) {
+            id
+        }
+    }
+}
+
+mutation UpdateVenueMutation($where: ClearVenueWhereUniqueInput!, $data: ClearVenueUpdateInput!) {
+    clear {
+        updateVenue(where: $where, data: $data) {
+            id
+        }
+    }
+}
+
+mutation DeleteVenueMutation($where: ClearVenueWhereUniqueInput!) {
+    clear {
+        deleteVenue(where: $where) {
+            id
+        }
+    }
+}

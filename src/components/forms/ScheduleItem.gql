@@ -1,0 +1,43 @@
+#import "./Person.gql"
+fragment ScheduleItemFormFragment on ClearScheduleItem {
+    id
+    name
+    type
+    description
+    link
+    start
+    end
+    hostEmail
+    hostName
+    hostPronoun
+    organizerEmail
+    organizerName
+    organizerPhone
+    finalized
+    internal
+}
+
+
+mutation CreateScheduleItemMutation($data: ClearScheduleItemCreateInput!) {
+    clear {
+        createScheduleItem(data: $data) {
+            id
+        }
+    }
+}
+
+mutation UpdateScheduleItemMutation($where: ClearScheduleItemWhereUniqueInput!, $data: ClearScheduleItemUpdateInput!) {
+    clear {
+        updateScheduleItem(where: $where, data: $data) {
+            id
+        }
+    }
+}
+
+mutation DeleteScheduleItemMutation($where: ClearScheduleItemWhereUniqueInput!) {
+    clear {
+        deleteScheduleItem(where: $where) {
+            id
+        }
+    }
+}

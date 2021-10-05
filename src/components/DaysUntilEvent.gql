@@ -1,0 +1,3 @@
+fragment DaysUntilEventFragment on ClearEvent {
+    startDate
+}

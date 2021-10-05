@@ -1,0 +1,9 @@
+fragment Ticket on ClearTicket {
+    id
+    firstName
+    lastName
+    age
+    email
+    type
+    needsGuardian
+}

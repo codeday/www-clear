@@ -1,0 +1,47 @@
+fragment VenueNotesFragment on ClearVenue {
+    notes: getMetadata(key: "notes")
+}
+
+fragment EventNotesFragment on ClearEvent {
+    notes: getMetadata(key: "notes")
+}
+
+fragment SponsorNotesFragment on ClearSponsor {
+    notes: getMetadata(key: "notes")
+}
+
+fragment ScheduleItemNotesFragment on ClearScheduleItem {
+    notes: getMetadata(key: "notes")
+}
+
+mutation SetVenueNotesMutation($id: String!, $notes: String!) {
+    clear {
+        setNotes: setVenueMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...VenueNotesFragment
+        }
+    }
+}
+
+mutation SetEventNotesMutation($id: String! $notes: String!) {
+    clear {
+        setNotes: setEventMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...EventNotesFragment
+        }
+    }
+}
+
+mutation SetSponsorNotesMutation($id: String! $notes: String!) {
+    clear {
+        setNotes: setSponsorMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...SponsorNotesFragment
+        }
+    }
+}
+
+mutation SetScheduleItemNotesMutation($id: String! $notes: String!) {
+    clear {
+        setNotes: setScheduleItemMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...ScheduleItemNotesFragment
+        }
+    }
+}

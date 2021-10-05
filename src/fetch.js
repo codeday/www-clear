@@ -1,12 +1,18 @@
 import {GraphQLClient} from "graphql-request";
-import {apiFetch} from '@codeday/topo/utils'
-import {validate} from "graphql";
+// import {apiFetch} from '@codeday/topo/utils' // TODO: UNCOMMENT ONCE clear-gql deployed
 
-export function useLocalhostFetcher(variables) { // TODO: Replace with ApiFetch once clear-gql deployed
-    const client = new GraphQLClient('http://localhost:5000/graphql')
-    return (q, v, h) => client.request(q, {...v, ...variables})
-}
+// TODO: remove once clear-gql deployed
 
-export function useFetcher(variables) {
-    return (q, v, h) => apiFetch(q, {...v, ...variables})
+export const apiFetch = function apiFetch(query, variables, headers) {
+    const client = new GraphQLClient('http://localhost:4000', {
+        headers: headers
+    });
+    return client.request(query, variables);
+};
+
+export function useFetcher(session, variables) {
+    return (q, v, h) => apiFetch(q, {...v, ...variables}, {
+        ...h,
+        'X-Clear-Authorization': `Bearer ${session?.clearAuthToken}`
+    })
 }

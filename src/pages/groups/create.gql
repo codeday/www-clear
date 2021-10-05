@@ -1,0 +1,7 @@
+mutation createEventGroup($data: ClearEventGroupCreateInput!) {
+    clear {
+        createEventGroup(data: $data) {
+            id
+        }
+    }
+}

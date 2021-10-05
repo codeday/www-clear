@@ -1,0 +1,29 @@
+#import "../../../components/VenueInfo.gql"
+#import "../../../components/RegistrationsToggleWithChecklist.gql"
+#import "../../../components/SponsorOverview.gql"
+#import "../../../components/RegistrationGraph.gql"
+#import "../../../components/ScheduleBox.gql"
+#import "../../../components/forms/Notes.gql"
+#import "../../../components/forms/Event.gql"
+
+query getEventQuery($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            id
+            name
+            displayDate
+            eventGroup {
+                name
+            }
+            venue {
+                ...VenueInfoFragment
+            }
+            ...RegistrationsToggleWithChecklistFragment
+            ...SponsorOverviewFragment
+            ...RegistrationGraphFragment
+            ...ScheduleBoxFragment
+            ...EventNotesFragment
+            ...EventFormFragment
+        }
+    }
+}

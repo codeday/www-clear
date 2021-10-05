@@ -1,0 +1,6 @@
+fragment RegistrationGraphFragment on ClearEvent {
+    createdAt
+    tickets(orderBy: {createdAt: asc}) {
+        createdAt
+    }
+}

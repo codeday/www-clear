@@ -1,0 +1,8 @@
+fragment EventFragment on ClearEvent {
+    id
+    name
+    eventGroup {
+        name
+    }
+    displayDate
+}

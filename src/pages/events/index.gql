@@ -1,0 +1,9 @@
+#import "../../components/Event.gql"
+
+query getEvents {
+    clear {
+        events {
+            ...EventFragment
+        }
+    }
+}
