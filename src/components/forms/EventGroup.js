@@ -76,9 +76,9 @@ export function CreateEventGroupModal({children, ...props}) {
 
     return (
         <Box {...props}>
-            <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add EventGroup</>}</Button>
+            <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add Event Group</>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
-                <Heading>Create EventGroup</Heading>
+                <Heading>Create Event Group</Heading>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -99,7 +99,7 @@ export function CreateEventGroupModal({children, ...props}) {
                                     to a parent object? do so here */
                                 });
                                 await router.replace(router.asPath)
-                                success('EventGroup Created')
+                                success('Event Group Created')
                                 onCloseModal()
                             } catch (ex) {
                                 error(ex.toString())
@@ -156,7 +156,7 @@ export function UpdateEventGroupModal({eventgroup, children, ...props}) {
                                     data: formDataToUpdateInput(formData)
                                 })
                                 await router.replace(router.asPath)
-                                success('EventGroup Updated')
+                                success('Event Group Updated')
                                 onCloseModal()
                             } catch (ex) {
                                 error(ex.toString())
@@ -183,8 +183,8 @@ export function DeleteEventGroupModal({eventgroup, children, ...props}) {
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
-                <Heading>Remove EventGroup</Heading>
-                <Text>Are you sure you want to delete this EventGroup?
+                <Heading>Remove Event Group</Heading>
+                <Text>Are you sure you want to delete this Event Group?
                     <br/>
                     There's no turning back!</Text>
                 <Button
@@ -196,14 +196,14 @@ export function DeleteEventGroupModal({eventgroup, children, ...props}) {
                         try {
                             await fetch(print(DeleteEventGroupMutation), {where: {id: eventgroup.id}})
                             await router.replace(router.asPath)
-                            success('EventGroup Deleted')
+                            success('Event Group Deleted')
                             onCloseModal()
                         } catch (ex) {
                             error(ex.toString())
                         }
                         setLoading(false);
                     }}
-                ><Icon.UiTrash/><b>Delete EventGroup</b></Button>
+                ><Icon.UiTrash/><b>Delete Event Group</b></Button>
                 <Button onClick={onCloseModal}><Icon.UiX/>Cancel</Button>
             </Modal>
         </Box>
