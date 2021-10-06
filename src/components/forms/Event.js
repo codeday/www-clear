@@ -54,6 +54,10 @@ const schema = {
             type: 'string',
             format: 'date',
         },
+        contentfulWebname: {
+          title: 'Contentful region ID',
+          type: 'string'
+        },
         managers: {
             title: 'Regional Managers (CodeDay Account usernames)',
             type: 'array',
@@ -113,7 +117,7 @@ export function CreateEventModal({group, children, ...props}) {
                                     data: {
                                         ...formData,
                                         managers: {
-                                            set: formData.managers
+                                            set: formData.managers || []
                                         },
                                         eventGroup: {
                                             connect: {id: group.id},

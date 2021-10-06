@@ -17,7 +17,7 @@ import Notes from '../../../components/forms/Notes';
 import RegistrationsToggleWithChecklist from '../../../components/RegistrationsToggleWithChecklist';
 import SponsorOverview from '../../../components/SponsorOverview';
 import RegistrationGraph from '../../../components/RegistrationGraph';
-import {UpdateEventModal} from '../../../components/forms/Event';
+import {DeleteEventModal, UpdateEventModal} from '../../../components/forms/Event';
 import {SetEventNotesMutation} from '../../../components/forms/Notes.gql';
 import DaysUntilEvent from '../../../components/DaysUntilEvent';
 import {CreateSponsorModal} from '../../../components/forms/Sponsor';
@@ -29,7 +29,7 @@ export default function Event({event}) {
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event}/>
-            <Heading>{event.name} ({event.displayDate})<UpdateEventModal event={event}/></Heading>
+            <Heading>{event.name} ({event.displayDate})<UpdateEventModal event={event}/><DeleteEventModal event={event} /></Heading>
             <Text>{event.eventGroup.name}</Text>
             <DaysUntilEvent event={event}/>
             <ResponsiveMasonry>

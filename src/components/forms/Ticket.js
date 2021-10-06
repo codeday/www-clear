@@ -37,6 +37,7 @@ const schema = {
             title: 'Age',
         },
     },
+    required: ['firstName', 'lastName']
 };
 
 const uiSchema = {};
