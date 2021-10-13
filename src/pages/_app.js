@@ -7,6 +7,7 @@ import 'antd/dist/antd.css';
 
 export default function CustomApp({Component, pageProps: {query, ...pageProps}}) {
     moment.tz.setDefault('Etc/UTC');
+
     return (
         <Theme>
             <QueryProvider value={query || {}}>

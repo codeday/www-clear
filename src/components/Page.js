@@ -10,6 +10,7 @@ import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/client';
 import Content from '@codeday/topo/Molecule/Content';
 import Spinner from '@codeday/topo/Atom/Spinner';
+import {useColorMode} from "@codeday/topo/Theme";
 
 const {publicRuntimeConfig} = getConfig();
 
@@ -17,6 +18,10 @@ export default function Page({
                                  children, title, slug, ...props
                              }) {
     const [session, loading] = useSession();
+    // dumb hack because dark mode doesn't work with antd css
+    const {setColorMode} = useColorMode()
+    if(setColorMode) setColorMode("light")
+
     if (!session) {
         return (
             <Box position="relative">
