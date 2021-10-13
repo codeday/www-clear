@@ -52,14 +52,6 @@ export default function Event({event}) {
                     <Notes notes={event.notes} updateId={event.id} updateMutation={SetEventNotesMutation}/>
                 </Masonry>
             </ResponsiveMasonry>
-            <Box>
-                <ul>
-                    <li/>
-                    <li>
-                        <Link href={`${event.id}/schedule`}>View Schedule</Link>
-                    </li>
-                </ul>
-            </Box>
         </Page>
     );
 }
