@@ -7,6 +7,8 @@ import Page from '../../components/Page';
 import {useFetcher} from '../../fetch';
 import Event from '../../components/Event';
 import {getEvents} from './index.gql';
+import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
+
 
 export default function Events({events}) {
     if (!events) return <Page/>;
@@ -15,11 +17,13 @@ export default function Events({events}) {
             <Heading>
                 My Events
             </Heading>
-            <Box display="flex">
-                {events.map((event) => (
-                    <Event m={4} event={event}/>
-                ))}
-            </Box>
+            <ResponsiveMasonry>
+                <Masonry>
+                    {events.map((event) => (
+                        <Event m={4} event={event}/>
+                    ))}
+                </Masonry>
+            </ResponsiveMasonry>
         </Page>
     );
 }
@@ -29,6 +33,7 @@ export async function getServerSideProps({req, res, query}) {
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(print(getEvents));
+    console.log(eventResults)
     return {
         props: {
             events: eventResults.clear.events,

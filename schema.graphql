@@ -277,6 +277,8 @@ type AdvisorsPendingRequests {
 type AdvisorsQuery {
     pendingRequests: [AdvisorsPendingRequests!]!
     remainingRequests: [AdvisorsRemainingRequestsType!]!
+    servedRequests(where: AdvisorsRequestCountWhereInput): [AdvisorsRequestCount!]!
+    submittedRequests(where: AdvisorsRequestCountWhereInput): [AdvisorsRequestCount!]!
 }
 
 type AdvisorsRemainingRequestsByAdvisorType {
@@ -288,6 +290,15 @@ type AdvisorsRemainingRequestsType {
     advisorTypes: [AdvisorsRemainingRequestsByAdvisorType!]!
     requestType: AdvisorsRequestType!
     totalRemainingRequests: Float!
+}
+
+type AdvisorsRequestCount {
+    email: String!
+    familyName: String!
+    givenName: String!
+    practiceInterviews: Float!
+    resumeReviews: Float!
+    username: String
 }
 
 "Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from."
@@ -2985,7 +2996,7 @@ type ClearQuery {
     event(where: ClearEventWhereUniqueInput!): ClearEvent
     eventGroup(where: ClearEventGroupWhereUniqueInput!): ClearEventGroup
     eventGroups(cursor: ClearEventGroupWhereUniqueInput, distinct: [ClearEventGroupScalarFieldEnum!], orderBy: [ClearEventGroupOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventGroupWhereInput): [ClearEventGroup!]!
-    events(cursor: ClearEventWhereUniqueInput, distinct: [ClearEventScalarFieldEnum!], orderBy: [ClearEventOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventWhereInput): [ClearEvent!]!
+    events(editable: Boolean): [ClearEvent!]!
     findFirstEvent(cursor: ClearEventWhereUniqueInput, distinct: [ClearEventScalarFieldEnum!], orderBy: [ClearEventOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventWhereInput): ClearEvent
     findFirstEventGroup(cursor: ClearEventGroupWhereUniqueInput, distinct: [ClearEventGroupScalarFieldEnum!], orderBy: [ClearEventGroupOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventGroupWhereInput): ClearEventGroup
     findFirstPayment(cursor: ClearPaymentWhereUniqueInput, distinct: [ClearPaymentScalarFieldEnum!], orderBy: [ClearPaymentOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPaymentWhereInput): ClearPayment
@@ -3002,7 +3013,6 @@ type ClearQuery {
     groupBySponsor(by: [ClearSponsorScalarFieldEnum!]!, having: ClearSponsorScalarWhereWithAggregatesInput, orderBy: [ClearSponsorOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearSponsorWhereInput): [ClearSponsorGroupBy!]!
     groupByTicket(by: [ClearTicketScalarFieldEnum!]!, having: ClearTicketScalarWhereWithAggregatesInput, orderBy: [ClearTicketOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearTicketWhereInput): [ClearTicketGroupBy!]!
     groupByVenue(by: [ClearVenueScalarFieldEnum!]!, having: ClearVenueScalarWhereWithAggregatesInput, orderBy: [ClearVenueOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearVenueWhereInput): [ClearVenueGroupBy!]!
-    myEvents: [ClearEvent!]!
     payment(where: ClearPaymentWhereUniqueInput!): ClearPayment
     payments(cursor: ClearPaymentWhereUniqueInput, distinct: [ClearPaymentScalarFieldEnum!], orderBy: [ClearPaymentOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPaymentWhereInput): [ClearPayment!]!
     people(cursor: ClearPersonWhereUniqueInput, distinct: [ClearPersonScalarFieldEnum!], orderBy: [ClearPersonOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPersonWhereInput): [ClearPerson!]!
@@ -3035,12 +3045,12 @@ type ClearScheduleItem {
     id: String!
     internal: Boolean!
     link: String
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
-    type: String
+    start: ClearDateTime!
+    type: String!
     updatedAt: ClearDateTime!
 }
 
@@ -3085,12 +3095,12 @@ type ClearScheduleItemGroupBy {
     internal: Boolean!
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
-    type: String
+    start: ClearDateTime!
+    type: String!
     updatedAt: ClearDateTime!
 }
 
@@ -3349,7 +3359,7 @@ type ClearVenue {
     getMetadata(key: String!): String
     id: String!
     mapLink: String
-    name: String
+    name: String!
     updatedAt: ClearDateTime!
 }
 
@@ -3391,7 +3401,7 @@ type ClearVenueGroupBy {
     id: String!
     mapLink: String
     metadata: ClearJSON
-    name: String
+    name: String!
     updatedAt: ClearDateTime!
 }
 
@@ -6484,6 +6494,12 @@ input AdvisorsAdvisorWhereInput {
     email: String
     id: String
     username: String
+}
+
+input AdvisorsRequestCountWhereInput {
+    domain: String
+    emails: [String!]
+    usernames: [String!]
 }
 
 "Arguments for filtering the CategoryToCategoryConnection connection"
@@ -10722,11 +10738,11 @@ input ClearScheduleItemCreateInput {
     internal: Boolean
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
+    start: ClearDateTime!
     type: String
     updatedAt: ClearDateTime
 }
@@ -10744,11 +10760,11 @@ input ClearScheduleItemCreateManyEventGroupInput {
     internal: Boolean
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
+    start: ClearDateTime!
     type: String
     updatedAt: ClearDateTime
 }
@@ -10771,11 +10787,11 @@ input ClearScheduleItemCreateManyEventInput {
     internal: Boolean
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
+    start: ClearDateTime!
     type: String
     updatedAt: ClearDateTime
 }
@@ -10799,11 +10815,11 @@ input ClearScheduleItemCreateManyInput {
     internal: Boolean
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
+    start: ClearDateTime!
     type: String
     updatedAt: ClearDateTime
 }
@@ -10845,11 +10861,11 @@ input ClearScheduleItemCreateWithoutEventGroupInput {
     internal: Boolean
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
+    start: ClearDateTime!
     type: String
     updatedAt: ClearDateTime
 }
@@ -10867,11 +10883,11 @@ input ClearScheduleItemCreateWithoutEventInput {
     internal: Boolean
     link: String
     metadata: ClearJSON
-    name: String
+    name: String!
     organizerEmail: String
     organizerName: String
     organizerPhone: String
-    start: ClearDateTime
+    start: ClearDateTime!
     type: String
     updatedAt: ClearDateTime
 }
@@ -10998,12 +11014,12 @@ input ClearScheduleItemScalarWhereInput {
     internal: ClearBoolFilter
     link: ClearStringNullableFilter
     metadata: ClearJsonNullableFilter
-    name: ClearStringNullableFilter
+    name: ClearStringFilter
     organizerEmail: ClearStringNullableFilter
     organizerName: ClearStringNullableFilter
     organizerPhone: ClearStringNullableFilter
-    start: ClearDateTimeNullableFilter
-    type: ClearStringNullableFilter
+    start: ClearDateTimeFilter
+    type: ClearStringFilter
     updatedAt: ClearDateTimeFilter
 }
 
@@ -11024,12 +11040,12 @@ input ClearScheduleItemScalarWhereWithAggregatesInput {
     internal: ClearBoolWithAggregatesFilter
     link: ClearStringNullableWithAggregatesFilter
     metadata: ClearJsonNullableWithAggregatesFilter
-    name: ClearStringNullableWithAggregatesFilter
+    name: ClearStringWithAggregatesFilter
     organizerEmail: ClearStringNullableWithAggregatesFilter
     organizerName: ClearStringNullableWithAggregatesFilter
     organizerPhone: ClearStringNullableWithAggregatesFilter
-    start: ClearDateTimeNullableWithAggregatesFilter
-    type: ClearStringNullableWithAggregatesFilter
+    start: ClearDateTimeWithAggregatesFilter
+    type: ClearStringWithAggregatesFilter
     updatedAt: ClearDateTimeWithAggregatesFilter
 }
 
@@ -11047,12 +11063,12 @@ input ClearScheduleItemUpdateInput {
     internal: ClearBoolFieldUpdateOperationsInput
     link: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     organizerEmail: ClearNullableStringFieldUpdateOperationsInput
     organizerName: ClearNullableStringFieldUpdateOperationsInput
     organizerPhone: ClearNullableStringFieldUpdateOperationsInput
-    start: ClearNullableDateTimeFieldUpdateOperationsInput
-    type: ClearNullableStringFieldUpdateOperationsInput
+    start: ClearDateTimeFieldUpdateOperationsInput
+    type: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -11068,12 +11084,12 @@ input ClearScheduleItemUpdateManyMutationInput {
     internal: ClearBoolFieldUpdateOperationsInput
     link: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     organizerEmail: ClearNullableStringFieldUpdateOperationsInput
     organizerName: ClearNullableStringFieldUpdateOperationsInput
     organizerPhone: ClearNullableStringFieldUpdateOperationsInput
-    start: ClearNullableDateTimeFieldUpdateOperationsInput
-    type: ClearNullableStringFieldUpdateOperationsInput
+    start: ClearDateTimeFieldUpdateOperationsInput
+    type: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -11138,12 +11154,12 @@ input ClearScheduleItemUpdateWithoutEventGroupInput {
     internal: ClearBoolFieldUpdateOperationsInput
     link: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     organizerEmail: ClearNullableStringFieldUpdateOperationsInput
     organizerName: ClearNullableStringFieldUpdateOperationsInput
     organizerPhone: ClearNullableStringFieldUpdateOperationsInput
-    start: ClearNullableDateTimeFieldUpdateOperationsInput
-    type: ClearNullableStringFieldUpdateOperationsInput
+    start: ClearDateTimeFieldUpdateOperationsInput
+    type: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -11160,12 +11176,12 @@ input ClearScheduleItemUpdateWithoutEventInput {
     internal: ClearBoolFieldUpdateOperationsInput
     link: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     organizerEmail: ClearNullableStringFieldUpdateOperationsInput
     organizerName: ClearNullableStringFieldUpdateOperationsInput
     organizerPhone: ClearNullableStringFieldUpdateOperationsInput
-    start: ClearNullableDateTimeFieldUpdateOperationsInput
-    type: ClearNullableStringFieldUpdateOperationsInput
+    start: ClearDateTimeFieldUpdateOperationsInput
+    type: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -11200,12 +11216,12 @@ input ClearScheduleItemWhereInput {
     internal: ClearBoolFilter
     link: ClearStringNullableFilter
     metadata: ClearJsonNullableFilter
-    name: ClearStringNullableFilter
+    name: ClearStringFilter
     organizerEmail: ClearStringNullableFilter
     organizerName: ClearStringNullableFilter
     organizerPhone: ClearStringNullableFilter
-    start: ClearDateTimeNullableFilter
-    type: ClearStringNullableFilter
+    start: ClearDateTimeFilter
+    type: ClearStringFilter
     updatedAt: ClearDateTimeFilter
 }
 
@@ -12186,7 +12202,7 @@ input ClearVenueCreateInput {
     id: String
     mapLink: String
     metadata: ClearJSON
-    name: String
+    name: String!
     updatedAt: ClearDateTime
 }
 
@@ -12200,7 +12216,7 @@ input ClearVenueCreateManyInput {
     id: String
     mapLink: String
     metadata: ClearJSON
-    name: String
+    name: String!
     updatedAt: ClearDateTime
 }
 
@@ -12225,7 +12241,7 @@ input ClearVenueCreateWithoutEventsInput {
     id: String
     mapLink: String
     metadata: ClearJSON
-    name: String
+    name: String!
     updatedAt: ClearDateTime
 }
 
@@ -12307,7 +12323,7 @@ input ClearVenueScalarWhereWithAggregatesInput {
     id: ClearStringWithAggregatesFilter
     mapLink: ClearStringNullableWithAggregatesFilter
     metadata: ClearJsonNullableWithAggregatesFilter
-    name: ClearStringNullableWithAggregatesFilter
+    name: ClearStringWithAggregatesFilter
     updatedAt: ClearDateTimeWithAggregatesFilter
 }
 
@@ -12326,7 +12342,7 @@ input ClearVenueUpdateInput {
     id: ClearStringFieldUpdateOperationsInput
     mapLink: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -12340,7 +12356,7 @@ input ClearVenueUpdateManyMutationInput {
     id: ClearStringFieldUpdateOperationsInput
     mapLink: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -12364,7 +12380,7 @@ input ClearVenueUpdateWithoutEventsInput {
     id: ClearStringFieldUpdateOperationsInput
     mapLink: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
-    name: ClearNullableStringFieldUpdateOperationsInput
+    name: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
 
@@ -12387,7 +12403,7 @@ input ClearVenueWhereInput {
     id: ClearStringFilter
     mapLink: ClearStringNullableFilter
     metadata: ClearJsonNullableFilter
-    name: ClearStringNullableFilter
+    name: ClearStringFilter
     updatedAt: ClearDateTimeFilter
 }
 
