@@ -69,9 +69,16 @@ export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(print(getEvent), {data: {id: eventId}});
+    const event = eventResults?.clear?.event
+    if (!event) return {
+        redirect: {
+            destination: `/events`,
+            permanent: false
+        }
+    }
     return {
         props: {
-            event: eventResults.clear.event,
+            event: event,
         },
     };
 }
