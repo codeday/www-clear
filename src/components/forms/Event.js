@@ -80,8 +80,8 @@ const uiSchema = {
 export function CreateEventModal({group, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
-        startDate: group.startDate,
-        endDate: group.endDate,
+        startDate: moment(group.startDate).utc().format('LL'),
+        endDate: moment(group.endDate).utc().format('LL'),
         ticketPrice: group.ticketPrice,
         earlyBirdPrice: group.earlyBirdPrice,
         earlyBirdCutoff: group.earlyBirdCutoff,
