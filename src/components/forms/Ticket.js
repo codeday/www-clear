@@ -36,6 +36,43 @@ const schema = {
             type: 'integer',
             title: 'Age',
         },
+        type: {
+            type: 'string',
+            title: 'Type',
+            default: 'STUDENT',
+            anyOf: [
+                {
+                    type: 'string',
+                    title: 'Student',
+                    enum: ['STUDENT']
+                },
+                {
+                    type: 'string',
+                    title: 'Teacher',
+                    enum: ['TEACHER']
+                },
+                {
+                    type: 'string',
+                    title: 'VIP',
+                    enum: ['VIP']
+                },
+                {
+                    type: 'string',
+                    title: 'Mentor',
+                    enum: ['MENTOR']
+                },
+                {
+                    type: 'string',
+                    title: 'Judge',
+                    enum: ['JUDGE']
+                },
+                {
+                    type: 'string',
+                    title: 'Staff',
+                    enum: ['STAFF']
+                }
+            ]
+        }
     },
     required: ['firstName', 'lastName']
 };
