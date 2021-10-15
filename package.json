@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.6",
@@ -46,6 +49,8 @@
   },
   "devDependencies": {
     "@codeday/eslint-config": "^2.1.4",
+    "@next/bundle-analyzer": "^11.1.2",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-next": "11.1.0",
     "npm-check": "^5.9.2"
