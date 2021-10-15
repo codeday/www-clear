@@ -84,8 +84,8 @@ export function CreateEventModal({group, children, ...props}) {
         endDate: moment(group.endDate).utc().format('LL'),
         ticketPrice: group.ticketPrice,
         earlyBirdPrice: group.earlyBirdPrice,
-        earlyBirdCutoff: group.earlyBirdCutoff,
-        registrationCutoff: group.registrationCutoff,
+        earlyBirdCutoff: moment(group.earlyBirdCutoff).utc().format('LL'),
+        registrationCutoff: moment(group.registrationCutoff).utc().format('LL'),
     });
     let fetch;
     getSession().then((onResolved) => fetch = useFetcher(onResolved));
@@ -146,6 +146,8 @@ export function UpdateEventModal({event, children, ...props}) {
         ...event,
         startDate: moment(event.startDate).utc().format('LL'),
         endDate: moment(event.endDate).utc().format('LL'),
+        earlyBirdCutoff: moment(event.earlyBirdCutoff).utc().format('LL'),
+        registrationCutoff: moment(event.registrationCutoff).utc().format('LL')
     });
     let fetch;
     getSession().then((onResolved) => fetch = useFetcher(onResolved));
