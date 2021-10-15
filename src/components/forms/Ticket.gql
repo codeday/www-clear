@@ -4,6 +4,7 @@ fragment TicketFormFragment on ClearTicket {
     email
     phone
     age
+    type
 }
 mutation CreateTicketMutation($data: ClearTicketCreateInput!) {
     clear {
