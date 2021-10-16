@@ -1,0 +1,30 @@
+fragment PromoCodeFormFragment on ClearPromoCode {
+    type
+    code
+    amount
+    uses
+}
+
+mutation CreatePromoCodeMutation($data: ClearPromoCodeCreateInput!) {
+    clear {
+        createPromoCode(data: $data) {
+            id
+        }
+    }
+}
+
+mutation UpdatePromoCodeMutation($where: ClearPromoCodeWhereUniqueInput!, $data: ClearPromoCodeUpdateInput!) {
+    clear {
+        updatePromoCode(where: $where, data: $data) {
+            id
+        }
+    }
+}
+
+mutation DeletePromoCodeMutation($where: ClearPromoCodeWhereUniqueInput!) {
+    clear {
+        deletePromoCode(where: $where) {
+            id
+        }
+    }
+}

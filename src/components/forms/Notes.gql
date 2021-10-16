@@ -1,3 +1,7 @@
+fragment PromoCodeNotesFragment on ClearPromoCode {
+    notes: getMetadata(key: "notes")
+}
+
 fragment VenueNotesFragment on ClearVenue {
     notes: getMetadata(key: "notes")
 }
@@ -12,6 +16,14 @@ fragment SponsorNotesFragment on ClearSponsor {
 
 fragment ScheduleItemNotesFragment on ClearScheduleItem {
     notes: getMetadata(key: "notes")
+}
+
+mutation SetPromoCodeNotesFragment($id: String! $notes: String!) {
+    clear {
+        setNotes: setPromoCodeMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...PromoCodeNotesFragment
+        }
+    }
 }
 
 mutation SetVenueNotesMutation($id: String!, $notes: String!) {
