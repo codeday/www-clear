@@ -5,6 +5,7 @@
 #import "../../../components/ScheduleBox.gql"
 #import "../../../components/forms/Notes.gql"
 #import "../../../components/forms/Event.gql"
+#import "../../../components/TicketBox.gql"
 
 query getEventQuery($data: ClearEventWhereUniqueInput!) {
     clear {
@@ -24,6 +25,7 @@ query getEventQuery($data: ClearEventWhereUniqueInput!) {
             ...ScheduleBoxFragment
             ...EventNotesFragment
             ...EventFormFragment
+            ...TicketBoxFragment
         }
     }
 }

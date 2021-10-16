@@ -1,0 +1,8 @@
+fragment TicketBoxFragment on ClearEvent {
+    ticketPrice
+    registrationCutoff
+    earlyBirdCutoff
+    earlyBirdPrice
+    canEarlyBirdRegister
+    canRegister
+}

@@ -1,0 +1,13 @@
+#import "../../../../components/PromoCodeBox.gql"
+
+query getEventWithPromoCodesQuery($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            id
+            name
+            promoCodes {
+                ...PromoCodeBoxFragment
+            }
+        }
+    }
+}

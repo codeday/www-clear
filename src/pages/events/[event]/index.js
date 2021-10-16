@@ -23,6 +23,7 @@ import DaysUntilEvent from '../../../components/DaysUntilEvent';
 import {CreateSponsorModal} from '../../../components/forms/Sponsor';
 import {CreateScheduleItemModal} from '../../../components/forms/ScheduleItem';
 import ScheduleBox from '../../../components/ScheduleBox';
+import TicketBox from "../../../components/TicketBox";
 
 export default function Event({event}) {
     if (!event) return <Page/>;
@@ -50,6 +51,7 @@ export default function Event({event}) {
                         <Button as="a" href={`${event.id}/schedule`}>View Schedule</Button>
                     </ScheduleBox>
                     <Notes notes={event.notes} updateId={event.id} updateMutation={SetEventNotesMutation}/>
+                    <TicketBox event={event}><Button as="a" href={`${event.id}/promoCodes`}>View Promo Codes</Button></TicketBox>
                 </Masonry>
             </ResponsiveMasonry>
         </Page>

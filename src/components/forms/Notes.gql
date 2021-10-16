@@ -18,7 +18,7 @@ fragment ScheduleItemNotesFragment on ClearScheduleItem {
     notes: getMetadata(key: "notes")
 }
 
-mutation SetPromoCodeNotesFragment($id: String! $notes: String!) {
+mutation SetPromoCodeNotesMutation($id: String! $notes: String!) {
     clear {
         setNotes: setPromoCodeMetadata(where: {id: $id}, key: "notes", value: $notes) {
             ...PromoCodeNotesFragment

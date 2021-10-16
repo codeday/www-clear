@@ -263,10 +263,24 @@ type AccountUserBadge {
     order: Int
 }
 
+type AdvisorsEventParticipation {
+    awardIds: [String!]!
+    eventId: String!
+    id: String!
+    profile: AdvisorsProfile!
+}
+
 type AdvisorsMutation {
     createAdvisor(data: AdvisorsAdvisorCreateInput!): Boolean!
+    createEventParticipation(data: AdvisorsEventParticipationCreateInput!, username: String!): AdvisorsEventParticipation!
+    createProfile(data: AdvisorsProfileCreateInput!): AdvisorsProfile!
+    createRecommendation(data: AdvisorsRecommendationCreateInput!, username: String!): AdvisorsRecommendation!
     createRequest(email: String!, familyName: String!, givenName: String!, resume: Upload, type: AdvisorsRequestType!): Boolean!
+    createTag(data: AdvisorsTagCreateInput!): AdvisorsTag!
+    deleteTag(id: String!): Boolean!
     editAdvisorLimits(limits: AdvisorsAdvisorLimitInput!, where: AdvisorsAdvisorWhereInput!): Boolean!
+    editProfile(data: AdvisorsProfileEditInput!): AdvisorsProfile!
+    editRecommendation(data: AdvisorsRecommendationEditInput!, id: String!): AdvisorsRecommendation!
 }
 
 type AdvisorsPendingRequests {
@@ -274,11 +288,56 @@ type AdvisorsPendingRequests {
     requestType: AdvisorsRequestType!
 }
 
+type AdvisorsProfile {
+    bio: String
+    createdAt: AdvisorsDateTime!
+    email: String!
+    eventParticipation: [AdvisorsEventParticipation!]!
+    experience: [AdvisorsTag!]!
+    familyName: String!
+    givenName: String!
+    gradHighSchoolAt: AdvisorsDateTime
+    gradUniversityAt: AdvisorsDateTime
+    recommendations: [AdvisorsRecommendation!]!
+    searchFullTimeAt: AdvisorsDateTime
+    searchInternships: Boolean!
+    searchOpen: Boolean!
+    underrepresentedEthnicity: Boolean!
+    underrepresentedGender: Boolean!
+    updatedAt: AdvisorsDateTime!
+    urlGithub: String
+    urlLinkedIn: String
+    urlResume: String
+    urlWebsite: String
+    username: String!
+    workFteAt: AdvisorsDateTime
+    workInternAt: AdvisorsDateTime
+}
+
 type AdvisorsQuery {
     pendingRequests: [AdvisorsPendingRequests!]!
+    profile: AdvisorsProfile!
     remainingRequests: [AdvisorsRemainingRequestsType!]!
     servedRequests(where: AdvisorsRequestCountWhereInput): [AdvisorsRequestCount!]!
     submittedRequests(where: AdvisorsRequestCountWhereInput): [AdvisorsRequestCount!]!
+    tags(type: AdvisorsTagType): [AdvisorsTag!]!
+}
+
+type AdvisorsRecommendation {
+    createdAt: AdvisorsDateTime!
+    employer: String!
+    familyName: String!
+    givenName: String!
+    id: String!
+    profile: AdvisorsProfile!
+    recommendation: String
+    relation: String!
+    skillEngineering: AdvisorsRecommendationRating
+    skillInterpersonal: AdvisorsRecommendationRating
+    skillTechnical: AdvisorsRecommendationRating
+    title: String!
+    updatedAt: AdvisorsDateTime!
+    username: String
 }
 
 type AdvisorsRemainingRequestsByAdvisorType {
@@ -299,6 +358,13 @@ type AdvisorsRequestCount {
     practiceInterviews: Float!
     resumeReviews: Float!
     username: String
+}
+
+type AdvisorsTag {
+    displayName: String!
+    id: String!
+    profiles: [AdvisorsProfile!]!
+    type: AdvisorsTagType!
 }
 
 "Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from."
@@ -2528,6 +2594,14 @@ type ClearAggregatePerson {
     _sum: ClearPersonSumAggregate
 }
 
+type ClearAggregatePromoCode {
+    _avg: ClearPromoCodeAvgAggregate
+    _count: ClearPromoCodeCountAggregate
+    _max: ClearPromoCodeMaxAggregate
+    _min: ClearPromoCodeMinAggregate
+    _sum: ClearPromoCodeSumAggregate
+}
+
 type ClearAggregateScheduleItem {
     _count: ClearScheduleItemCountAggregate
     _max: ClearScheduleItemMaxAggregate
@@ -2560,6 +2634,9 @@ type ClearAggregateVenue {
 
 type ClearEvent {
     _count: ClearEventCount
+    activeTicketPrice: Float
+    canEarlyBirdRegister: Boolean!
+    canRegister: Boolean!
     contentfulWebname: String
     createdAt: ClearDateTime!
     displayDate: String!
@@ -2572,6 +2649,7 @@ type ClearEvent {
     id: String!
     managers: [String!]!
     name: String!
+    promoCodes(cursor: ClearPromoCodeWhereUniqueInput, distinct: [ClearPromoCodeScalarFieldEnum!], orderBy: [ClearPromoCodeOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): [ClearPromoCode!]!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean!
     schedule(cursor: ClearScheduleItemWhereUniqueInput, distinct: [ClearScheduleItemScalarFieldEnum!], orderBy: [ClearScheduleItemOrderByWithRelationInput!], skip: Int, take: Int, where: ClearScheduleItemWhereInput): [ClearScheduleItem!]!
@@ -2590,6 +2668,7 @@ type ClearEventAvgAggregate {
 }
 
 type ClearEventCount {
+    promoCodes: Int!
     schedule: Int!
     sponsors: Int!
     tickets: Int!
@@ -2626,6 +2705,7 @@ type ClearEventGroup {
     getMetadata(key: String!): String
     id: String!
     name: String!
+    promoCodes(cursor: ClearPromoCodeWhereUniqueInput, distinct: [ClearPromoCodeScalarFieldEnum!], orderBy: [ClearPromoCodeOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): [ClearPromoCode!]!
     registrationCutoff: ClearDateTime!
     schedule(cursor: ClearScheduleItemWhereUniqueInput, distinct: [ClearScheduleItemScalarFieldEnum!], orderBy: [ClearScheduleItemOrderByWithRelationInput!], skip: Int, take: Int, where: ClearScheduleItemWhereInput): [ClearScheduleItem!]!
     startDate: ClearDateTime!
@@ -2664,6 +2744,7 @@ type ClearEventGroupBy {
 
 type ClearEventGroupCount {
     events: Int!
+    promoCodes: Int!
     schedule: Int!
 }
 
@@ -2778,12 +2859,14 @@ type ClearMutation {
     createManyEventGroup(data: [ClearEventGroupCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createManyPayment(data: [ClearPaymentCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createManyPerson(data: [ClearPersonCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
+    createManyPromoCode(data: [ClearPromoCodeCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createManyScheduleItem(data: [ClearScheduleItemCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createManySponsor(data: [ClearSponsorCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createManyTicket(data: [ClearTicketCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createManyVenue(data: [ClearVenueCreateManyInput!]!, skipDuplicates: Boolean): ClearAffectedRowsOutput!
     createPayment(data: ClearPaymentCreateInput!): ClearPayment!
     createPerson(data: ClearPersonCreateInput!): ClearPerson!
+    createPromoCode(data: ClearPromoCodeCreateInput!): ClearPromoCode!
     createScheduleItem(data: ClearScheduleItemCreateInput!): ClearScheduleItem!
     createSponsor(data: ClearSponsorCreateInput!): ClearSponsor!
     createTicket(data: ClearTicketCreateInput!): ClearTicket!
@@ -2794,12 +2877,14 @@ type ClearMutation {
     deleteManyEventGroup(where: ClearEventGroupWhereInput): ClearAffectedRowsOutput!
     deleteManyPayment(where: ClearPaymentWhereInput): ClearAffectedRowsOutput!
     deleteManyPerson(where: ClearPersonWhereInput): ClearAffectedRowsOutput!
+    deleteManyPromoCode(where: ClearPromoCodeWhereInput): ClearAffectedRowsOutput!
     deleteManyScheduleItem(where: ClearScheduleItemWhereInput): ClearAffectedRowsOutput!
     deleteManySponsor(where: ClearSponsorWhereInput): ClearAffectedRowsOutput!
     deleteManyTicket(where: ClearTicketWhereInput): ClearAffectedRowsOutput!
     deleteManyVenue(where: ClearVenueWhereInput): ClearAffectedRowsOutput!
     deletePayment(where: ClearPaymentWhereUniqueInput!): ClearPayment
     deletePerson(where: ClearPersonWhereUniqueInput!): ClearPerson
+    deletePromoCode(where: ClearPromoCodeWhereUniqueInput!): ClearPromoCode
     deleteScheduleItem(where: ClearScheduleItemWhereUniqueInput!): ClearScheduleItem
     deleteSponsor(where: ClearSponsorWhereUniqueInput!): ClearSponsor
     deleteTicket(where: ClearTicketWhereUniqueInput!): ClearTicket
@@ -2808,6 +2893,7 @@ type ClearMutation {
     setEventMetadata(key: String!, value: String!, where: ClearEventWhereUniqueInput!): ClearEvent
     setPaymentMetadata(key: String!, value: String!, where: ClearPaymentWhereUniqueInput!): ClearPayment
     setPersonMetadata(key: String!, value: String!, where: ClearPersonWhereUniqueInput!): ClearPerson
+    setPromoCodeMetadata(key: String!, value: String!, where: ClearPromoCodeWhereUniqueInput!): ClearPromoCode
     setScheduleItemMetadata(key: String!, value: String!, where: ClearScheduleItemWhereUniqueInput!): ClearScheduleItem
     setSponsorMetadata(key: String!, value: String!, where: ClearSponsorWhereUniqueInput!): ClearSponsor
     setTicketMetadata(key: String!, value: String!, where: ClearTicketWhereUniqueInput!): ClearTicket
@@ -2818,12 +2904,14 @@ type ClearMutation {
     updateManyEventGroup(data: ClearEventGroupUpdateManyMutationInput!, where: ClearEventGroupWhereInput): ClearAffectedRowsOutput!
     updateManyPayment(data: ClearPaymentUpdateManyMutationInput!, where: ClearPaymentWhereInput): ClearAffectedRowsOutput!
     updateManyPerson(data: ClearPersonUpdateManyMutationInput!, where: ClearPersonWhereInput): ClearAffectedRowsOutput!
+    updateManyPromoCode(data: ClearPromoCodeUpdateManyMutationInput!, where: ClearPromoCodeWhereInput): ClearAffectedRowsOutput!
     updateManyScheduleItem(data: ClearScheduleItemUpdateManyMutationInput!, where: ClearScheduleItemWhereInput): ClearAffectedRowsOutput!
     updateManySponsor(data: ClearSponsorUpdateManyMutationInput!, where: ClearSponsorWhereInput): ClearAffectedRowsOutput!
     updateManyTicket(data: ClearTicketUpdateManyMutationInput!, where: ClearTicketWhereInput): ClearAffectedRowsOutput!
     updateManyVenue(data: ClearVenueUpdateManyMutationInput!, where: ClearVenueWhereInput): ClearAffectedRowsOutput!
     updatePayment(data: ClearPaymentUpdateInput!, where: ClearPaymentWhereUniqueInput!): ClearPayment
     updatePerson(data: ClearPersonUpdateInput!, where: ClearPersonWhereUniqueInput!): ClearPerson
+    updatePromoCode(data: ClearPromoCodeUpdateInput!, where: ClearPromoCodeWhereUniqueInput!): ClearPromoCode
     updateScheduleItem(data: ClearScheduleItemUpdateInput!, where: ClearScheduleItemWhereUniqueInput!): ClearScheduleItem
     updateSponsor(data: ClearSponsorUpdateInput!, where: ClearSponsorWhereUniqueInput!): ClearSponsor
     updateTicket(data: ClearTicketUpdateInput!, where: ClearTicketWhereUniqueInput!): ClearTicket
@@ -2832,6 +2920,7 @@ type ClearMutation {
     upsertEventGroup(create: ClearEventGroupCreateInput!, update: ClearEventGroupUpdateInput!, where: ClearEventGroupWhereUniqueInput!): ClearEventGroup!
     upsertPayment(create: ClearPaymentCreateInput!, update: ClearPaymentUpdateInput!, where: ClearPaymentWhereUniqueInput!): ClearPayment!
     upsertPerson(create: ClearPersonCreateInput!, update: ClearPersonUpdateInput!, where: ClearPersonWhereUniqueInput!): ClearPerson!
+    upsertPromoCode(create: ClearPromoCodeCreateInput!, update: ClearPromoCodeUpdateInput!, where: ClearPromoCodeWhereUniqueInput!): ClearPromoCode!
     upsertScheduleItem(create: ClearScheduleItemCreateInput!, update: ClearScheduleItemUpdateInput!, where: ClearScheduleItemWhereUniqueInput!): ClearScheduleItem!
     upsertSponsor(create: ClearSponsorCreateInput!, update: ClearSponsorUpdateInput!, where: ClearSponsorWhereUniqueInput!): ClearSponsor!
     upsertTicket(create: ClearTicketCreateInput!, update: ClearTicketUpdateInput!, where: ClearTicketWhereUniqueInput!): ClearTicket!
@@ -2984,11 +3073,100 @@ type ClearPersonSumAggregate {
     age: Int
 }
 
+type ClearPromoCode {
+    _count: ClearPromoCodeCount
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime!
+    event: ClearEvent
+    eventGroup: ClearEventGroup
+    eventGroupId: String
+    eventId: String
+    getMetadata(key: String!): String
+    id: String!
+    tickets(cursor: ClearTicketWhereUniqueInput, distinct: [ClearTicketScalarFieldEnum!], orderBy: [ClearTicketOrderByWithRelationInput!], skip: Int, take: Int, where: ClearTicketWhereInput): [ClearTicket!]!
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime!
+    uses: Int
+    usesRemaining: Float
+}
+
+type ClearPromoCodeAvgAggregate {
+    amount: Float
+    uses: Float
+}
+
+type ClearPromoCodeCount {
+    tickets: Int!
+}
+
+type ClearPromoCodeCountAggregate {
+    _all: Int!
+    amount: Int!
+    code: Int!
+    createdAt: Int!
+    eventGroupId: Int!
+    eventId: Int!
+    id: Int!
+    metadata: Int!
+    type: Int!
+    updatedAt: Int!
+    uses: Int!
+}
+
+type ClearPromoCodeGroupBy {
+    _avg: ClearPromoCodeAvgAggregate
+    _count: ClearPromoCodeCountAggregate
+    _max: ClearPromoCodeMaxAggregate
+    _min: ClearPromoCodeMinAggregate
+    _sum: ClearPromoCodeSumAggregate
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime!
+    eventGroupId: String
+    eventId: String
+    id: String!
+    metadata: ClearJSON
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime!
+    uses: Int
+}
+
+type ClearPromoCodeMaxAggregate {
+    amount: Float
+    code: String
+    createdAt: ClearDateTime
+    eventGroupId: String
+    eventId: String
+    id: String
+    type: ClearDiscountType
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+type ClearPromoCodeMinAggregate {
+    amount: Float
+    code: String
+    createdAt: ClearDateTime
+    eventGroupId: String
+    eventId: String
+    id: String
+    type: ClearDiscountType
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+type ClearPromoCodeSumAggregate {
+    amount: Float
+    uses: Int
+}
+
 type ClearQuery {
     aggregateEvent(cursor: ClearEventWhereUniqueInput, orderBy: [ClearEventOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventWhereInput): ClearAggregateEvent!
     aggregateEventGroup(cursor: ClearEventGroupWhereUniqueInput, orderBy: [ClearEventGroupOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventGroupWhereInput): ClearAggregateEventGroup!
     aggregatePayment(cursor: ClearPaymentWhereUniqueInput, orderBy: [ClearPaymentOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPaymentWhereInput): ClearAggregatePayment!
     aggregatePerson(cursor: ClearPersonWhereUniqueInput, orderBy: [ClearPersonOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPersonWhereInput): ClearAggregatePerson!
+    aggregatePromoCode(cursor: ClearPromoCodeWhereUniqueInput, orderBy: [ClearPromoCodeOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): ClearAggregatePromoCode!
     aggregateScheduleItem(cursor: ClearScheduleItemWhereUniqueInput, orderBy: [ClearScheduleItemOrderByWithRelationInput!], skip: Int, take: Int, where: ClearScheduleItemWhereInput): ClearAggregateScheduleItem!
     aggregateSponsor(cursor: ClearSponsorWhereUniqueInput, orderBy: [ClearSponsorOrderByWithRelationInput!], skip: Int, take: Int, where: ClearSponsorWhereInput): ClearAggregateSponsor!
     aggregateTicket(cursor: ClearTicketWhereUniqueInput, orderBy: [ClearTicketOrderByWithRelationInput!], skip: Int, take: Int, where: ClearTicketWhereInput): ClearAggregateTicket!
@@ -2996,11 +3174,12 @@ type ClearQuery {
     event(where: ClearEventWhereUniqueInput!): ClearEvent
     eventGroup(where: ClearEventGroupWhereUniqueInput!): ClearEventGroup
     eventGroups(cursor: ClearEventGroupWhereUniqueInput, distinct: [ClearEventGroupScalarFieldEnum!], orderBy: [ClearEventGroupOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventGroupWhereInput): [ClearEventGroup!]!
-    events(editable: Boolean): [ClearEvent!]!
+    events(cursor: ClearEventWhereUniqueInput, distinct: [ClearEventScalarFieldEnum!], editable: Boolean, orderBy: [ClearEventOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventWhereInput): [ClearEvent!]!
     findFirstEvent(cursor: ClearEventWhereUniqueInput, distinct: [ClearEventScalarFieldEnum!], orderBy: [ClearEventOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventWhereInput): ClearEvent
     findFirstEventGroup(cursor: ClearEventGroupWhereUniqueInput, distinct: [ClearEventGroupScalarFieldEnum!], orderBy: [ClearEventGroupOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventGroupWhereInput): ClearEventGroup
     findFirstPayment(cursor: ClearPaymentWhereUniqueInput, distinct: [ClearPaymentScalarFieldEnum!], orderBy: [ClearPaymentOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPaymentWhereInput): ClearPayment
     findFirstPerson(cursor: ClearPersonWhereUniqueInput, distinct: [ClearPersonScalarFieldEnum!], orderBy: [ClearPersonOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPersonWhereInput): ClearPerson
+    findFirstPromoCode(cursor: ClearPromoCodeWhereUniqueInput, distinct: [ClearPromoCodeScalarFieldEnum!], orderBy: [ClearPromoCodeOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): ClearPromoCode
     findFirstScheduleItem(cursor: ClearScheduleItemWhereUniqueInput, distinct: [ClearScheduleItemScalarFieldEnum!], orderBy: [ClearScheduleItemOrderByWithRelationInput!], skip: Int, take: Int, where: ClearScheduleItemWhereInput): ClearScheduleItem
     findFirstSponsor(cursor: ClearSponsorWhereUniqueInput, distinct: [ClearSponsorScalarFieldEnum!], orderBy: [ClearSponsorOrderByWithRelationInput!], skip: Int, take: Int, where: ClearSponsorWhereInput): ClearSponsor
     findFirstTicket(cursor: ClearTicketWhereUniqueInput, distinct: [ClearTicketScalarFieldEnum!], orderBy: [ClearTicketOrderByWithRelationInput!], skip: Int, take: Int, where: ClearTicketWhereInput): ClearTicket
@@ -3009,6 +3188,7 @@ type ClearQuery {
     groupByEventGroup(by: [ClearEventGroupScalarFieldEnum!]!, having: ClearEventGroupScalarWhereWithAggregatesInput, orderBy: [ClearEventGroupOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearEventGroupWhereInput): [ClearEventGroupGroupBy!]!
     groupByPayment(by: [ClearPaymentScalarFieldEnum!]!, having: ClearPaymentScalarWhereWithAggregatesInput, orderBy: [ClearPaymentOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearPaymentWhereInput): [ClearPaymentGroupBy!]!
     groupByPerson(by: [ClearPersonScalarFieldEnum!]!, having: ClearPersonScalarWhereWithAggregatesInput, orderBy: [ClearPersonOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearPersonWhereInput): [ClearPersonGroupBy!]!
+    groupByPromoCode(by: [ClearPromoCodeScalarFieldEnum!]!, having: ClearPromoCodeScalarWhereWithAggregatesInput, orderBy: [ClearPromoCodeOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): [ClearPromoCodeGroupBy!]!
     groupByScheduleItem(by: [ClearScheduleItemScalarFieldEnum!]!, having: ClearScheduleItemScalarWhereWithAggregatesInput, orderBy: [ClearScheduleItemOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearScheduleItemWhereInput): [ClearScheduleItemGroupBy!]!
     groupBySponsor(by: [ClearSponsorScalarFieldEnum!]!, having: ClearSponsorScalarWhereWithAggregatesInput, orderBy: [ClearSponsorOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearSponsorWhereInput): [ClearSponsorGroupBy!]!
     groupByTicket(by: [ClearTicketScalarFieldEnum!]!, having: ClearTicketScalarWhereWithAggregatesInput, orderBy: [ClearTicketOrderByWithAggregationInput!], skip: Int, take: Int, where: ClearTicketWhereInput): [ClearTicketGroupBy!]!
@@ -3017,6 +3197,8 @@ type ClearQuery {
     payments(cursor: ClearPaymentWhereUniqueInput, distinct: [ClearPaymentScalarFieldEnum!], orderBy: [ClearPaymentOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPaymentWhereInput): [ClearPayment!]!
     people(cursor: ClearPersonWhereUniqueInput, distinct: [ClearPersonScalarFieldEnum!], orderBy: [ClearPersonOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPersonWhereInput): [ClearPerson!]!
     person(where: ClearPersonWhereUniqueInput!): ClearPerson
+    promoCode(where: ClearPromoCodeWhereUniqueInput!): ClearPromoCode
+    promoCodes(cursor: ClearPromoCodeWhereUniqueInput, distinct: [ClearPromoCodeScalarFieldEnum!], orderBy: [ClearPromoCodeOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): [ClearPromoCode!]!
     scheduleItem(where: ClearScheduleItemWhereUniqueInput!): ClearScheduleItem
     scheduleItems(cursor: ClearScheduleItemWhereUniqueInput, distinct: [ClearScheduleItemScalarFieldEnum!], orderBy: [ClearScheduleItemOrderByWithRelationInput!], skip: Int, take: Int, where: ClearScheduleItemWhereInput): [ClearScheduleItem!]!
     sponsor(where: ClearSponsorWhereUniqueInput!): ClearSponsor
@@ -3258,6 +3440,8 @@ type ClearTicket {
     paymentId: String
     personId: String
     phone: String
+    promoCode: ClearPromoCode
+    promoCodeId: String
     type: ClearTicketType!
     updatedAt: ClearDateTime!
     waiverSigned: Boolean!
@@ -3281,6 +3465,7 @@ type ClearTicketCountAggregate {
     paymentId: Int!
     personId: Int!
     phone: Int!
+    promoCodeId: Int!
     type: Int!
     updatedAt: Int!
     waiverSigned: Int!
@@ -3304,6 +3489,7 @@ type ClearTicketGroupBy {
     paymentId: String
     personId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType!
     updatedAt: ClearDateTime!
     waiverSigned: Boolean!
@@ -3321,6 +3507,7 @@ type ClearTicketMaxAggregate {
     paymentId: String
     personId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -3338,6 +3525,7 @@ type ClearTicketMinAggregate {
     paymentId: String
     personId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -5030,9 +5218,22 @@ enum AdvisorsAdvisorType {
     TECHNICAL
 }
 
+enum AdvisorsRecommendationRating {
+    INTERN_BELOW
+    INTERN_EXCEEDS
+    INTERN_MEETS
+    NEW_GRAD
+    NEW_GRAD_EXCEEDS
+}
+
 enum AdvisorsRequestType {
     INTERVIEW
     RESUME
+}
+
+enum AdvisorsTagType {
+    INTEREST
+    TECHNOLOGY
 }
 
 "What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are judged in that order. Default is the value of the 'avatar_rating' option"
@@ -5467,6 +5668,11 @@ enum CalendarOrder {
     DESC
 }
 
+enum ClearDiscountType {
+    PERCENT
+    SUBTRACT
+}
+
 enum ClearEventGroupScalarFieldEnum {
     createdAt
     earlyBirdCutoff
@@ -5520,6 +5726,19 @@ enum ClearPersonScalarFieldEnum {
     pronouns
     updatedAt
     username
+}
+
+enum ClearPromoCodeScalarFieldEnum {
+    amount
+    code
+    createdAt
+    eventGroupId
+    eventId
+    id
+    metadata
+    type
+    updatedAt
+    uses
 }
 
 enum ClearQueryMode {
@@ -5584,6 +5803,7 @@ enum ClearTicketScalarFieldEnum {
     paymentId
     personId
     phone
+    promoCodeId
     type
     updatedAt
     waiverSigned
@@ -6496,10 +6716,87 @@ input AdvisorsAdvisorWhereInput {
     username: String
 }
 
+input AdvisorsEventParticipationCreateInput {
+    awardIds: [String!]
+    eventId: String!
+}
+
+input AdvisorsProfileCreateInput {
+    bio: String
+    email: String!
+    experience: [String!]
+    familyName: String!
+    givenName: String!
+    gradHighSchoolAt: AdvisorsDateTime
+    gradUniversityAt: AdvisorsDateTime
+    resume: Upload
+    searchFullTimeAt: AdvisorsDateTime
+    searchInternships: Boolean!
+    searchOpen: Boolean!
+    underrepresentedEthnicity: Boolean!
+    underrepresentedGender: Boolean!
+    urlGithub: String
+    urlLinkedIn: String
+    urlWebsite: String
+    workFteAt: AdvisorsDateTime
+    workInternAt: AdvisorsDateTime
+}
+
+input AdvisorsProfileEditInput {
+    bio: String
+    email: String
+    experience: [String!]
+    familyName: String
+    givenName: String
+    gradHighSchoolAt: AdvisorsDateTime
+    gradUniversityAt: AdvisorsDateTime
+    resume: Upload
+    searchFullTimeAt: AdvisorsDateTime
+    searchInternships: Boolean
+    searchOpen: Boolean
+    underrepresentedEthnicity: Boolean
+    underrepresentedGender: Boolean
+    urlGithub: String
+    urlLinkedIn: String
+    urlWebsite: String
+    workFteAt: AdvisorsDateTime
+    workInternAt: AdvisorsDateTime
+}
+
+input AdvisorsRecommendationCreateInput {
+    employer: String!
+    familyName: String!
+    givenName: String!
+    recommendation: String
+    relation: String!
+    skillEngineering: AdvisorsRecommendationRating
+    skillInterpersonal: AdvisorsRecommendationRating
+    skillTechnical: AdvisorsRecommendationRating
+    title: String!
+}
+
+input AdvisorsRecommendationEditInput {
+    employer: String
+    familyName: String
+    givenName: String
+    recommendation: String
+    relation: String
+    skillEngineering: AdvisorsRecommendationRating
+    skillInterpersonal: AdvisorsRecommendationRating
+    skillTechnical: AdvisorsRecommendationRating
+    title: String
+}
+
 input AdvisorsRequestCountWhereInput {
     domain: String
     emails: [String!]
     usernames: [String!]
+}
+
+input AdvisorsTagCreateInput {
+    displayName: String!
+    id: String!
+    type: AdvisorsTagType!
 }
 
 "Arguments for filtering the CategoryToCategoryConnection connection"
@@ -8907,6 +9204,27 @@ input ClearDateTimeWithAggregatesFilter {
     notIn: [ClearDateTime!]
 }
 
+input ClearEnumDiscountTypeFieldUpdateOperationsInput {
+    set: ClearDiscountType
+}
+
+input ClearEnumDiscountTypeFilter {
+    equals: ClearDiscountType
+    in: [ClearDiscountType!]
+    not: ClearNestedEnumDiscountTypeFilter
+    notIn: [ClearDiscountType!]
+}
+
+input ClearEnumDiscountTypeWithAggregatesFilter {
+    _count: ClearNestedIntFilter
+    _max: ClearNestedEnumDiscountTypeFilter
+    _min: ClearNestedEnumDiscountTypeFilter
+    equals: ClearDiscountType
+    in: [ClearDiscountType!]
+    not: ClearNestedEnumDiscountTypeWithAggregatesFilter
+    notIn: [ClearDiscountType!]
+}
+
 input ClearEnumTicketTypeFieldUpdateOperationsInput {
     set: ClearTicketType
 }
@@ -8963,6 +9281,7 @@ input ClearEventCreateInput {
     managers: ClearEventCreatemanagersInput
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
     schedule: ClearScheduleItemCreateNestedManyWithoutEventInput
@@ -9057,6 +9376,12 @@ input ClearEventCreateNestedManyWithoutVenueInput {
     createMany: ClearEventCreateManyVenueInputEnvelope
 }
 
+input ClearEventCreateNestedOneWithoutPromoCodesInput {
+    connect: ClearEventWhereUniqueInput
+    connectOrCreate: ClearEventCreateOrConnectWithoutPromoCodesInput
+    create: ClearEventCreateWithoutPromoCodesInput
+}
+
 input ClearEventCreateNestedOneWithoutScheduleInput {
     connect: ClearEventWhereUniqueInput
     connectOrCreate: ClearEventCreateOrConnectWithoutScheduleInput
@@ -9077,6 +9402,11 @@ input ClearEventCreateNestedOneWithoutTicketsInput {
 
 input ClearEventCreateOrConnectWithoutEventGroupInput {
     create: ClearEventCreateWithoutEventGroupInput!
+    where: ClearEventWhereUniqueInput!
+}
+
+input ClearEventCreateOrConnectWithoutPromoCodesInput {
+    create: ClearEventCreateWithoutPromoCodesInput!
     where: ClearEventWhereUniqueInput!
 }
 
@@ -9110,6 +9440,29 @@ input ClearEventCreateWithoutEventGroupInput {
     managers: ClearEventCreatemanagersInput
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
+    registrationCutoff: ClearDateTime!
+    registrationsOpen: Boolean
+    schedule: ClearScheduleItemCreateNestedManyWithoutEventInput
+    sponsors: ClearSponsorCreateNestedManyWithoutEventInput
+    startDate: ClearDateTime!
+    ticketPrice: Float!
+    tickets: ClearTicketCreateNestedManyWithoutEventInput
+    updatedAt: ClearDateTime
+    venue: ClearVenueCreateNestedOneWithoutEventsInput
+}
+
+input ClearEventCreateWithoutPromoCodesInput {
+    contentfulWebname: String
+    createdAt: ClearDateTime
+    earlyBirdCutoff: ClearDateTime!
+    earlyBirdPrice: Float!
+    endDate: ClearDateTime!
+    eventGroup: ClearEventGroupCreateNestedOneWithoutEventsInput!
+    id: String
+    managers: ClearEventCreatemanagersInput
+    metadata: ClearJSON
+    name: String!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
     schedule: ClearScheduleItemCreateNestedManyWithoutEventInput
@@ -9132,6 +9485,7 @@ input ClearEventCreateWithoutScheduleInput {
     managers: ClearEventCreatemanagersInput
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
     sponsors: ClearSponsorCreateNestedManyWithoutEventInput
@@ -9153,6 +9507,7 @@ input ClearEventCreateWithoutSponsorsInput {
     managers: ClearEventCreatemanagersInput
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
     schedule: ClearScheduleItemCreateNestedManyWithoutEventInput
@@ -9174,6 +9529,7 @@ input ClearEventCreateWithoutTicketsInput {
     managers: ClearEventCreatemanagersInput
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
     schedule: ClearScheduleItemCreateNestedManyWithoutEventInput
@@ -9195,6 +9551,7 @@ input ClearEventCreateWithoutVenueInput {
     managers: ClearEventCreatemanagersInput
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
     schedule: ClearScheduleItemCreateNestedManyWithoutEventInput
@@ -9237,6 +9594,7 @@ input ClearEventGroupCreateInput {
     id: String
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventGroupInput
     registrationCutoff: ClearDateTime!
     schedule: ClearScheduleItemCreateNestedManyWithoutEventGroupInput
     startDate: ClearDateTime!
@@ -9264,6 +9622,12 @@ input ClearEventGroupCreateNestedOneWithoutEventsInput {
     create: ClearEventGroupCreateWithoutEventsInput
 }
 
+input ClearEventGroupCreateNestedOneWithoutPromoCodesInput {
+    connect: ClearEventGroupWhereUniqueInput
+    connectOrCreate: ClearEventGroupCreateOrConnectWithoutPromoCodesInput
+    create: ClearEventGroupCreateWithoutPromoCodesInput
+}
+
 input ClearEventGroupCreateNestedOneWithoutScheduleInput {
     connect: ClearEventGroupWhereUniqueInput
     connectOrCreate: ClearEventGroupCreateOrConnectWithoutScheduleInput
@@ -9272,6 +9636,11 @@ input ClearEventGroupCreateNestedOneWithoutScheduleInput {
 
 input ClearEventGroupCreateOrConnectWithoutEventsInput {
     create: ClearEventGroupCreateWithoutEventsInput!
+    where: ClearEventGroupWhereUniqueInput!
+}
+
+input ClearEventGroupCreateOrConnectWithoutPromoCodesInput {
+    create: ClearEventGroupCreateWithoutPromoCodesInput!
     where: ClearEventGroupWhereUniqueInput!
 }
 
@@ -9285,6 +9654,23 @@ input ClearEventGroupCreateWithoutEventsInput {
     earlyBirdCutoff: ClearDateTime!
     earlyBirdPrice: Float!
     endDate: ClearDateTime!
+    id: String
+    metadata: ClearJSON
+    name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventGroupInput
+    registrationCutoff: ClearDateTime!
+    schedule: ClearScheduleItemCreateNestedManyWithoutEventGroupInput
+    startDate: ClearDateTime!
+    ticketPrice: Float!
+    updatedAt: ClearDateTime
+}
+
+input ClearEventGroupCreateWithoutPromoCodesInput {
+    createdAt: ClearDateTime
+    earlyBirdCutoff: ClearDateTime!
+    earlyBirdPrice: Float!
+    endDate: ClearDateTime!
+    events: ClearEventCreateNestedManyWithoutEventGroupInput
     id: String
     metadata: ClearJSON
     name: String!
@@ -9304,6 +9690,7 @@ input ClearEventGroupCreateWithoutScheduleInput {
     id: String
     metadata: ClearJSON
     name: String!
+    promoCodes: ClearPromoCodeCreateNestedManyWithoutEventGroupInput
     registrationCutoff: ClearDateTime!
     startDate: ClearDateTime!
     ticketPrice: Float!
@@ -9364,6 +9751,7 @@ input ClearEventGroupOrderByWithRelationInput {
     id: ClearSortOrder
     metadata: ClearSortOrder
     name: ClearSortOrder
+    promoCodes: ClearPromoCodeOrderByRelationAggregateInput
     registrationCutoff: ClearSortOrder
     schedule: ClearScheduleItemOrderByRelationAggregateInput
     startDate: ClearSortOrder
@@ -9407,6 +9795,7 @@ input ClearEventGroupUpdateInput {
     id: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventGroupInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     schedule: ClearScheduleItemUpdateManyWithoutEventGroupInput
     startDate: ClearDateTimeFieldUpdateOperationsInput
@@ -9436,6 +9825,16 @@ input ClearEventGroupUpdateOneRequiredWithoutEventsInput {
     upsert: ClearEventGroupUpsertWithoutEventsInput
 }
 
+input ClearEventGroupUpdateOneWithoutPromoCodesInput {
+    connect: ClearEventGroupWhereUniqueInput
+    connectOrCreate: ClearEventGroupCreateOrConnectWithoutPromoCodesInput
+    create: ClearEventGroupCreateWithoutPromoCodesInput
+    delete: Boolean
+    disconnect: Boolean
+    update: ClearEventGroupUpdateWithoutPromoCodesInput
+    upsert: ClearEventGroupUpsertWithoutPromoCodesInput
+}
+
 input ClearEventGroupUpdateOneWithoutScheduleInput {
     connect: ClearEventGroupWhereUniqueInput
     connectOrCreate: ClearEventGroupCreateOrConnectWithoutScheduleInput
@@ -9451,6 +9850,23 @@ input ClearEventGroupUpdateWithoutEventsInput {
     earlyBirdCutoff: ClearDateTimeFieldUpdateOperationsInput
     earlyBirdPrice: ClearFloatFieldUpdateOperationsInput
     endDate: ClearDateTimeFieldUpdateOperationsInput
+    id: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventGroupInput
+    registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
+    schedule: ClearScheduleItemUpdateManyWithoutEventGroupInput
+    startDate: ClearDateTimeFieldUpdateOperationsInput
+    ticketPrice: ClearFloatFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+}
+
+input ClearEventGroupUpdateWithoutPromoCodesInput {
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    earlyBirdCutoff: ClearDateTimeFieldUpdateOperationsInput
+    earlyBirdPrice: ClearFloatFieldUpdateOperationsInput
+    endDate: ClearDateTimeFieldUpdateOperationsInput
+    events: ClearEventUpdateManyWithoutEventGroupInput
     id: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
@@ -9470,6 +9886,7 @@ input ClearEventGroupUpdateWithoutScheduleInput {
     id: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventGroupInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     startDate: ClearDateTimeFieldUpdateOperationsInput
     ticketPrice: ClearFloatFieldUpdateOperationsInput
@@ -9479,6 +9896,11 @@ input ClearEventGroupUpdateWithoutScheduleInput {
 input ClearEventGroupUpsertWithoutEventsInput {
     create: ClearEventGroupCreateWithoutEventsInput!
     update: ClearEventGroupUpdateWithoutEventsInput!
+}
+
+input ClearEventGroupUpsertWithoutPromoCodesInput {
+    create: ClearEventGroupCreateWithoutPromoCodesInput!
+    update: ClearEventGroupUpdateWithoutPromoCodesInput!
 }
 
 input ClearEventGroupUpsertWithoutScheduleInput {
@@ -9498,6 +9920,7 @@ input ClearEventGroupWhereInput {
     id: ClearStringFilter
     metadata: ClearJsonNullableFilter
     name: ClearStringFilter
+    promoCodes: ClearPromoCodeListRelationFilter
     registrationCutoff: ClearDateTimeFilter
     schedule: ClearScheduleItemListRelationFilter
     startDate: ClearDateTimeFilter
@@ -9589,6 +10012,7 @@ input ClearEventOrderByWithRelationInput {
     managers: ClearSortOrder
     metadata: ClearSortOrder
     name: ClearSortOrder
+    promoCodes: ClearPromoCodeOrderByRelationAggregateInput
     registrationCutoff: ClearSortOrder
     registrationsOpen: ClearSortOrder
     schedule: ClearScheduleItemOrderByRelationAggregateInput
@@ -9666,6 +10090,7 @@ input ClearEventUpdateInput {
     managers: ClearEventUpdatemanagersInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
     schedule: ClearScheduleItemUpdateManyWithoutEventInput
@@ -9740,6 +10165,16 @@ input ClearEventUpdateOneRequiredWithoutTicketsInput {
     upsert: ClearEventUpsertWithoutTicketsInput
 }
 
+input ClearEventUpdateOneWithoutPromoCodesInput {
+    connect: ClearEventWhereUniqueInput
+    connectOrCreate: ClearEventCreateOrConnectWithoutPromoCodesInput
+    create: ClearEventCreateWithoutPromoCodesInput
+    delete: Boolean
+    disconnect: Boolean
+    update: ClearEventUpdateWithoutPromoCodesInput
+    upsert: ClearEventUpsertWithoutPromoCodesInput
+}
+
 input ClearEventUpdateOneWithoutScheduleInput {
     connect: ClearEventWhereUniqueInput
     connectOrCreate: ClearEventCreateOrConnectWithoutScheduleInput
@@ -9780,6 +10215,29 @@ input ClearEventUpdateWithoutEventGroupInput {
     managers: ClearEventUpdatemanagersInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
+    registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
+    registrationsOpen: ClearBoolFieldUpdateOperationsInput
+    schedule: ClearScheduleItemUpdateManyWithoutEventInput
+    sponsors: ClearSponsorUpdateManyWithoutEventInput
+    startDate: ClearDateTimeFieldUpdateOperationsInput
+    ticketPrice: ClearFloatFieldUpdateOperationsInput
+    tickets: ClearTicketUpdateManyWithoutEventInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    venue: ClearVenueUpdateOneWithoutEventsInput
+}
+
+input ClearEventUpdateWithoutPromoCodesInput {
+    contentfulWebname: ClearNullableStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    earlyBirdCutoff: ClearDateTimeFieldUpdateOperationsInput
+    earlyBirdPrice: ClearFloatFieldUpdateOperationsInput
+    endDate: ClearDateTimeFieldUpdateOperationsInput
+    eventGroup: ClearEventGroupUpdateOneRequiredWithoutEventsInput
+    id: ClearStringFieldUpdateOperationsInput
+    managers: ClearEventUpdatemanagersInput
+    metadata: ClearJSON
+    name: ClearStringFieldUpdateOperationsInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
     schedule: ClearScheduleItemUpdateManyWithoutEventInput
@@ -9802,6 +10260,7 @@ input ClearEventUpdateWithoutScheduleInput {
     managers: ClearEventUpdatemanagersInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
     sponsors: ClearSponsorUpdateManyWithoutEventInput
@@ -9823,6 +10282,7 @@ input ClearEventUpdateWithoutSponsorsInput {
     managers: ClearEventUpdatemanagersInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
     schedule: ClearScheduleItemUpdateManyWithoutEventInput
@@ -9844,6 +10304,7 @@ input ClearEventUpdateWithoutTicketsInput {
     managers: ClearEventUpdatemanagersInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
     schedule: ClearScheduleItemUpdateManyWithoutEventInput
@@ -9865,6 +10326,7 @@ input ClearEventUpdateWithoutVenueInput {
     managers: ClearEventUpdatemanagersInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
     schedule: ClearScheduleItemUpdateManyWithoutEventInput
@@ -9890,6 +10352,11 @@ input ClearEventUpsertWithWhereUniqueWithoutVenueInput {
     create: ClearEventCreateWithoutVenueInput!
     update: ClearEventUpdateWithoutVenueInput!
     where: ClearEventWhereUniqueInput!
+}
+
+input ClearEventUpsertWithoutPromoCodesInput {
+    create: ClearEventCreateWithoutPromoCodesInput!
+    update: ClearEventUpdateWithoutPromoCodesInput!
 }
 
 input ClearEventUpsertWithoutScheduleInput {
@@ -9922,6 +10389,7 @@ input ClearEventWhereInput {
     managers: ClearStringNullableListFilter
     metadata: ClearJsonNullableFilter
     name: ClearStringFilter
+    promoCodes: ClearPromoCodeListRelationFilter
     registrationCutoff: ClearDateTimeFilter
     registrationsOpen: ClearBoolFilter
     schedule: ClearScheduleItemListRelationFilter
@@ -10109,6 +10577,23 @@ input ClearNestedDateTimeWithAggregatesFilter {
     lte: ClearDateTime
     not: ClearNestedDateTimeWithAggregatesFilter
     notIn: [ClearDateTime!]
+}
+
+input ClearNestedEnumDiscountTypeFilter {
+    equals: ClearDiscountType
+    in: [ClearDiscountType!]
+    not: ClearNestedEnumDiscountTypeFilter
+    notIn: [ClearDiscountType!]
+}
+
+input ClearNestedEnumDiscountTypeWithAggregatesFilter {
+    _count: ClearNestedIntFilter
+    _max: ClearNestedEnumDiscountTypeFilter
+    _min: ClearNestedEnumDiscountTypeFilter
+    equals: ClearDiscountType
+    in: [ClearDiscountType!]
+    not: ClearNestedEnumDiscountTypeWithAggregatesFilter
+    notIn: [ClearDiscountType!]
 }
 
 input ClearNestedEnumTicketTypeFilter {
@@ -10698,6 +11183,431 @@ input ClearPersonWhereInput {
 }
 
 input ClearPersonWhereUniqueInput {
+    id: String
+}
+
+input ClearPromoCodeAvgOrderByAggregateInput {
+    amount: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeCountOrderByAggregateInput {
+    amount: ClearSortOrder
+    code: ClearSortOrder
+    createdAt: ClearSortOrder
+    eventGroupId: ClearSortOrder
+    eventId: ClearSortOrder
+    id: ClearSortOrder
+    metadata: ClearSortOrder
+    type: ClearSortOrder
+    updatedAt: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeCreateInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    event: ClearEventCreateNestedOneWithoutPromoCodesInput
+    eventGroup: ClearEventGroupCreateNestedOneWithoutPromoCodesInput
+    id: String
+    metadata: ClearJSON
+    tickets: ClearTicketCreateNestedManyWithoutPromoCodeInput
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeCreateManyEventGroupInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    eventId: String
+    id: String
+    metadata: ClearJSON
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeCreateManyEventGroupInputEnvelope {
+    data: [ClearPromoCodeCreateManyEventGroupInput!]!
+    skipDuplicates: Boolean
+}
+
+input ClearPromoCodeCreateManyEventInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    eventGroupId: String
+    id: String
+    metadata: ClearJSON
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeCreateManyEventInputEnvelope {
+    data: [ClearPromoCodeCreateManyEventInput!]!
+    skipDuplicates: Boolean
+}
+
+input ClearPromoCodeCreateManyInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    eventGroupId: String
+    eventId: String
+    id: String
+    metadata: ClearJSON
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeCreateNestedManyWithoutEventGroupInput {
+    connect: [ClearPromoCodeWhereUniqueInput!]
+    connectOrCreate: [ClearPromoCodeCreateOrConnectWithoutEventGroupInput!]
+    create: [ClearPromoCodeCreateWithoutEventGroupInput!]
+    createMany: ClearPromoCodeCreateManyEventGroupInputEnvelope
+}
+
+input ClearPromoCodeCreateNestedManyWithoutEventInput {
+    connect: [ClearPromoCodeWhereUniqueInput!]
+    connectOrCreate: [ClearPromoCodeCreateOrConnectWithoutEventInput!]
+    create: [ClearPromoCodeCreateWithoutEventInput!]
+    createMany: ClearPromoCodeCreateManyEventInputEnvelope
+}
+
+input ClearPromoCodeCreateNestedOneWithoutTicketsInput {
+    connect: ClearPromoCodeWhereUniqueInput
+    connectOrCreate: ClearPromoCodeCreateOrConnectWithoutTicketsInput
+    create: ClearPromoCodeCreateWithoutTicketsInput
+}
+
+input ClearPromoCodeCreateOrConnectWithoutEventGroupInput {
+    create: ClearPromoCodeCreateWithoutEventGroupInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeCreateOrConnectWithoutEventInput {
+    create: ClearPromoCodeCreateWithoutEventInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeCreateOrConnectWithoutTicketsInput {
+    create: ClearPromoCodeCreateWithoutTicketsInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeCreateWithoutEventGroupInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    event: ClearEventCreateNestedOneWithoutPromoCodesInput
+    id: String
+    metadata: ClearJSON
+    tickets: ClearTicketCreateNestedManyWithoutPromoCodeInput
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeCreateWithoutEventInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    eventGroup: ClearEventGroupCreateNestedOneWithoutPromoCodesInput
+    id: String
+    metadata: ClearJSON
+    tickets: ClearTicketCreateNestedManyWithoutPromoCodeInput
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeCreateWithoutTicketsInput {
+    amount: Float!
+    code: String!
+    createdAt: ClearDateTime
+    event: ClearEventCreateNestedOneWithoutPromoCodesInput
+    eventGroup: ClearEventGroupCreateNestedOneWithoutPromoCodesInput
+    id: String
+    metadata: ClearJSON
+    type: ClearDiscountType!
+    updatedAt: ClearDateTime
+    uses: Int
+}
+
+input ClearPromoCodeListRelationFilter {
+    every: ClearPromoCodeWhereInput
+    none: ClearPromoCodeWhereInput
+    some: ClearPromoCodeWhereInput
+}
+
+input ClearPromoCodeMaxOrderByAggregateInput {
+    amount: ClearSortOrder
+    code: ClearSortOrder
+    createdAt: ClearSortOrder
+    eventGroupId: ClearSortOrder
+    eventId: ClearSortOrder
+    id: ClearSortOrder
+    type: ClearSortOrder
+    updatedAt: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeMinOrderByAggregateInput {
+    amount: ClearSortOrder
+    code: ClearSortOrder
+    createdAt: ClearSortOrder
+    eventGroupId: ClearSortOrder
+    eventId: ClearSortOrder
+    id: ClearSortOrder
+    type: ClearSortOrder
+    updatedAt: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeOrderByRelationAggregateInput {
+    _count: ClearSortOrder
+}
+
+input ClearPromoCodeOrderByWithAggregationInput {
+    _avg: ClearPromoCodeAvgOrderByAggregateInput
+    _count: ClearPromoCodeCountOrderByAggregateInput
+    _max: ClearPromoCodeMaxOrderByAggregateInput
+    _min: ClearPromoCodeMinOrderByAggregateInput
+    _sum: ClearPromoCodeSumOrderByAggregateInput
+    amount: ClearSortOrder
+    code: ClearSortOrder
+    createdAt: ClearSortOrder
+    eventGroupId: ClearSortOrder
+    eventId: ClearSortOrder
+    id: ClearSortOrder
+    metadata: ClearSortOrder
+    type: ClearSortOrder
+    updatedAt: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeOrderByWithRelationInput {
+    amount: ClearSortOrder
+    code: ClearSortOrder
+    createdAt: ClearSortOrder
+    event: ClearEventOrderByWithRelationInput
+    eventGroup: ClearEventGroupOrderByWithRelationInput
+    eventGroupId: ClearSortOrder
+    eventId: ClearSortOrder
+    id: ClearSortOrder
+    metadata: ClearSortOrder
+    tickets: ClearTicketOrderByRelationAggregateInput
+    type: ClearSortOrder
+    updatedAt: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeRelationFilter {
+    is: ClearPromoCodeWhereInput
+    isNot: ClearPromoCodeWhereInput
+}
+
+input ClearPromoCodeScalarWhereInput {
+    AND: [ClearPromoCodeScalarWhereInput!]
+    NOT: [ClearPromoCodeScalarWhereInput!]
+    OR: [ClearPromoCodeScalarWhereInput!]
+    amount: ClearFloatFilter
+    code: ClearStringFilter
+    createdAt: ClearDateTimeFilter
+    eventGroupId: ClearStringNullableFilter
+    eventId: ClearStringNullableFilter
+    id: ClearStringFilter
+    metadata: ClearJsonNullableFilter
+    type: ClearEnumDiscountTypeFilter
+    updatedAt: ClearDateTimeFilter
+    uses: ClearIntNullableFilter
+}
+
+input ClearPromoCodeScalarWhereWithAggregatesInput {
+    AND: [ClearPromoCodeScalarWhereWithAggregatesInput!]
+    NOT: [ClearPromoCodeScalarWhereWithAggregatesInput!]
+    OR: [ClearPromoCodeScalarWhereWithAggregatesInput!]
+    amount: ClearFloatWithAggregatesFilter
+    code: ClearStringWithAggregatesFilter
+    createdAt: ClearDateTimeWithAggregatesFilter
+    eventGroupId: ClearStringNullableWithAggregatesFilter
+    eventId: ClearStringNullableWithAggregatesFilter
+    id: ClearStringWithAggregatesFilter
+    metadata: ClearJsonNullableWithAggregatesFilter
+    type: ClearEnumDiscountTypeWithAggregatesFilter
+    updatedAt: ClearDateTimeWithAggregatesFilter
+    uses: ClearIntNullableWithAggregatesFilter
+}
+
+input ClearPromoCodeSumOrderByAggregateInput {
+    amount: ClearSortOrder
+    uses: ClearSortOrder
+}
+
+input ClearPromoCodeUpdateInput {
+    amount: ClearFloatFieldUpdateOperationsInput
+    code: ClearStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    event: ClearEventUpdateOneWithoutPromoCodesInput
+    eventGroup: ClearEventGroupUpdateOneWithoutPromoCodesInput
+    id: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    tickets: ClearTicketUpdateManyWithoutPromoCodeInput
+    type: ClearEnumDiscountTypeFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    uses: ClearNullableIntFieldUpdateOperationsInput
+}
+
+input ClearPromoCodeUpdateManyMutationInput {
+    amount: ClearFloatFieldUpdateOperationsInput
+    code: ClearStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    id: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    type: ClearEnumDiscountTypeFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    uses: ClearNullableIntFieldUpdateOperationsInput
+}
+
+input ClearPromoCodeUpdateManyWithWhereWithoutEventGroupInput {
+    data: ClearPromoCodeUpdateManyMutationInput!
+    where: ClearPromoCodeScalarWhereInput!
+}
+
+input ClearPromoCodeUpdateManyWithWhereWithoutEventInput {
+    data: ClearPromoCodeUpdateManyMutationInput!
+    where: ClearPromoCodeScalarWhereInput!
+}
+
+input ClearPromoCodeUpdateManyWithoutEventGroupInput {
+    connect: [ClearPromoCodeWhereUniqueInput!]
+    connectOrCreate: [ClearPromoCodeCreateOrConnectWithoutEventGroupInput!]
+    create: [ClearPromoCodeCreateWithoutEventGroupInput!]
+    createMany: ClearPromoCodeCreateManyEventGroupInputEnvelope
+    delete: [ClearPromoCodeWhereUniqueInput!]
+    deleteMany: [ClearPromoCodeScalarWhereInput!]
+    disconnect: [ClearPromoCodeWhereUniqueInput!]
+    set: [ClearPromoCodeWhereUniqueInput!]
+    update: [ClearPromoCodeUpdateWithWhereUniqueWithoutEventGroupInput!]
+    updateMany: [ClearPromoCodeUpdateManyWithWhereWithoutEventGroupInput!]
+    upsert: [ClearPromoCodeUpsertWithWhereUniqueWithoutEventGroupInput!]
+}
+
+input ClearPromoCodeUpdateManyWithoutEventInput {
+    connect: [ClearPromoCodeWhereUniqueInput!]
+    connectOrCreate: [ClearPromoCodeCreateOrConnectWithoutEventInput!]
+    create: [ClearPromoCodeCreateWithoutEventInput!]
+    createMany: ClearPromoCodeCreateManyEventInputEnvelope
+    delete: [ClearPromoCodeWhereUniqueInput!]
+    deleteMany: [ClearPromoCodeScalarWhereInput!]
+    disconnect: [ClearPromoCodeWhereUniqueInput!]
+    set: [ClearPromoCodeWhereUniqueInput!]
+    update: [ClearPromoCodeUpdateWithWhereUniqueWithoutEventInput!]
+    updateMany: [ClearPromoCodeUpdateManyWithWhereWithoutEventInput!]
+    upsert: [ClearPromoCodeUpsertWithWhereUniqueWithoutEventInput!]
+}
+
+input ClearPromoCodeUpdateOneWithoutTicketsInput {
+    connect: ClearPromoCodeWhereUniqueInput
+    connectOrCreate: ClearPromoCodeCreateOrConnectWithoutTicketsInput
+    create: ClearPromoCodeCreateWithoutTicketsInput
+    delete: Boolean
+    disconnect: Boolean
+    update: ClearPromoCodeUpdateWithoutTicketsInput
+    upsert: ClearPromoCodeUpsertWithoutTicketsInput
+}
+
+input ClearPromoCodeUpdateWithWhereUniqueWithoutEventGroupInput {
+    data: ClearPromoCodeUpdateWithoutEventGroupInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeUpdateWithWhereUniqueWithoutEventInput {
+    data: ClearPromoCodeUpdateWithoutEventInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeUpdateWithoutEventGroupInput {
+    amount: ClearFloatFieldUpdateOperationsInput
+    code: ClearStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    event: ClearEventUpdateOneWithoutPromoCodesInput
+    id: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    tickets: ClearTicketUpdateManyWithoutPromoCodeInput
+    type: ClearEnumDiscountTypeFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    uses: ClearNullableIntFieldUpdateOperationsInput
+}
+
+input ClearPromoCodeUpdateWithoutEventInput {
+    amount: ClearFloatFieldUpdateOperationsInput
+    code: ClearStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    eventGroup: ClearEventGroupUpdateOneWithoutPromoCodesInput
+    id: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    tickets: ClearTicketUpdateManyWithoutPromoCodeInput
+    type: ClearEnumDiscountTypeFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    uses: ClearNullableIntFieldUpdateOperationsInput
+}
+
+input ClearPromoCodeUpdateWithoutTicketsInput {
+    amount: ClearFloatFieldUpdateOperationsInput
+    code: ClearStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    event: ClearEventUpdateOneWithoutPromoCodesInput
+    eventGroup: ClearEventGroupUpdateOneWithoutPromoCodesInput
+    id: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    type: ClearEnumDiscountTypeFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    uses: ClearNullableIntFieldUpdateOperationsInput
+}
+
+input ClearPromoCodeUpsertWithWhereUniqueWithoutEventGroupInput {
+    create: ClearPromoCodeCreateWithoutEventGroupInput!
+    update: ClearPromoCodeUpdateWithoutEventGroupInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeUpsertWithWhereUniqueWithoutEventInput {
+    create: ClearPromoCodeCreateWithoutEventInput!
+    update: ClearPromoCodeUpdateWithoutEventInput!
+    where: ClearPromoCodeWhereUniqueInput!
+}
+
+input ClearPromoCodeUpsertWithoutTicketsInput {
+    create: ClearPromoCodeCreateWithoutTicketsInput!
+    update: ClearPromoCodeUpdateWithoutTicketsInput!
+}
+
+input ClearPromoCodeWhereInput {
+    AND: [ClearPromoCodeWhereInput!]
+    NOT: [ClearPromoCodeWhereInput!]
+    OR: [ClearPromoCodeWhereInput!]
+    amount: ClearFloatFilter
+    code: ClearStringFilter
+    createdAt: ClearDateTimeFilter
+    event: ClearEventRelationFilter
+    eventGroup: ClearEventGroupRelationFilter
+    eventGroupId: ClearStringNullableFilter
+    eventId: ClearStringNullableFilter
+    id: ClearStringFilter
+    metadata: ClearJsonNullableFilter
+    tickets: ClearTicketListRelationFilter
+    type: ClearEnumDiscountTypeFilter
+    updatedAt: ClearDateTimeFilter
+    uses: ClearIntNullableFilter
+}
+
+input ClearPromoCodeWhereUniqueInput {
     id: String
 }
 
@@ -11643,6 +12553,7 @@ input ClearTicketCountOrderByAggregateInput {
     paymentId: ClearSortOrder
     personId: ClearSortOrder
     phone: ClearSortOrder
+    promoCodeId: ClearSortOrder
     type: ClearSortOrder
     updatedAt: ClearSortOrder
     waiverSigned: ClearSortOrder
@@ -11661,6 +12572,7 @@ input ClearTicketCreateInput {
     metadata: ClearJSON
     payment: ClearPaymentCreateNestedOneWithoutTicketInput
     phone: String
+    promoCode: ClearPromoCodeCreateNestedOneWithoutTicketsInput
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11678,6 +12590,7 @@ input ClearTicketCreateManyEventInput {
     paymentId: String
     personId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11700,6 +12613,7 @@ input ClearTicketCreateManyGuardianInput {
     metadata: ClearJSON
     paymentId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11723,6 +12637,7 @@ input ClearTicketCreateManyInput {
     paymentId: String
     personId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11740,6 +12655,7 @@ input ClearTicketCreateManyPaymentInput {
     metadata: ClearJSON
     personId: String
     phone: String
+    promoCodeId: String
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11747,6 +12663,29 @@ input ClearTicketCreateManyPaymentInput {
 
 input ClearTicketCreateManyPaymentInputEnvelope {
     data: [ClearTicketCreateManyPaymentInput!]!
+    skipDuplicates: Boolean
+}
+
+input ClearTicketCreateManyPromoCodeInput {
+    age: Int
+    couponCode: String
+    createdAt: ClearDateTime
+    email: String
+    eventId: String!
+    firstName: String!
+    id: String
+    lastName: String!
+    metadata: ClearJSON
+    paymentId: String
+    personId: String
+    phone: String
+    type: ClearTicketType
+    updatedAt: ClearDateTime
+    waiverSigned: Boolean
+}
+
+input ClearTicketCreateManyPromoCodeInputEnvelope {
+    data: [ClearTicketCreateManyPromoCodeInput!]!
     skipDuplicates: Boolean
 }
 
@@ -11771,6 +12710,13 @@ input ClearTicketCreateNestedManyWithoutPaymentInput {
     createMany: ClearTicketCreateManyPaymentInputEnvelope
 }
 
+input ClearTicketCreateNestedManyWithoutPromoCodeInput {
+    connect: [ClearTicketWhereUniqueInput!]
+    connectOrCreate: [ClearTicketCreateOrConnectWithoutPromoCodeInput!]
+    create: [ClearTicketCreateWithoutPromoCodeInput!]
+    createMany: ClearTicketCreateManyPromoCodeInputEnvelope
+}
+
 input ClearTicketCreateOrConnectWithoutEventInput {
     create: ClearTicketCreateWithoutEventInput!
     where: ClearTicketWhereUniqueInput!
@@ -11786,6 +12732,11 @@ input ClearTicketCreateOrConnectWithoutPaymentInput {
     where: ClearTicketWhereUniqueInput!
 }
 
+input ClearTicketCreateOrConnectWithoutPromoCodeInput {
+    create: ClearTicketCreateWithoutPromoCodeInput!
+    where: ClearTicketWhereUniqueInput!
+}
+
 input ClearTicketCreateWithoutEventInput {
     age: Int
     couponCode: String
@@ -11798,6 +12749,7 @@ input ClearTicketCreateWithoutEventInput {
     metadata: ClearJSON
     payment: ClearPaymentCreateNestedOneWithoutTicketInput
     phone: String
+    promoCode: ClearPromoCodeCreateNestedOneWithoutTicketsInput
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11815,6 +12767,7 @@ input ClearTicketCreateWithoutGuardianInput {
     metadata: ClearJSON
     payment: ClearPaymentCreateNestedOneWithoutTicketInput
     phone: String
+    promoCode: ClearPromoCodeCreateNestedOneWithoutTicketsInput
     type: ClearTicketType
     updatedAt: ClearDateTime
     waiverSigned: Boolean
@@ -11831,6 +12784,25 @@ input ClearTicketCreateWithoutPaymentInput {
     id: String
     lastName: String!
     metadata: ClearJSON
+    phone: String
+    promoCode: ClearPromoCodeCreateNestedOneWithoutTicketsInput
+    type: ClearTicketType
+    updatedAt: ClearDateTime
+    waiverSigned: Boolean
+}
+
+input ClearTicketCreateWithoutPromoCodeInput {
+    age: Int
+    couponCode: String
+    createdAt: ClearDateTime
+    email: String
+    event: ClearEventCreateNestedOneWithoutTicketsInput!
+    firstName: String!
+    guardian: ClearPersonCreateNestedOneWithoutTicketInput
+    id: String
+    lastName: String!
+    metadata: ClearJSON
+    payment: ClearPaymentCreateNestedOneWithoutTicketInput
     phone: String
     type: ClearTicketType
     updatedAt: ClearDateTime
@@ -11855,6 +12827,7 @@ input ClearTicketMaxOrderByAggregateInput {
     paymentId: ClearSortOrder
     personId: ClearSortOrder
     phone: ClearSortOrder
+    promoCodeId: ClearSortOrder
     type: ClearSortOrder
     updatedAt: ClearSortOrder
     waiverSigned: ClearSortOrder
@@ -11872,6 +12845,7 @@ input ClearTicketMinOrderByAggregateInput {
     paymentId: ClearSortOrder
     personId: ClearSortOrder
     phone: ClearSortOrder
+    promoCodeId: ClearSortOrder
     type: ClearSortOrder
     updatedAt: ClearSortOrder
     waiverSigned: ClearSortOrder
@@ -11899,6 +12873,7 @@ input ClearTicketOrderByWithAggregationInput {
     paymentId: ClearSortOrder
     personId: ClearSortOrder
     phone: ClearSortOrder
+    promoCodeId: ClearSortOrder
     type: ClearSortOrder
     updatedAt: ClearSortOrder
     waiverSigned: ClearSortOrder
@@ -11920,6 +12895,8 @@ input ClearTicketOrderByWithRelationInput {
     paymentId: ClearSortOrder
     personId: ClearSortOrder
     phone: ClearSortOrder
+    promoCode: ClearPromoCodeOrderByWithRelationInput
+    promoCodeId: ClearSortOrder
     type: ClearSortOrder
     updatedAt: ClearSortOrder
     waiverSigned: ClearSortOrder
@@ -11941,6 +12918,7 @@ input ClearTicketScalarWhereInput {
     paymentId: ClearStringNullableFilter
     personId: ClearStringNullableFilter
     phone: ClearStringNullableFilter
+    promoCodeId: ClearStringNullableFilter
     type: ClearEnumTicketTypeFilter
     updatedAt: ClearDateTimeFilter
     waiverSigned: ClearBoolFilter
@@ -11962,6 +12940,7 @@ input ClearTicketScalarWhereWithAggregatesInput {
     paymentId: ClearStringNullableWithAggregatesFilter
     personId: ClearStringNullableWithAggregatesFilter
     phone: ClearStringNullableWithAggregatesFilter
+    promoCodeId: ClearStringNullableWithAggregatesFilter
     type: ClearEnumTicketTypeWithAggregatesFilter
     updatedAt: ClearDateTimeWithAggregatesFilter
     waiverSigned: ClearBoolWithAggregatesFilter
@@ -11984,6 +12963,7 @@ input ClearTicketUpdateInput {
     metadata: ClearJSON
     payment: ClearPaymentUpdateOneWithoutTicketInput
     phone: ClearNullableStringFieldUpdateOperationsInput
+    promoCode: ClearPromoCodeUpdateOneWithoutTicketsInput
     type: ClearEnumTicketTypeFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
     waiverSigned: ClearBoolFieldUpdateOperationsInput
@@ -12015,6 +12995,11 @@ input ClearTicketUpdateManyWithWhereWithoutGuardianInput {
 }
 
 input ClearTicketUpdateManyWithWhereWithoutPaymentInput {
+    data: ClearTicketUpdateManyMutationInput!
+    where: ClearTicketScalarWhereInput!
+}
+
+input ClearTicketUpdateManyWithWhereWithoutPromoCodeInput {
     data: ClearTicketUpdateManyMutationInput!
     where: ClearTicketScalarWhereInput!
 }
@@ -12061,6 +13046,20 @@ input ClearTicketUpdateManyWithoutPaymentInput {
     upsert: [ClearTicketUpsertWithWhereUniqueWithoutPaymentInput!]
 }
 
+input ClearTicketUpdateManyWithoutPromoCodeInput {
+    connect: [ClearTicketWhereUniqueInput!]
+    connectOrCreate: [ClearTicketCreateOrConnectWithoutPromoCodeInput!]
+    create: [ClearTicketCreateWithoutPromoCodeInput!]
+    createMany: ClearTicketCreateManyPromoCodeInputEnvelope
+    delete: [ClearTicketWhereUniqueInput!]
+    deleteMany: [ClearTicketScalarWhereInput!]
+    disconnect: [ClearTicketWhereUniqueInput!]
+    set: [ClearTicketWhereUniqueInput!]
+    update: [ClearTicketUpdateWithWhereUniqueWithoutPromoCodeInput!]
+    updateMany: [ClearTicketUpdateManyWithWhereWithoutPromoCodeInput!]
+    upsert: [ClearTicketUpsertWithWhereUniqueWithoutPromoCodeInput!]
+}
+
 input ClearTicketUpdateWithWhereUniqueWithoutEventInput {
     data: ClearTicketUpdateWithoutEventInput!
     where: ClearTicketWhereUniqueInput!
@@ -12076,6 +13075,11 @@ input ClearTicketUpdateWithWhereUniqueWithoutPaymentInput {
     where: ClearTicketWhereUniqueInput!
 }
 
+input ClearTicketUpdateWithWhereUniqueWithoutPromoCodeInput {
+    data: ClearTicketUpdateWithoutPromoCodeInput!
+    where: ClearTicketWhereUniqueInput!
+}
+
 input ClearTicketUpdateWithoutEventInput {
     age: ClearNullableIntFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
@@ -12088,6 +13092,7 @@ input ClearTicketUpdateWithoutEventInput {
     metadata: ClearJSON
     payment: ClearPaymentUpdateOneWithoutTicketInput
     phone: ClearNullableStringFieldUpdateOperationsInput
+    promoCode: ClearPromoCodeUpdateOneWithoutTicketsInput
     type: ClearEnumTicketTypeFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
     waiverSigned: ClearBoolFieldUpdateOperationsInput
@@ -12105,6 +13110,7 @@ input ClearTicketUpdateWithoutGuardianInput {
     metadata: ClearJSON
     payment: ClearPaymentUpdateOneWithoutTicketInput
     phone: ClearNullableStringFieldUpdateOperationsInput
+    promoCode: ClearPromoCodeUpdateOneWithoutTicketsInput
     type: ClearEnumTicketTypeFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
     waiverSigned: ClearBoolFieldUpdateOperationsInput
@@ -12121,6 +13127,25 @@ input ClearTicketUpdateWithoutPaymentInput {
     id: ClearStringFieldUpdateOperationsInput
     lastName: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
+    phone: ClearNullableStringFieldUpdateOperationsInput
+    promoCode: ClearPromoCodeUpdateOneWithoutTicketsInput
+    type: ClearEnumTicketTypeFieldUpdateOperationsInput
+    updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    waiverSigned: ClearBoolFieldUpdateOperationsInput
+}
+
+input ClearTicketUpdateWithoutPromoCodeInput {
+    age: ClearNullableIntFieldUpdateOperationsInput
+    couponCode: ClearNullableStringFieldUpdateOperationsInput
+    createdAt: ClearDateTimeFieldUpdateOperationsInput
+    email: ClearNullableStringFieldUpdateOperationsInput
+    event: ClearEventUpdateOneRequiredWithoutTicketsInput
+    firstName: ClearStringFieldUpdateOperationsInput
+    guardian: ClearPersonUpdateOneWithoutTicketInput
+    id: ClearStringFieldUpdateOperationsInput
+    lastName: ClearStringFieldUpdateOperationsInput
+    metadata: ClearJSON
+    payment: ClearPaymentUpdateOneWithoutTicketInput
     phone: ClearNullableStringFieldUpdateOperationsInput
     type: ClearEnumTicketTypeFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
@@ -12145,6 +13170,12 @@ input ClearTicketUpsertWithWhereUniqueWithoutPaymentInput {
     where: ClearTicketWhereUniqueInput!
 }
 
+input ClearTicketUpsertWithWhereUniqueWithoutPromoCodeInput {
+    create: ClearTicketCreateWithoutPromoCodeInput!
+    update: ClearTicketUpdateWithoutPromoCodeInput!
+    where: ClearTicketWhereUniqueInput!
+}
+
 input ClearTicketWhereInput {
     AND: [ClearTicketWhereInput!]
     NOT: [ClearTicketWhereInput!]
@@ -12164,6 +13195,8 @@ input ClearTicketWhereInput {
     paymentId: ClearStringNullableFilter
     personId: ClearStringNullableFilter
     phone: ClearStringNullableFilter
+    promoCode: ClearPromoCodeRelationFilter
+    promoCodeId: ClearStringNullableFilter
     type: ClearEnumTicketTypeFilter
     updatedAt: ClearDateTimeFilter
     waiverSigned: ClearBoolFilter
@@ -14583,6 +15616,9 @@ scalar LabsJSON
 
 "The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
 scalar LabsJSONObject
+
+"The javascript `Date` as string. Type represents date and time as the ISO Date string."
+scalar AdvisorsDateTime
 
 "The javascript `Date` as string. Type represents date and time as the ISO Date string."
 scalar ClearDateTime

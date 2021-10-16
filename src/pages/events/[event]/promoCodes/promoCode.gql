@@ -1,0 +1,22 @@
+#import "../../../../components/forms/PromoCode.gql"
+#import "../../../../components/forms/Notes.gql"
+#import "../../../../components/Ticket.gql"
+
+query GetPromoCodeQuery($data: ClearPromoCodeWhereUniqueInput!) {
+    clear {
+        promoCode(where: $data) {
+            id
+            event {
+                id
+                name
+            }
+            tickets {
+                ...Ticket
+            }
+            uses
+            usesRemaining
+            ...PromoCodeFormFragment
+            ...PromoCodeNotesFragment
+        }
+    }
+}

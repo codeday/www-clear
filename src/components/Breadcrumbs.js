@@ -3,7 +3,7 @@ import {useRouter} from 'next/router';
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink,} from '@chakra-ui/react';
 
 export default function Breadcrumbs({
-                                        group, event, ticket, scheduleitem,
+                                        group, event, ticket, scheduleitem, code,
                                     }) {
     const router = useRouter();
     const [breadcrumbs, setBreadcrumbs] = useState(null);
@@ -12,6 +12,7 @@ export default function Breadcrumbs({
         if (event && string === event.id) return event.name;
         if (ticket && string === ticket.id) return `${ticket.firstName} ${ticket.lastName}`;
         if (scheduleitem && string === scheduleitem.id) return scheduleitem.name;
+        if (code && string === code.id) return code.code
         // https://stackoverflow.com/a/4149393
         return string
             .replace(/([A-Z])/g, ' $1')

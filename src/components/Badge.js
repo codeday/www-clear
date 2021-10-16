@@ -10,7 +10,7 @@ export default function Badge({children, ...props}) {
             color="gray.800"
             p={1}
             px={2}
-            mr={1}
+            m={1}
             rounded={5}
             {...props}
         >
