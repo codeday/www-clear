@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 import InfoBox from "./InfoBox";
 import {} from "@codeday/topocons/Icon"
 
