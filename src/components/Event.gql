@@ -1,6 +1,7 @@
 fragment EventFragment on ClearEvent {
     id
     name
+    soldTickets(onlyStudents: true)
     eventGroup {
         name
     }
