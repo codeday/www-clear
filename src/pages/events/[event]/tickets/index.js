@@ -9,6 +9,8 @@ import Ticket from '../../../../components/Ticket';
 import Page from '../../../../components/Page';
 import {useFetcher} from '../../../../fetch';
 import {CreateTicketModal} from '../../../../components/forms/Ticket';
+import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
+
 
 export default function Tickets({event}) {
     if (!event) return <Page/>;
@@ -17,10 +19,12 @@ export default function Tickets({event}) {
             <Breadcrumbs event={event}/>
             <Heading>{event.name} Tickets</Heading>
             <CreateTicketModal event={event}/>
-            <Flex m={4} wrap="wrap">
-                {event.tickets.map((ticket) => (
-                    <Ticket ticket={ticket}/>))}
-            </Flex>
+            <ResponsiveMasonry>
+                <Masonry>
+                    {event.tickets.map((ticket) => (
+                        <Ticket ticket={ticket}/>))}
+                </Masonry>
+            </ResponsiveMasonry>
         </Page>
     );
 }
