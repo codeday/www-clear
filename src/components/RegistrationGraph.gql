@@ -1,5 +1,6 @@
 fragment RegistrationGraphFragment on ClearEvent {
     createdAt
+    soldTickets(onlyStudents: true)
     tickets(orderBy: {createdAt: asc}) {
         createdAt
     }

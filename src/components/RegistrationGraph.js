@@ -3,6 +3,7 @@ import LineGraph from 'react-line-graph';
 import moment from 'moment';
 import {Heading} from '@codeday/topo/Atom/Text';
 import InfoBox from './InfoBox';
+import Text from '@codeday/topo/Atom/Text/Text';
 
 export default function RegistrationGraph({event, children, ...props}) {
     const now = moment();
@@ -22,6 +23,7 @@ export default function RegistrationGraph({event, children, ...props}) {
     return (
         <InfoBox heading="Registrations" {...props}>
             <Heading>{event.tickets.length} Registrations</Heading>
+            <Text size="sm">Students: {event.soldTickets} Staff: {event.tickets.length-event.soldTickets}</Text>
             {children}
             <LineGraph data={data}/>
         </InfoBox>
