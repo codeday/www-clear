@@ -123,7 +123,7 @@ export function UpdateVenueModal({venue, children, ...props}) {
 
     return (
         <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
+            <Button h={6} d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
                 <Form
                     schema={schema}
@@ -168,7 +168,7 @@ export function DeleteVenueModal({venue, children, ...props}) {
 
     return (
         <Box d="inline">
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
+            <Button h={6} d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
                 <Heading>Remove Venue</Heading>
                 <Text>Are you sure you want to delete this venue?

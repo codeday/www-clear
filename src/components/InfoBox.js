@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@codeday/topo/Atom/Box';
 
-export default function InfoBox({children, heading, ...props}) {
+export default function InfoBox({children, heading, headingSize, ...props}) {
     return (
         <Box
             d="block"
@@ -11,7 +11,7 @@ export default function InfoBox({children, heading, ...props}) {
             m={1}
             {...props}
         >
-            <Box ml={1}>
+            <Box ml={1} fontSize={headingSize}>
                 <b>{heading}</b>
             </Box>
             <Box

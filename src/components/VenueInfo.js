@@ -12,6 +12,7 @@ export default function VenueInfo({venue, children, ...props}) {
     return (
         <InfoBox
             id={venue.id}
+            headingSize="xl"
             heading={(
                 <>Venue
                     <UpdateVenueModal
