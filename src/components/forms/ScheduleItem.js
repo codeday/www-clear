@@ -105,7 +105,7 @@ export function CreateScheduleItemModal({
 
     return (
         <Box d="inline" {...props}>
-            <Button onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Schedule Item</>}</Button>
+            <Button h={6} onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Schedule Item</>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
                 <Heading>Create Schedule Item</Heading>
                 <Form

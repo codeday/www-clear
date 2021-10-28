@@ -67,7 +67,7 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
     getSession().then((onResolved) => fetch = useFetcher(onResolved))
     const router = useRouter();
     return (
-        <InfoBox heading="Event Status">
+        <InfoBox heading="Event Status" headingSize="xl">
             <Box>
                 <Heading d="inline">Registrations are&nbsp;</Heading>
                 {event.registrationsOpen ?

@@ -79,7 +79,7 @@ export function CreateSponsorModal({event, children, ...props}) {
 
     return (
         <Box d="inline" {...props}>
-            <Button onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Sponsor</>}</Button>
+            <Button h={6} onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Sponsor</>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
                 <Heading>Create Sponsor</Heading>
                 <Form

@@ -44,13 +44,14 @@ export default function Notes({notes, updateMutation, updateId, children, ...pro
         }}><Icon.UiX/></Button>
     const editButton = <Button
         variant="ghost"
+        h={6}
         onClick={() => {
             setEditing(true);
             setTempNotes(notes);
         }}><Icon.UiEdit/></Button>
     const heading = editing ? <> Notes <Box>{okButton} {trashButton}</Box> </> : <>Notes {editButton}</>
     return (
-        <InfoBox heading={heading} {...props}>
+        <InfoBox heading={heading}  {...props}>
             {editing ?
                 <TextareaInput
                     value={tempNotes}
