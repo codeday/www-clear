@@ -1,13 +1,13 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
-import {Calendar, PaymentCash, PaymentDiscount} from "@codeday/topocons/Icon"
-import Alert, {GoodAlert} from "./Alert";
+import { Calendar, PaymentCash, PaymentDiscount } from "@codeday/topocons/Icon"
+import Alert, { GoodAlert } from "./Alert";
 import moment from "moment-timezone";
 import Text from "@codeday/topo/Atom/Text"
 
-export default function TicketBox({event, children, ...props}) {
+export default function TicketBox({ event, children, ...props }) {
     return (
-        <InfoBox heading="Ticket Details">
+        <InfoBox headingSize="xl" heading="Ticket Details">
             <Text>
                 <PaymentCash />Regular Ticket Price: {event.ticketPrice}
             </Text>
@@ -20,8 +20,8 @@ export default function TicketBox({event, children, ...props}) {
             <Text>
                 <Calendar />Early Bird Deadline: {moment(event.earlyBirdCutoff).utc().format('LL')}
             </Text>
-            {event.canEarlyBirdRegister? <GoodAlert>Early Bird Active</GoodAlert>: <Alert>Early Bird Inactive</Alert>}
-            {event.canRegister? <GoodAlert>Registrations Active</GoodAlert>: <Alert>Registrations Inactive</Alert>}
+            {event.canEarlyBirdRegister ? <GoodAlert>Early Bird Active</GoodAlert> : <Alert>Early Bird Inactive</Alert>}
+            {event.canRegister ? <GoodAlert>Registrations Active</GoodAlert> : <Alert>Registrations Inactive</Alert>}
             {children}
         </InfoBox>
     )

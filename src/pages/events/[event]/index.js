@@ -50,7 +50,7 @@ export default function Event({event}) {
                                  heading={<>Schedule <CreateScheduleItemModal event={event}><Icon.UiAdd/></CreateScheduleItemModal></>}>
                         <Button as="a" href={`${event.id}/schedule`}>View Schedule</Button>
                     </ScheduleBox>
-                    <Notes notes={event.notes} updateId={event.id} updateMutation={SetEventNotesMutation}/>
+                    <Notes notes={event.notes} updateId={event.id} headingSize="xl" updateMutation={SetEventNotesMutation}/>
                     <TicketBox event={event}><Button as="a" href={`${event.id}/promoCodes`}>View Promo Codes</Button></TicketBox>
                 </Masonry>
             </ResponsiveMasonry>

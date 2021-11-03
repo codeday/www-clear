@@ -8,7 +8,7 @@ export default function ({schedule, children, ...props}) {
     const nonfinalizedExternalEvents = schedule.filter((val) => !val.finalized && !val.internal);
     const internalEvents = schedule.filter((val) => val.internal);
     return (
-        <InfoBox heading="Schedule" {...props}>
+        <InfoBox heading="Schedule" headingSize="xl" {...props}>
             <Box>
                 <Heading d="inline" color="green">{finalizedExternalEvents.length}</Heading> Finalized Events
             </Box>
