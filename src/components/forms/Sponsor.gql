@@ -31,3 +31,11 @@ mutation DeleteSponsorMutation($where: ClearSponsorWhereUniqueInput!) {
         }
     }
 }
+
+mutation UploadSponsorLogoMutation($where: ClearSponsorWhereUniqueInput! $file: Upload!) {
+    clear {
+        uploadSponsorLogo(where: $where, upload: $file) {
+            logoImageUri
+        }
+    }
+}
