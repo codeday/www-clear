@@ -20,11 +20,10 @@ const schema = {
             title: 'Name',
             type: 'string',
         },
-        // logoImageUri: {
-        //     title: "Logo",
-        //     type: "string",
-        //     format: "data-url"
-        // },
+        link: {
+            title: 'Link',
+            type: 'string'
+        },
         description: {
             title: 'Description',
             type: 'string',

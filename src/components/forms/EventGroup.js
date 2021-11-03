@@ -51,6 +51,10 @@ const schema = {
             type: 'string',
             format: 'date',
             title: 'Registration Cutoff'
+        },
+        showcaseId: {
+            type: 'string',
+            title: 'Showcase ID'
         }
     },
     required: ['name', 'startDate', 'endDate', 'ticketPrice', 'earlyBirdPrice', 'earlyBirdCutoff', 'registrationCutoff']

@@ -6,6 +6,7 @@ fragment SponsorFormFragment on ClearSponsor {
     contactName
     contactPhone
     contactEmail
+    link
 }
 
 mutation CreateSponsorMutation($data: ClearSponsorCreateInput!) {

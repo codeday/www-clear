@@ -66,6 +66,10 @@ const schema = {
                 type: 'string',
             },
         },
+        showcaseId: {
+            title: 'Showcase ID',
+            type: 'string'
+        }
     },
 };
 

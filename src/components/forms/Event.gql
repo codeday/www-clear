@@ -8,6 +8,7 @@ fragment EventFormFragment on ClearEvent {
     registrationCutoff
     managers
     contentfulWebname
+    showcaseId
 }
 
 fragment CreateEventGroupPrefillFragment on ClearEventGroup {

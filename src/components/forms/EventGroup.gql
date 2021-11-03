@@ -6,6 +6,7 @@ fragment EventGroupFormFragment on ClearEventGroup {
     earlyBirdPrice
     earlyBirdCutoff
     registrationCutoff
+    showcaseId
 }
 
 mutation CreateEventGroupMutation($data: ClearEventGroupCreateInput!) {
