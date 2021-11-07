@@ -45,7 +45,8 @@
     "react-line-graph": "^1.0.6",
     "react-responsive-masonry": "^2.1.3",
     "react-responsive-modal": "^6.1.0",
-    "swr": "^1.0.1"
+    "swr": "^1.0.1",
+    "three": "^0.134.0"
   },
   "devDependencies": {
     "@codeday/eslint-config": "^2.1.4",
