@@ -1,10 +1,19 @@
 import * as THREE from "three";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 function Opossum({ height, width }) {
+  const [renderer,setRenderer] = useState()
+
+  
+
   useEffect(() => {
+    const resizeWindow = ()=>{
+      renderer.setSize(window.innerWidth, height);
+    }
+    window.addEventListener('resize', resizeWindow);
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -24,6 +33,8 @@ function Opossum({ height, width }) {
     renderer.setSize(window.innerWidth, height);
     camera.position.set(10, 2, 0);
     renderer.render(scene, camera);
+
+    setRenderer(renderer)
 
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
     hemiLight.position.set(0, 20, 0);
