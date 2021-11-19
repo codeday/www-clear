@@ -14,6 +14,7 @@ export default function Ticket({ticket, ...props}) {
              rounded={10}
              width="fit-content" {...props}
              as="a"
+             display="block"
              href={`tickets/${ticket.id}`}>
             <TicketTypeBadge ticket={ticket}/>
             <b>{ticket.firstName} {ticket.lastName}</b>{ticket.age ? '-' : null} {ticket.age}
