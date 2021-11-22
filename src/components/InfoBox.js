@@ -27,7 +27,6 @@ export default function InfoBox({children, heading, headingSize, buttons, nested
                 </Flex>
             )}
             <Box
-                bg="gray.50"
                 mt={1}
                 rounded={5}
                 p={1}
