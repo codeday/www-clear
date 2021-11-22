@@ -35,23 +35,54 @@ export default function Event({event}) {
             <DaysUntilEvent event={event}/>
             <ResponsiveMasonry>
                 <Masonry>
-                    <VenueInfo venue={event.venue}>
-                        {event.venue ? null : <><Alert>No Venue</Alert><CreateVenueModal event={event}/></>}
+                    <VenueInfo
+                      venue={event.venue}
+                      buttons={!event.venue && <CreateVenueModal event={event}><Icon.UiAdd/></CreateVenueModal>}
+                    >
+                        {!event.venue && <Alert>No Venue</Alert>}
                     </VenueInfo>
                     <RegistrationsToggleWithChecklist event={event}/>
-                    <SponsorOverview sponsors={event.sponsors}
-                                     heading={<>Sponsors <CreateSponsorModal event={event}><Icon.UiAdd/></CreateSponsorModal> </>}>
-                        <Button as="a" href={`${event.id}/sponsors`}>View Sponsors</Button>
+                    <SponsorOverview
+                        sponsors={event.sponsors}
+                        heading="Sponsors"
+                        buttons={
+                          <>
+                            <Button h={6} as="a" href={`${event.id}/sponsors`}><Icon.Eye /></Button>
+                            &nbsp;
+                            <CreateSponsorModal event={event}><Icon.UiAdd/></CreateSponsorModal>
+                          </>
+                        }
+                    >
                     </SponsorOverview>
-                    <RegistrationGraph event={event}>
-                        <Button as="a" href={`${event.id}/tickets`}>View Registrations</Button>
+                    <RegistrationGraph
+                        event={event}
+                        buttons={
+                            <Button h={6} as="a" href={`${event.id}/tickets`}><Icon.Eye /></Button>
+                        }
+                    >
                     </RegistrationGraph>
-                    <ScheduleBox schedule={event.schedule}
-                                 heading={<>Schedule <CreateScheduleItemModal event={event}><Icon.UiAdd/></CreateScheduleItemModal></>}>
-                        <Button as="a" href={`${event.id}/schedule`}>View Schedule</Button>
-                    </ScheduleBox>
-                    <Notes notes={event.notes} updateId={event.id} headingSize="xl" updateMutation={SetEventNotesMutation}/>
-                    <TicketBox event={event}><Button as="a" href={`${event.id}/promoCodes`}>View Promo Codes</Button></TicketBox>
+                    <ScheduleBox
+                        schedule={event.schedule}
+                        buttons={
+                            <>
+                                <Button h={6} as="a" href={`${event.id}/schedule`}><Icon.Eye /></Button>
+                                &nbsp;
+                                <CreateScheduleItemModal event={event}><Icon.UiAdd/></CreateScheduleItemModal>
+                            </>
+                        }
+                    />
+                    <Notes
+                        notes={event.notes}
+                        updateId={event.id}
+                        headingSize="xl"
+                        updateMutation={SetEventNotesMutation}
+                    />
+                    <TicketBox
+                      event={event}
+                      buttons={
+                        <Button h={6} as="a" href={`${event.id}/promoCodes`}>PROMOS</Button>
+                      }
+                    />
                 </Masonry>
             </ResponsiveMasonry>
         </Page>

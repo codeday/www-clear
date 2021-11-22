@@ -1,14 +1,22 @@
 import React from 'react'
 import Text from '@codeday/topo/Atom/Text'
+import Box, { Flex } from '@codeday/topo/Atom/Box';
 import InfoBox from "./InfoBox";
+import { Image } from '@codeday/topo/node_modules/@chakra-ui/react';
 
 export default function Event({event, ...props}) {
     return (
-        <InfoBox heading={event.name} id={event.id} as="a" href={`/events/${event.id}`} {...props}>
-            <Text mb={0}>{event.eventGroup?.name || null}</Text>
-            <Text mb={0}>{event.displayDate}</Text>
-            <Text mb={0}>{event.soldTickets + (event.soldTickets == 1 ? " ticket" : " tickets")} sold</Text>
-            {event.soldTickets > 0 && <Text mb={0}>({event.students} students {event.soldTickets - event.students} staff)</Text>}
+        <InfoBox heading={<>{event.name} - {event.eventGroup?.name}</>} id={event.id} as="a" href={`/events/${event.id}`} {...props}>
+          <Flex>
+            <Box bgColor="gray.50" w="60px" h="60px" mr={4} mb={1} ml={1}>
+              {event.region?.skylinePhoto && <Image src={event.region.skylinePhoto.url} alt="" />}
+            </Box>
+            <Box>
+              <Text mb={0}>{event.displayDate}</Text>
+              <Text mb={0}>{event.soldTickets + (event.soldTickets == 1 ? " ticket" : " tickets")} sold</Text>
+              {event.soldTickets > 0 && <Text mb={0}>({event.students} students {event.soldTickets - event.students} staff)</Text>}
+            </Box>
+          </Flex>
         </InfoBox>
     )
 }

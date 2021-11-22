@@ -1,20 +1,30 @@
 import React from 'react';
-import {Heading} from '@codeday/topo/Atom/Text';
+import Text from '@codeday/topo/Atom/Text';
 import moment from 'moment-timezone';
 import InfoBox from './InfoBox';
 
-export default function DaysUntilEvent({event, children, ...props}) {
-    const now = moment().utc(false);
-    const eventStart = moment(event.startDate).utc();
-    const daysUntil = Math.ceil(moment.duration(eventStart.diff(now)).as('days'));
+function DayDisplay({ text, redText, children, ...props }) {
     return (
         <InfoBox {...props}>
-            <Heading pb={3} size="2xl">CodeDay is&nbsp;
-                <Heading size="3xl" color="brand" d="inline">
-                    {daysUntil === 1 ? 'tomorrow' : daysUntil === 0 ? 'today' : `in ${daysUntil} days`}
-                </Heading>.
-            </Heading>
+            <Text mb={0} fontSize="3xl" fontWeight="bold">{text}{text && redText && <>&nbsp;</>}
+                {redText && (
+                    <Text as="span" color="brand">
+                        {redText}
+                    </Text>
+                )}
+            </Text>
             {children}
         </InfoBox>
     );
+}
+
+export default function DaysUntilEvent({event, ...props}) {
+    const now = moment().utc(false);
+    const eventStart = moment(event.startDate).utc();
+    const daysUntil = Math.ceil(moment.duration(eventStart.diff(now)).as('days'));
+
+    if (daysUntil < 0) return <DayDisplay text="CodeDay is over. :(" {...props} />;
+    if (daysUntil === 0) return <DayDisplay redText="It's CodeDay!" {...props} />;
+    if (daysUntil === 1) return <DayDisplay text="CodeDay is" redText="tomorrow." {...props} />
+    return <DayDisplay text="CodeDay is" redText={`in ${daysUntil} days.`} {...props} />
 }

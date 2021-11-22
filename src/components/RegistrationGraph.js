@@ -18,14 +18,12 @@ export default function RegistrationGraph({ event, children, ...props }) {
         }
     });
     data.push({ x: 60, y: data[data.length - 1].y });
-    console.log(data);
-    console.log(event.tickets);
     return (
         <InfoBox heading="Registrations" headingSize="xl" {...props}>
             <Heading>{event.tickets.length} Registrations</Heading>
             <Text m={0} ml={.5} size="sm">{event.soldTickets} students; {event.tickets.length - event.soldTickets} staff</Text>
             {children}
-            <LineGraph data={data} />
+            {event.soldTickets > 0 && <LineGraph data={data} />}
         </InfoBox>
     );
 }

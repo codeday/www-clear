@@ -68,7 +68,7 @@ export default function Page({
                         {loading ? <Skelly/> : menuItems}
                     </Menu>
                 </Header>
-                <Content>
+                <Content mt={-8}>
                     {children}
                 </Content>
             </Box>

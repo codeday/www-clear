@@ -3,7 +3,7 @@ import Switch from "@codeday/topo/Atom/Input/Switch"
 import Alert, {GoodAlert, WarningAlert} from "./Alert"
 import Box from "@codeday/topo/Atom/Box"
 import InfoBox from "./InfoBox"
-import {Heading} from "@codeday/topo/Atom/Text"
+import Text, {Heading} from "@codeday/topo/Atom/Text"
 import {useFetcher} from "../fetch";
 import {useToasts} from "@codeday/topo/utils"
 import {print} from "graphql";
@@ -68,11 +68,11 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
     const router = useRouter();
     return (
         <InfoBox heading="Event Status" headingSize="xl">
-            <Box>
-                <Heading d="inline">Registrations are&nbsp;</Heading>
+            <Box fontSize="2xl" fontWeight="bold">
+                <Text as="span">Registrations are&nbsp;</Text>
                 {event.registrationsOpen ?
-                    <Heading d="inline" color="green">Open</Heading> :
-                    <Heading d="inline" color="gray.500">Closed</Heading>
+                    <Text as="span" color="green">open.</Text> :
+                    <Text as="span" color="gray.500">closed.</Text>
                 }
             </Box>
             <Switch
@@ -98,10 +98,8 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
                 }}
             />
             <Box m={2}>
-                {checks.map((check) => {
-                    if (check.check) {
-                        return <><GoodAlert m={0.5}>{check.passedMsg}</GoodAlert><br/></>
-                    } else if (check.severity === "warning") {
+                {checks.filter((check) => !check.check).map((check) => {
+                    if (check.severity === "warning") {
                         return <><WarningAlert m={0.5}>{check.failedMsg}</WarningAlert><br/></>
                     } else {
                         return <><Alert m={0.5}>{check.failedMsg}</Alert><br/></>

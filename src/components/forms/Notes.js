@@ -21,7 +21,7 @@ export default function Notes({notes, updateMutation, updateId, children, ...pro
     const router = useRouter()
 
     const okButton = <Button
-        variant="ghost"
+        h={6}
         disabled={loading}
         isLoading={loading}
         onClick={async () => {
@@ -38,20 +38,19 @@ export default function Notes({notes, updateMutation, updateId, children, ...pro
 
         }}><Icon.UiOk/></Button>
     const trashButton = <Button
-        variant="ghost"
+        h={6}
         onClick={() => {
             setEditing(false)
         }}><Icon.UiX/></Button>
     const editButton = <Button
-        variant="ghost"
         h={6}
         onClick={() => {
             setEditing(true);
             setTempNotes(notes);
         }}><Icon.UiEdit/></Button>
-    const heading = editing ? <> Notes <Box>{okButton} {trashButton}</Box> </> : <>Notes {editButton}</>
+    const buttons = editing ? <Box>{okButton} {trashButton}</Box> : editButton;
     return (
-        <InfoBox heading={heading}  {...props}>
+        <InfoBox heading={"Notes"} buttons={buttons}  {...props}>
             {editing ?
                 <TextareaInput
                     value={tempNotes}

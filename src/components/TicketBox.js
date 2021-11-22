@@ -7,20 +7,20 @@ import Text from "@codeday/topo/Atom/Text"
 
 export default function TicketBox({ event, children, ...props }) {
     return (
-        <InfoBox headingSize="xl" heading="Ticket Details">
-            <Text>
-                <PaymentCash />Regular Ticket Price: {event.ticketPrice}
-            </Text>
-            <Text>
-                <Calendar />Registration Deadline: {moment(event.registrationCutoff).utc().format('LL')}
-            </Text>
-            <Text>
+        <InfoBox headingSize="xl" heading="Pricing" {...props}>
+            <Text mb={0}>
                 <PaymentDiscount />Early Bird Ticket Price: {event.earlyBirdPrice}
             </Text>
-            <Text>
+            <Text mb={0}>
                 <Calendar />Early Bird Deadline: {moment(event.earlyBirdCutoff).utc().format('LL')}
             </Text>
             {event.canEarlyBirdRegister ? <GoodAlert>Early Bird Active</GoodAlert> : <Alert>Early Bird Inactive</Alert>}
+            <Text mb={0} mt={2}>
+                <PaymentCash />Regular Ticket Price: {event.ticketPrice}
+            </Text>
+            <Text mb={0}>
+                <Calendar />Registration Deadline: {moment(event.registrationCutoff).utc().format('LL')}
+            </Text>
             {event.canRegister ? <GoodAlert>Registrations Active</GoodAlert> : <Alert>Registrations Inactive</Alert>}
             {children}
         </InfoBox>

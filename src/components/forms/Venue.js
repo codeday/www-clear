@@ -63,7 +63,7 @@ export function CreateVenueModal({event, children, ...props}) {
 
     return (
         <Box {...props}>
-            <Button onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Venue</>}</Button>
+            <Button h={6} onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Venue</>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
                 <Heading>Create Venue</Heading>
                 <InfoAlert>You can leave anything you aren't sure of yet blank and edit later!</InfoAlert>

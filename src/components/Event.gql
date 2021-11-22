@@ -7,4 +7,9 @@ fragment EventFragment on ClearEvent {
         name
     }
     displayDate
+    region {
+      skylinePhoto {
+        url(transform: { width: 100, height: 100, resizeStrategy: FILL })
+      }
+    }
 }
