@@ -1,12 +1,12 @@
 import Opossum from "../components/Opossum";
-import { Heading } from "@codeday/topo/Atom/Text";
-import Text from "@codeday/topo/Atom/Text";
+import Text, {Heading} from "@codeday/topo/Atom/Text";
 import Box from "@codeday/topo/Atom/Box";
 import Link from "@codeday/topo/Atom/Text/Link";
+import Page from "../components/Page"
 
 export default function ServerError() {
   return (
-    <Box>
+    <Page title='Error 500'>
       <Box style={{ display: "flex", justifyContent: "center" }}>
         <Opossum height={600} />
       </Box>
@@ -15,6 +15,6 @@ export default function ServerError() {
         <Text>There seems to have been an error on our part. </Text>
         <Link href="/">Go home</Link>
       </Box>
-    </Box>
+    </Page>
   );
 }
