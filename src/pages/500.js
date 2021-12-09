@@ -8,7 +8,7 @@ export default function ServerError() {
   return (
     <Page title='Error 500'>
       <Box style={{ display: "flex", justifyContent: "center" }}>
-        <Opossum height={600} />
+        <Opossum />
       </Box>
       <Box style={{ textAlign: "center" }}>
         <Heading>Oh no! Error 500</Heading>
