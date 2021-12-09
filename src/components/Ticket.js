@@ -12,7 +12,8 @@ export default function Ticket({ticket, ...props}) {
              m={2}
              p={4}
              rounded={10}
-             width="fit-content" {...props}
+             width="fit-content"
+             {...props}
              as="a"
              display="block"
              href={`tickets/${ticket.id}`}>
