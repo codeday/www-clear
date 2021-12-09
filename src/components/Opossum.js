@@ -74,6 +74,9 @@ function Opossum({ height, width }) {
     function animate() {
       requestAnimationFrame(animate);
 
+      controls.enablePan = false;
+      controls.enableRotate = false;
+      controls.enableZoom = false;
       controls.autoRotate = true;
       controls.autoRotateSpeed = 5.0;
 

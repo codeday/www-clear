@@ -1,4 +1,4 @@
-import Opossum from "../components/opossum/Opossum";
+import Opossum from "../components/Opossum";
 import { Heading } from "@codeday/topo/Atom/Text";
 import Text from "@codeday/topo/Atom/Text";
 import Box from "@codeday/topo/Atom/Box";
