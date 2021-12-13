@@ -1,0 +1,23 @@
+mutation CreateCovidRestrictionMutation($data: ClearCovidRestrictionCreateInput!) {
+    clear {
+        createCovidRestriction(data: $data) {
+            id
+        }
+    }
+}
+
+mutation UpdateCovidRestrictionMutation($where: ClearCovidRestrictionWhereUniqueInput!, $data: ClearCovidRestrictionUpdateInput!) {
+    clear {
+        updateCovidRestriction(where: $where, data: $data) {
+            id
+        }
+    }
+}
+
+mutation DeleteCovidRestrictionMutation($where: ClearCovidRestrictionWhereUniqueInput!) {
+    clear {
+        deleteCovidRestriction(where: $where) {
+            id
+        }
+    }
+}

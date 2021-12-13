@@ -13,6 +13,39 @@ import {getSession} from 'next-auth/client';
 import {CreateTicketMutation, DeleteTicketMutation, UpdateTicketMutation} from './Ticket.gql';
 import {useFetcher} from '../../fetch';
 
+export const ticketTypeEnum = [
+    {
+        type: 'string',
+        title: 'Student',
+        enum: ['STUDENT']
+    },
+    {
+        type: 'string',
+        title: 'Teacher',
+        enum: ['TEACHER']
+    },
+    {
+        type: 'string',
+        title: 'VIP',
+        enum: ['VIP']
+    },
+    {
+        type: 'string',
+        title: 'Mentor',
+        enum: ['MENTOR']
+    },
+    {
+        type: 'string',
+        title: 'Judge',
+        enum: ['JUDGE']
+    },
+    {
+        type: 'string',
+        title: 'Staff',
+        enum: ['STAFF']
+    }
+]
+
 const schema = {
     type: 'object',
     properties: {
@@ -40,38 +73,7 @@ const schema = {
             type: 'string',
             title: 'Type',
             default: 'STUDENT',
-            anyOf: [
-                {
-                    type: 'string',
-                    title: 'Student',
-                    enum: ['STUDENT']
-                },
-                {
-                    type: 'string',
-                    title: 'Teacher',
-                    enum: ['TEACHER']
-                },
-                {
-                    type: 'string',
-                    title: 'VIP',
-                    enum: ['VIP']
-                },
-                {
-                    type: 'string',
-                    title: 'Mentor',
-                    enum: ['MENTOR']
-                },
-                {
-                    type: 'string',
-                    title: 'Judge',
-                    enum: ['JUDGE']
-                },
-                {
-                    type: 'string',
-                    title: 'Staff',
-                    enum: ['STAFF']
-                }
-            ]
+            anyOf: ticketTypeEnum
         }
     },
     required: ['firstName', 'lastName']
