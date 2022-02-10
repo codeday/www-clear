@@ -40,3 +40,11 @@ mutation UploadSponsorLogoMutation($where: ClearSponsorWhereUniqueInput! $file: 
         }
     }
 }
+
+mutation UploadSponsorDarkLogoMutation($where: ClearSponsorWhereUniqueInput! $file: Upload!) {
+    clear {
+        uploadDarkSponsorLogo(where: $where, upload: $file) {
+            logoImageUri
+        }
+    }
+}

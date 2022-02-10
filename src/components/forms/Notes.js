@@ -50,7 +50,7 @@ export default function Notes({notes, updateMutation, updateId, children, ...pro
         }}><Icon.UiEdit/></Button>
     const buttons = editing ? <Box>{okButton} {trashButton}</Box> : editButton;
     return (
-        <InfoBox heading={"Notes"} buttons={buttons}  {...props}>
+        <InfoBox heading={"Notes"} buttons={buttons} {...props}>
             {editing ?
                 <TextareaInput
                     value={tempNotes}

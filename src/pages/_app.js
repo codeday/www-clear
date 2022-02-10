@@ -9,7 +9,7 @@ export default function CustomApp({Component, pageProps: {query, ...pageProps}})
     moment.tz.setDefault('Etc/UTC');
 
     return (
-        <Theme>
+        <Theme brandColor="red" withChat>
             <QueryProvider value={query || {}}>
                 <Component {...pageProps} />
             </QueryProvider>

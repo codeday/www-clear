@@ -1,0 +1,21 @@
+fragment EmailTemplateFragment on ClearEmailTemplate {
+    id
+    name
+    subject
+    automatic
+    fromEmail
+    fromName
+    replyTo
+    extraFilters
+    marketing
+    sendAfterEvent
+    sendInWorkHours
+    sendLate
+    sendParent
+    sendText
+    sendTo
+    template
+    textMsg
+    when
+    whenFrom
+}

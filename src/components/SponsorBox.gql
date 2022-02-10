@@ -8,6 +8,7 @@ fragment SponsorBoxFragment on ClearSponsor {
     description
     perks
     logoImageUri
+    darkLogoImageUri
     contactName
     contactEmail
     contactPhone

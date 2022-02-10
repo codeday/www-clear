@@ -30,6 +30,8 @@ const schema = {
         automatic: {
             title: 'Automatic?',
             type: 'boolean',
+            default: false
+
         },
         fromName: {
             title: 'From Name',
@@ -51,7 +53,9 @@ const schema = {
         },
         sendText: {
             title: 'Send as text?',
-            type:'boolean'
+            type:'boolean',
+            default: false
+
         },
         textMsg: {
             title: 'Text message',
@@ -91,28 +95,38 @@ const schema = {
         },
         sendLate: {
             title: 'Send Late?',
-            type: 'boolean'
+            type: 'boolean',
+            default: false
         },
         sendInWorkHours: {
             title: 'Wait to send until work hours?',
-            type: 'boolean'
+            type: 'boolean',
+            default: false
+
         },
         sendAfterEvent: {
             title: 'Send after event?',
-            type: 'boolean'
+            type: 'boolean',
+            default: false
+
         },
         sendParent: {
             title: 'Send to parents?',
-            type: 'boolean'
+            type: 'boolean',
+            default: false
+
         },
         marketing: {
             title: 'Marketing email?',
-            type: 'boolean'
+            type: 'boolean',
+            default: false
+
         },
-        extraFilters: {
-            title: 'Extra filters (prisma `where`)',
-            type: 'string'
-        }
+        // extraFilters: {
+        //     title: 'Extra filters (prisma `where`)',
+        //     type: 'string'
+        // }
+        // Dropped feature to save dev time, unimplemented on backend. Might add at some point
     },
     required: [
         "name",
@@ -140,7 +154,7 @@ const uiSchema = {
         'ui:help': 'Only applies if time source is event start - if true, retroactively sends emails if people register after email sent to others'
     },
     sendAfterEvent: {
-        'ui:help': '<b>All</b> Email Templates without this option are barred from being sent if the event has ended'
+        'ui:help': '**All** Email Templates without this option are barred from being sent if the event has ended'
     },
     sendParent: {
         'ui:help': 'If selected, this email will only be sent to parents - to send to both, create two Email Templates'

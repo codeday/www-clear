@@ -9,6 +9,8 @@ fragment EventFormFragment on ClearEvent {
     managers
     contentfulWebname
     showcaseId
+    timezone
+    majorityAge
 }
 
 fragment CreateEventGroupPrefillFragment on ClearEventGroup {

@@ -18,6 +18,14 @@ fragment ScheduleItemNotesFragment on ClearScheduleItem {
     notes: getMetadata(key: "notes")
 }
 
+fragment EventRestrictionNotesFragment on ClearEventRestriction {
+    notes: getMetadata(key: "notes")
+}
+
+fragment EmailTemplateNotesFragment on ClearEmailTemplate {
+    notes: getMetadata(key: "notes")
+}
+
 mutation SetPromoCodeNotesMutation($id: String! $notes: String!) {
     clear {
         setNotes: setPromoCodeMetadata(where: {id: $id}, key: "notes", value: $notes) {
@@ -54,6 +62,22 @@ mutation SetScheduleItemNotesMutation($id: String! $notes: String!) {
     clear {
         setNotes: setScheduleItemMetadata(where: {id: $id}, key: "notes", value: $notes) {
             ...ScheduleItemNotesFragment
+        }
+    }
+}
+
+mutation SetEventRestrictionNotesMutation($id: String! $notes: String!) {
+    clear {
+        setNotes: setEventRestrictionMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...EventRestrictionNotesFragment
+        }
+    }
+}
+
+mutation SetEmailTemplateNotesMutation($id: String! $notes: String!) {
+    clear {
+        setNotes: setEmailTemplateMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...EmailTemplateNotesFragment
         }
     }
 }

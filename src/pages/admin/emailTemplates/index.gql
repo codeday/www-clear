@@ -1,0 +1,10 @@
+#import "../../../components/EmailTemplate.gql"
+#import "../../../components/forms/EmailTemplate.gql"
+query getEmailTemplatesQuery {
+    clear {
+        emailTemplates {
+            ...EmailTemplateFragment
+            ...EmailTemplateFormFragment
+        }
+    }
+}

@@ -21,3 +21,25 @@ mutation DeleteEmailTemplateMutation($where: ClearEmailTemplateWhereUniqueInput!
         }
     }
 }
+
+fragment EmailTemplateFormFragment on ClearEmailTemplate {
+    id
+    name
+    automatic
+    fromName
+    fromEmail
+    replyTo
+    subject
+    template
+    sendText
+    textMsg
+    sendTo
+    when
+    whenFrom
+    sendLate
+    sendInWorkHours
+    sendAfterEvent
+    sendParent
+    marketing
+    extraFilters
+}

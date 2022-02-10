@@ -24,6 +24,8 @@ import {CreateSponsorModal} from '../../../components/forms/Sponsor';
 import {CreateScheduleItemModal} from '../../../components/forms/ScheduleItem';
 import ScheduleBox from '../../../components/ScheduleBox';
 import TicketBox from "../../../components/TicketBox";
+import EventRestrictionBox from "../../../components/EventRestrictionBox";
+
 
 export default function Event({event}) {
     if (!event) return <Page/>;
@@ -82,6 +84,15 @@ export default function Event({event}) {
                       buttons={
                         <Button h={6} as="a" href={`${event.id}/promoCodes`}>PROMOS</Button>
                       }
+                    />
+                    <Box /> {/* hack for spacing */}
+                    <EventRestrictionBox
+                        restrictions={event.eventRestrictions}
+                        buttons={
+                            <Button h={6} as="a" href={`${event.id}/eventRestrictions`}>
+                                <Icon.Eye />
+                            </Button>
+                        }
                     />
                 </Masonry>
             </ResponsiveMasonry>

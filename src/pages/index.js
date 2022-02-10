@@ -11,6 +11,9 @@ export default function Index() {
                 <li>
                     <Link href="groups">Event Groups</Link>
                 </li>
+                <li>
+                    <Link href="admin">Admin</Link>
+                </li>
             </ul>
         </Page>
     );

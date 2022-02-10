@@ -1,0 +1,4 @@
+fragment EventRestrictionBoxFragment on ClearEventRestriction {
+    id
+    name
+}

@@ -7,6 +7,7 @@
 #import "../../../components/forms/Event.gql"
 #import "../../../components/TicketBox.gql"
 #import "../../../components/DaysUntilEvent.gql"
+#import "../../../components/EventRestrictionBox.gql"
 
 query getEventQuery($data: ClearEventWhereUniqueInput!) {
     clear {
@@ -19,6 +20,9 @@ query getEventQuery($data: ClearEventWhereUniqueInput!) {
             }
             venue {
                 ...VenueInfoFragment
+            }
+            eventRestrictions {
+                ...EventRestrictionBoxFragment
             }
             ...RegistrationsToggleWithChecklistFragment
             ...SponsorOverviewFragment

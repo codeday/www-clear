@@ -1,0 +1,17 @@
+#import "../../../components/EventRestriction.gql"
+#import "../../../components/LinkEventRestrictionsModal.gql"
+
+query GetEventRestrictionsQuery($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            id
+            name
+            eventRestrictions {
+                ...EventRestrictionFragment
+            }
+        }
+        eventRestrictions {
+            ...LinkEventRestrictionsModalFragment
+        }
+    }
+}

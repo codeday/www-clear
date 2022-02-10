@@ -69,6 +69,15 @@ const schema = {
         showcaseId: {
             title: 'Showcase ID',
             type: 'string'
+        },
+        timezone: {
+            title: 'Timezone (IANA)',
+            type: 'string'
+        },
+        majorityAge: {
+            title: 'Age of majority',
+            type: 'number',
+            default: 18
         }
     },
 };

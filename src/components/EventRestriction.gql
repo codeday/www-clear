@@ -1,0 +1,12 @@
+#import "forms/EventRestriction.gql"
+#import "forms/Notes.gql"
+
+fragment EventRestrictionFragment on ClearEventRestriction {
+    id
+    name
+    title
+    details
+    iconUri
+    ...EventRestrictionFormFragment
+    ...EventRestrictionNotesFragment
+}

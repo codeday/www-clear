@@ -10,10 +10,10 @@ import {InfoAlert} from "../Alert";
 import {useFetcher} from "../../fetch";
 import {getSession} from 'next-auth/client';
 import {
-    CreateCovidRestrictionMutation,
-    UpdateCovidRestrictionMutation,
-    DeleteCovidRestrictionMutation
-} from "./CovidRestriction.gql";
+    CreateEventRestrictionMutation,
+    UpdateEventRestrictionMutation,
+    DeleteEventRestrictionMutation
+} from "./EventRestriction.gql";
 import {print} from "graphql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
@@ -43,7 +43,7 @@ const uiSchema = {
     }
 }
 
-export function CreateCovidRestrictionModal({children, ...props}) {
+export function CreateEventRestrictionModal({children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
     let fetch;
@@ -56,9 +56,9 @@ export function CreateCovidRestrictionModal({children, ...props}) {
 
     return (
         <Box {...props}>
-            <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add CovidRestriction</>}</Button>
+            <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add Event Restriction</>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
-                <Heading>Create CovidRestriction</Heading>
+                <Heading>Create Event Restriction</Heading>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -71,13 +71,13 @@ export function CreateCovidRestrictionModal({children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateCovidRestrictionMutation), {
+                                await fetch(print(CreateEventRestrictionMutation), {
                                     data: formData
                                     /* need to connect the new object
                                     to a parent object? do so here */
                                 });
                                 await router.replace(router.asPath)
-                                success('CovidRestriction Created')
+                                success('EventRestriction Created')
                                 onCloseModal()
                             } catch (ex) {
                                 error(ex.toString())
@@ -90,9 +90,9 @@ export function CreateCovidRestrictionModal({children, ...props}) {
     )
 }
 
-export function UpdateCovidRestrictionModal({covidrestriction, children, ...props}) {
+export function UpdateEventRestrictionModal({eventrestriction, children, ...props}) {
     const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState(covidrestriction);
+    const [formData, setFormData] = useState(eventrestriction);
     let fetch;
     getSession().then((onResolved) => fetch = useFetcher(onResolved));
     const [loading, setLoading] = useState(false)
@@ -104,7 +104,7 @@ export function UpdateCovidRestrictionModal({covidrestriction, children, ...prop
     function formDataToUpdateInput(formData) {
         const ret = {}
         Object.keys(schema.properties).map((key) => {
-            if (formData[key] !== covidrestriction[key]) ret[key] = {set: formData[key]}
+            if (formData[key] !== eventrestriction[key]) ret[key] = {set: formData[key]}
         })
         return ret
     }
@@ -125,12 +125,12 @@ export function UpdateCovidRestrictionModal({covidrestriction, children, ...prop
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateCovidRestrictionMutation), {
-                                    where: {id: covidrestriction.id},
+                                await fetch(print(UpdateEventRestrictionMutation), {
+                                    where: {id: eventrestriction.id},
                                     data: formDataToUpdateInput(formData)
                                 })
                                 await router.replace(router.asPath)
-                                success('CovidRestriction Updated')
+                                success('Event Restriction Updated')
                                 onCloseModal()
                             } catch (ex) {
                                 error(ex.toString())
@@ -143,7 +143,7 @@ export function UpdateCovidRestrictionModal({covidrestriction, children, ...prop
     )
 }
 
-export function DeleteCovidRestrictionModal({covidrestriction, children, ...props}) {
+export function DeleteEventRestrictionModal({eventrestriction, children, ...props}) {
     const [open, setOpen] = useState(false);
     let fetch;
     getSession().then((onResolved) => fetch = useFetcher(onResolved));
@@ -157,8 +157,8 @@ export function DeleteCovidRestrictionModal({covidrestriction, children, ...prop
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center>
-                <Heading>Remove CovidRestriction</Heading>
-                <Text>Are you sure you want to delete this CovidRestriction?
+                <Heading>Remove EventRestriction</Heading>
+                <Text>Are you sure you want to delete this Event Restriction?
                     <br/>
                     There's no turning back!</Text>
                 <Button
@@ -168,16 +168,16 @@ export function DeleteCovidRestrictionModal({covidrestriction, children, ...prop
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteCovidRestrictionMutation), {where: {id: covidrestriction.id}})
+                            await fetch(print(DeleteEventRestrictionMutation), {where: {id: eventrestriction.id}})
                             await router.replace(router.asPath)
-                            success('CovidRestriction Deleted')
+                            success('EventRestriction Deleted')
                             onCloseModal()
                         } catch (ex) {
                             error(ex.toString())
                         }
                         setLoading(false);
                     }}
-                ><Icon.UiTrash/><b>Delete CovidRestriction</b></Button>
+                ><Icon.UiTrash/><b>Delete Event Restriction</b></Button>
                 <Button onClick={onCloseModal}><Icon.UiX/>Cancel</Button>
             </Modal>
         </Box>
