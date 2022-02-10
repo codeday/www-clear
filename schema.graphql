@@ -3842,6 +3842,7 @@ type ClearEmailTemplate {
     id: String!
     marketing: Boolean!
     name: String!
+    previewEmailBody: String!
     replyTo: String!
     sendAfterEvent: Boolean!
     sendInWorkHours: Boolean!
@@ -4418,6 +4419,7 @@ type ClearMutation {
     updateSponsor(data: ClearSponsorUpdateInput!, where: ClearSponsorWhereUniqueInput!): ClearSponsor
     updateTicket(data: ClearTicketUpdateInput!, where: ClearTicketWhereUniqueInput!): ClearTicket
     updateVenue(data: ClearVenueUpdateInput!, where: ClearVenueWhereUniqueInput!): ClearVenue
+    uploadDarkSponsorLogo(upload: Upload!, where: ClearSponsorWhereUniqueInput!): ClearSponsor
     uploadEventRestrictionIcon(upload: Upload!, where: ClearEventRestrictionWhereUniqueInput!): ClearEventRestriction
     uploadSponsorLogo(upload: Upload!, where: ClearSponsorWhereUniqueInput!): ClearSponsor
     upsertEmailTemplate(create: ClearEmailTemplateCreateInput!, update: ClearEmailTemplateUpdateInput!, where: ClearEmailTemplateWhereUniqueInput!): ClearEmailTemplate!
@@ -4854,6 +4856,7 @@ type ClearSponsor {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime!
+    darkLogoImageUri: String
     description: String
     event: ClearEvent
     eventId: String
@@ -4877,6 +4880,7 @@ type ClearSponsorCountAggregate {
     contactName: Int!
     contactPhone: Int!
     createdAt: Int!
+    darkLogoImageUri: Int!
     description: Int!
     eventId: Int!
     id: Int!
@@ -4899,6 +4903,7 @@ type ClearSponsorGroupBy {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime!
+    darkLogoImageUri: String
     description: String
     eventId: String
     id: String!
@@ -4916,6 +4921,7 @@ type ClearSponsorMaxAggregate {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime
+    darkLogoImageUri: String
     description: String
     eventId: String
     id: String
@@ -4932,6 +4938,7 @@ type ClearSponsorMinAggregate {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime
+    darkLogoImageUri: String
     description: String
     eventId: String
     id: String
@@ -5999,6 +6006,13 @@ type CmsRegion implements CmsEntry {
     aliases(locale: String): [String]
     complication(locale: String, preview: Boolean): CmsAsset
     contentfulMetadata: CmsContentfulMetadata!
+    countryName(locale: String): String
+    countryNameAdjective(locale: String): String
+    countryNameShort(locale: String): String
+    countryNameShortAdjective(locale: String): String
+    e164CountryCode(locale: String): String
+    iso3166Alpha2Code(locale: String): String
+    iso3166Alpha3Code(locale: String): String
     linkedFrom(allowedLocales: [String]): CmsRegionLinkingCollections
     location(locale: String): CmsLocation
     motto(locale: String): String
@@ -7602,6 +7616,7 @@ enum ClearSponsorScalarFieldEnum {
     contactName
     contactPhone
     createdAt
+    darkLogoImageUri
     description
     eventId
     id
@@ -8086,6 +8101,20 @@ enum CmsRegionOrder {
     abbr_DESC
     accountingName_ASC
     accountingName_DESC
+    countryNameAdjective_ASC
+    countryNameAdjective_DESC
+    countryNameShortAdjective_ASC
+    countryNameShortAdjective_DESC
+    countryNameShort_ASC
+    countryNameShort_DESC
+    countryName_ASC
+    countryName_DESC
+    e164CountryCode_ASC
+    e164CountryCode_DESC
+    iso3166Alpha2Code_ASC
+    iso3166Alpha2Code_DESC
+    iso3166Alpha3Code_ASC
+    iso3166Alpha3Code_DESC
     motto_ASC
     motto_DESC
     name_ASC
@@ -15364,6 +15393,7 @@ input ClearSponsorCountOrderByAggregateInput {
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
     createdAt: ClearSortOrder
+    darkLogoImageUri: ClearSortOrder
     description: ClearSortOrder
     eventId: ClearSortOrder
     id: ClearSortOrder
@@ -15381,6 +15411,7 @@ input ClearSponsorCreateInput {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime
+    darkLogoImageUri: String
     description: String
     event: ClearEventCreateNestedOneWithoutSponsorsInput
     id: String
@@ -15398,6 +15429,7 @@ input ClearSponsorCreateManyEventInput {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime
+    darkLogoImageUri: String
     description: String
     id: String
     link: String
@@ -15419,6 +15451,7 @@ input ClearSponsorCreateManyInput {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime
+    darkLogoImageUri: String
     description: String
     eventId: String
     id: String
@@ -15448,6 +15481,7 @@ input ClearSponsorCreateWithoutEventInput {
     contactName: String
     contactPhone: String
     createdAt: ClearDateTime
+    darkLogoImageUri: String
     description: String
     id: String
     link: String
@@ -15470,6 +15504,7 @@ input ClearSponsorMaxOrderByAggregateInput {
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
     createdAt: ClearSortOrder
+    darkLogoImageUri: ClearSortOrder
     description: ClearSortOrder
     eventId: ClearSortOrder
     id: ClearSortOrder
@@ -15486,6 +15521,7 @@ input ClearSponsorMinOrderByAggregateInput {
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
     createdAt: ClearSortOrder
+    darkLogoImageUri: ClearSortOrder
     description: ClearSortOrder
     eventId: ClearSortOrder
     id: ClearSortOrder
@@ -15511,6 +15547,7 @@ input ClearSponsorOrderByWithAggregationInput {
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
     createdAt: ClearSortOrder
+    darkLogoImageUri: ClearSortOrder
     description: ClearSortOrder
     eventId: ClearSortOrder
     id: ClearSortOrder
@@ -15528,6 +15565,7 @@ input ClearSponsorOrderByWithRelationInput {
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
     createdAt: ClearSortOrder
+    darkLogoImageUri: ClearSortOrder
     description: ClearSortOrder
     event: ClearEventOrderByWithRelationInput
     eventId: ClearSortOrder
@@ -15549,6 +15587,7 @@ input ClearSponsorScalarWhereInput {
     contactName: ClearStringNullableFilter
     contactPhone: ClearStringNullableFilter
     createdAt: ClearDateTimeFilter
+    darkLogoImageUri: ClearStringNullableFilter
     description: ClearStringNullableFilter
     eventId: ClearStringNullableFilter
     id: ClearStringFilter
@@ -15569,6 +15608,7 @@ input ClearSponsorScalarWhereWithAggregatesInput {
     contactName: ClearStringNullableWithAggregatesFilter
     contactPhone: ClearStringNullableWithAggregatesFilter
     createdAt: ClearDateTimeWithAggregatesFilter
+    darkLogoImageUri: ClearStringNullableWithAggregatesFilter
     description: ClearStringNullableWithAggregatesFilter
     eventId: ClearStringNullableWithAggregatesFilter
     id: ClearStringWithAggregatesFilter
@@ -15590,6 +15630,7 @@ input ClearSponsorUpdateInput {
     contactName: ClearNullableStringFieldUpdateOperationsInput
     contactPhone: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
+    darkLogoImageUri: ClearNullableStringFieldUpdateOperationsInput
     description: ClearNullableStringFieldUpdateOperationsInput
     event: ClearEventUpdateOneWithoutSponsorsInput
     id: ClearStringFieldUpdateOperationsInput
@@ -15607,6 +15648,7 @@ input ClearSponsorUpdateManyMutationInput {
     contactName: ClearNullableStringFieldUpdateOperationsInput
     contactPhone: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
+    darkLogoImageUri: ClearNullableStringFieldUpdateOperationsInput
     description: ClearNullableStringFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     link: ClearNullableStringFieldUpdateOperationsInput
@@ -15647,6 +15689,7 @@ input ClearSponsorUpdateWithoutEventInput {
     contactName: ClearNullableStringFieldUpdateOperationsInput
     contactPhone: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
+    darkLogoImageUri: ClearNullableStringFieldUpdateOperationsInput
     description: ClearNullableStringFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     link: ClearNullableStringFieldUpdateOperationsInput
@@ -15672,6 +15715,7 @@ input ClearSponsorWhereInput {
     contactName: ClearStringNullableFilter
     contactPhone: ClearStringNullableFilter
     createdAt: ClearDateTimeFilter
+    darkLogoImageUri: ClearStringNullableFilter
     description: ClearStringNullableFilter
     event: ClearEventRelationFilter
     eventId: ClearStringNullableFilter
@@ -17695,6 +17739,55 @@ input CmsRegionFilter {
     aliases_exists: Boolean
     complication_exists: Boolean
     contentfulMetadata: CmsContentfulMetadataFilter
+    countryName: String
+    countryNameAdjective: String
+    countryNameAdjective_contains: String
+    countryNameAdjective_exists: Boolean
+    countryNameAdjective_in: [String]
+    countryNameAdjective_not: String
+    countryNameAdjective_not_contains: String
+    countryNameAdjective_not_in: [String]
+    countryNameShort: String
+    countryNameShortAdjective: String
+    countryNameShortAdjective_contains: String
+    countryNameShortAdjective_exists: Boolean
+    countryNameShortAdjective_in: [String]
+    countryNameShortAdjective_not: String
+    countryNameShortAdjective_not_contains: String
+    countryNameShortAdjective_not_in: [String]
+    countryNameShort_contains: String
+    countryNameShort_exists: Boolean
+    countryNameShort_in: [String]
+    countryNameShort_not: String
+    countryNameShort_not_contains: String
+    countryNameShort_not_in: [String]
+    countryName_contains: String
+    countryName_exists: Boolean
+    countryName_in: [String]
+    countryName_not: String
+    countryName_not_contains: String
+    countryName_not_in: [String]
+    e164CountryCode: String
+    e164CountryCode_contains: String
+    e164CountryCode_exists: Boolean
+    e164CountryCode_in: [String]
+    e164CountryCode_not: String
+    e164CountryCode_not_contains: String
+    e164CountryCode_not_in: [String]
+    iso3166Alpha2Code: String
+    iso3166Alpha2Code_contains: String
+    iso3166Alpha2Code_exists: Boolean
+    iso3166Alpha2Code_in: [String]
+    iso3166Alpha2Code_not: String
+    iso3166Alpha2Code_not_contains: String
+    iso3166Alpha2Code_not_in: [String]
+    iso3166Alpha3Code: String
+    iso3166Alpha3Code_contains: String
+    iso3166Alpha3Code_exists: Boolean
+    iso3166Alpha3Code_in: [String]
+    iso3166Alpha3Code_not: String
+    iso3166Alpha3Code_not_contains: String
+    iso3166Alpha3Code_not_in: [String]
     location_exists: Boolean
     location_within_circle: CmsCircle
     location_within_rectangle: CmsRectangle
@@ -18256,6 +18349,55 @@ input CmscfRegionNestedFilter {
     aliases_exists: Boolean
     complication_exists: Boolean
     contentfulMetadata: CmsContentfulMetadataFilter
+    countryName: String
+    countryNameAdjective: String
+    countryNameAdjective_contains: String
+    countryNameAdjective_exists: Boolean
+    countryNameAdjective_in: [String]
+    countryNameAdjective_not: String
+    countryNameAdjective_not_contains: String
+    countryNameAdjective_not_in: [String]
+    countryNameShort: String
+    countryNameShortAdjective: String
+    countryNameShortAdjective_contains: String
+    countryNameShortAdjective_exists: Boolean
+    countryNameShortAdjective_in: [String]
+    countryNameShortAdjective_not: String
+    countryNameShortAdjective_not_contains: String
+    countryNameShortAdjective_not_in: [String]
+    countryNameShort_contains: String
+    countryNameShort_exists: Boolean
+    countryNameShort_in: [String]
+    countryNameShort_not: String
+    countryNameShort_not_contains: String
+    countryNameShort_not_in: [String]
+    countryName_contains: String
+    countryName_exists: Boolean
+    countryName_in: [String]
+    countryName_not: String
+    countryName_not_contains: String
+    countryName_not_in: [String]
+    e164CountryCode: String
+    e164CountryCode_contains: String
+    e164CountryCode_exists: Boolean
+    e164CountryCode_in: [String]
+    e164CountryCode_not: String
+    e164CountryCode_not_contains: String
+    e164CountryCode_not_in: [String]
+    iso3166Alpha2Code: String
+    iso3166Alpha2Code_contains: String
+    iso3166Alpha2Code_exists: Boolean
+    iso3166Alpha2Code_in: [String]
+    iso3166Alpha2Code_not: String
+    iso3166Alpha2Code_not_contains: String
+    iso3166Alpha2Code_not_in: [String]
+    iso3166Alpha3Code: String
+    iso3166Alpha3Code_contains: String
+    iso3166Alpha3Code_exists: Boolean
+    iso3166Alpha3Code_in: [String]
+    iso3166Alpha3Code_not: String
+    iso3166Alpha3Code_not_contains: String
+    iso3166Alpha3Code_not_in: [String]
     location_exists: Boolean
     location_within_circle: CmsCircle
     location_within_rectangle: CmsRectangle
