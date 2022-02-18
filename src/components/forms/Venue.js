@@ -27,9 +27,41 @@ const schema = {
             type: 'integer',
             title: 'Capacity',
         },
-        address: {
+        addressLine1: {
             type: 'string',
-            title: 'Address',
+            title: 'Address Line 1'
+        },
+        addressLine2: {
+            type: 'string',
+            title: 'Address Line 2',
+        },
+        addressLine3: {
+            type: 'string',
+            title: 'Address Line 3',
+        },
+        city: {
+            type: 'string',
+            title: 'City',
+        },
+        state: {
+            type: 'string',
+            title: 'State'
+        },
+        stateAbbreviation: {
+            type: 'string',
+            title: 'State Abbreviation'
+        },
+        zipCode: {
+            type: 'string',
+            title: 'ZIP code'
+        },
+        country: {
+            type: 'string',
+            title: 'Country'
+        },
+        countryAbbreviation: {
+            type: 'string',
+            title: 'Country Abbreviation'
         },
         mapLink: {
             type: 'string',
