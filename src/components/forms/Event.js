@@ -78,6 +78,16 @@ const schema = {
             title: 'Age of majority',
             type: 'number',
             default: 18
+        },
+        minAge: {
+            title: 'Minimum age to register',
+            type: 'number',
+            default: 12
+        },
+        maxAge: {
+            title: 'Maximum age to register',
+            type: 'number',
+            default: 25
         }
     },
 };
