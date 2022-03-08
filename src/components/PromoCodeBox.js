@@ -8,7 +8,7 @@ export default function PromoCodeBox({promoCode, children, ...props}) {
              Type: {promoCode.type}<br/>
              Amount: {promoCode.amount}<br/>
              Uses: {promoCode.uses || <>&infin;</>}<br/>
-             {promoCode.usesRemaining? `Uses Remaining: ${promoCode.usesRemaining}}`: null}
+             {promoCode.usesRemaining? `Uses Remaining: ${promoCode.usesRemaining}`: null}
          </InfoBox>
      )
 }

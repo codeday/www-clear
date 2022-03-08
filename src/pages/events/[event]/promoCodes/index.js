@@ -7,14 +7,14 @@ import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Page from "../../../../components/Page"
 import {Heading} from "@codeday/topo/Atom/Text"
 import PromoCodeBox from "../../../../components/PromoCodeBox";
-import {CreatePromoCodeModal} from "../../../../components/forms/PromoCode";
+import {CreatePromoCodeModal, CreateScholarshipCodeButton} from "../../../../components/forms/PromoCode";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 
 export default function PromoCodes({event}) {
     return (
         <Page title="Promo Codes">
             <Breadcrumbs event={event} />
-            <Heading>{event.name} ~ Promo Codes <CreatePromoCodeModal event={event} /></Heading>
+            <Heading>{event.name} ~ Promo Codes <CreatePromoCodeModal event={event} /> <CreateScholarshipCodeButton event={event} /></Heading>
             <ResponsiveMasonry>
                 <Masonry>
                     {event.promoCodes.map((promoCode) => {

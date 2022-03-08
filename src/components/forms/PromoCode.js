@@ -15,6 +15,15 @@ import {useRouter} from "next/router";
 import moment from "moment-timezone";
 import {getSession} from "next-auth/client";
 
+const characters = "ABCDEFGHKPQRSTUVWXYZ";
+function generatePromoCode(length) {
+    let result = '';
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
+
 const schema = {
     type: "object",
     properties: {
@@ -189,5 +198,47 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
                 <Button onClick={onCloseModal}><Icon.UiX/>Cancel</Button>
             </Modal>
         </Box>
+    )
+}
+
+export function CreateScholarshipCodeButton({event, children, ...props}) {
+    let fetch;
+    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const [loading, setLoading] = useState(false)
+    const {success, error} = useToasts();
+    const router = useRouter();
+
+    return (
+        <Button
+            d="inline"
+            isLoading={loading}
+            disabled={loading}
+            onClick={async () => {
+                setLoading(true)
+                try {
+                    const result = await fetch(print(CreatePromoCodeMutation), {
+                        data: {
+                            code: generatePromoCode(6),
+                            type: 'PERCENT',
+                            amount: 100,
+                            uses: 1,
+                            event: {
+                                connect: {
+                                    id: event.id
+                                }
+                            }
+                        }
+                    });
+                    await router.push(`promoCodes/${result.clear.createPromoCode.id}`)
+                    success('Promo Code Created')
+                } catch (ex) {
+                    error(ex.toString())
+                }
+                setLoading(false)
+        }
+        }
+            >
+            Generate Scholarship Code
+        </Button>
     )
 }
