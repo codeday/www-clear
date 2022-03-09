@@ -57,6 +57,7 @@ export default function TicketPage({ticket}) {
                     <InfoBox heading="Payment Details">
                         Registered on: {moment(ticket.createdAt).format('LL')} <br/>
                         Promo Code used: {ticket.promoCode?.code || 'N/A'}
+                        Payment intent ID: {ticket.payment?.stripePaymentIntentId || 'N/A'}
                     </InfoBox>
                         </Masonry>
                         </ResponsiveMasonry>
