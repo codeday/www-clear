@@ -5,6 +5,7 @@
 #import "../../../components/ScheduleBox.gql"
 #import "../../../components/forms/Notes.gql"
 #import "../../../components/forms/Event.gql"
+#import "../../../components/forms/Venue.gql"
 #import "../../../components/TicketBox.gql"
 #import "../../../components/DaysUntilEvent.gql"
 #import "../../../components/EventRestrictionBox.gql"
