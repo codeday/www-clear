@@ -41,6 +41,7 @@
     "random-seed": "^0.3.0",
     "react": "^17.0.2",
     "react-clock": "^3.0.0",
+    "react-csv": "^2.2.2",
     "react-date-picker": "^8.3.2",
     "react-datetime": "^3.0.4",
     "react-datetime-picker": "^3.4.0",
