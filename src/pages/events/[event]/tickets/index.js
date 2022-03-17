@@ -14,6 +14,7 @@ import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 
 export default function Tickets({event}) {
     if (!event) return <Page/>;
+    const csv = event.tickets.map((t) => [t.firstName, t.lastName, t.age, t.email, t.type].join(',')).join(`\n`);
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event}/>
@@ -25,6 +26,7 @@ export default function Tickets({event}) {
                         <Ticket ticket={ticket}/>))}
                 </Masonry>
             </ResponsiveMasonry>
+        <textarea value={`firstName,lastName,age,email,type\n${csv}`} />
         </Page>
     );
 }
