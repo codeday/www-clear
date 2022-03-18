@@ -1,7 +1,7 @@
 import React from 'react';
 import {print} from 'graphql';
-import {Heading} from '@codeday/topo/Atom/Text';
-import {Grid} from '@codeday/topo/Atom/Box';
+import Text, {Heading} from '@codeday/topo/Atom/Text';
+import Box, {Grid} from '@codeday/topo/Atom/Box';
 import {getSession} from 'next-auth/client';
 import {getEventWithTickets} from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
@@ -49,6 +49,18 @@ export default function Tickets({event, session}) {
                     <UiDownload />Download as CSV
                 </CSVLink>
             </Button>
+            <Box p={4} mt={8} mb={4} backgroundColor="blue.50" borderColor="blue.500" borderWidth={1} fontSize="lg">
+                <Text>
+                    Attendees/parents can e-sign missing waivers on their own phone. Have them show you the
+                    confirmation screen!
+                </Text>
+                <Text mb={0}>
+                  <Text as="span" bold>CodeDay.to/Waiver</Text> (under 18)
+                </Text>
+                <Text>
+                  <Text as="span" bold>CodeDay.to/AdultWaiver</Text> (over 18)
+                </Text>
+            </Box>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}}>
               {event.tickets.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1).map((ticket) => (
                   <Ticket ticket={ticket} session={session}/>))}
