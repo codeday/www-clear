@@ -4,6 +4,7 @@ fragment Ticket on ClearTicket {
     lastName
     age
     email
+    phone
     type
     needsGuardian
 }

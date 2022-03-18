@@ -6,6 +6,18 @@ query getEventWithTickets($data: ClearEventWhereUniqueInput!) {
             name
             tickets {
                 ...Ticket
+                firstName
+                lastName
+                age
+                email
+                phone
+                type
+                guardian {
+                    firstName
+                    lastName
+                    email
+                    phone
+                }
             }
         }
     }

@@ -15,14 +15,37 @@ import Button from "@codeday/topo/Atom/Button";
 import {UiDownload} from "@codeday/topocons/Icon"
 export default function Tickets({event}) {
     if (!event) return <Page/>;
-    const csv = event.tickets.map((t) => [t.firstName, t.lastName, t.age, t.email, t.type].join(',')).join(`\n`);
+    const headers = [
+        "firstName",
+        "lastName",
+        "age",
+        "email",
+        "phone",
+        "type",
+        "guardianFirstName",
+        "guardianLastName",
+        "guardianEmail",
+        "guardianPhone",
+    ];
+    const csv = event.tickets.map((t) => [
+        t.firstName,
+        t.lastName,
+        t.age,
+        t.email,
+        t.phone,
+        t.type,
+        t.guardian?.firstName || '',
+        t.guardian?.lastName || '',
+        t.guardian?.email || '',
+        t.guardian?.phone || '',
+    ].join(',')).join(`\n`);
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event}/>
             <Heading>{event.name} Tickets</Heading>
             <CreateTicketModal event={event} d="inline" pr={4}/>
             <Button d="inline">
-                <CSVLink data={csv} headers={["firstName", "lastName", "age", "email", "type"]} filename="tickets.csv">
+                <CSVLink data={csv} headers={headers} filename="tickets.csv">
                     <UiDownload />Download as CSV
                 </CSVLink>
             </Button>

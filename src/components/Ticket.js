@@ -19,8 +19,8 @@ export default function Ticket({ticket, ...props}) {
              href={`tickets/${ticket.id}`}>
             <TicketTypeBadge ticket={ticket}/>
             <b>{ticket.firstName} {ticket.lastName}</b>{ticket.age ? '-' : null} {ticket.age}
-            {ticket.needsGuardian ? <><br/><Alert>Needs Guardian</Alert></> : null}
             {ticket.email ? <Text>{ticket.email}</Text> : null}
+            {ticket.phone ? <Text>{ticket.phone}</Text> : null}
         </Box>)
 }
 
