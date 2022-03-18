@@ -1,7 +1,7 @@
 import React from 'react';
 import {print} from 'graphql';
 import {Heading} from '@codeday/topo/Atom/Text';
-import {Flex} from '@codeday/topo/Atom/Box';
+import {Grid} from '@codeday/topo/Atom/Box';
 import {getSession} from 'next-auth/client';
 import {getEventWithTickets} from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
@@ -9,11 +9,11 @@ import Ticket from '../../../../components/Ticket';
 import Page from '../../../../components/Page';
 import {useFetcher} from '../../../../fetch';
 import {CreateTicketModal} from '../../../../components/forms/Ticket';
-import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import {CSVLink} from "react-csv";
 import Button from "@codeday/topo/Atom/Button";
-import {UiDownload} from "@codeday/topocons/Icon"
-export default function Tickets({event}) {
+import {UiDownload} from "@codeday/topocons/Icon";
+
+export default function Tickets({event, session}) {
     if (!event) return <Page/>;
     const headers = [
         "firstName",
@@ -49,12 +49,10 @@ export default function Tickets({event}) {
                     <UiDownload />Download as CSV
                 </CSVLink>
             </Button>
-            <ResponsiveMasonry>
-                <Masonry>
-                    {event.tickets.map((ticket) => (
-                        <Ticket ticket={ticket}/>))}
-                </Masonry>
-            </ResponsiveMasonry>
+            <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}}>
+              {event.tickets.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1).map((ticket) => (
+                  <Ticket ticket={ticket} session={session}/>))}
+            </Grid>
         </Page>
     );
 }
@@ -67,6 +65,7 @@ export async function getServerSideProps({req, res, query: {event: eventId}}) {
     return {
         props: {
             event: eventResult.clear.event,
+            session,
         },
     };
 }

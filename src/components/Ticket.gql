@@ -7,4 +7,19 @@ fragment Ticket on ClearTicket {
     phone
     type
     needsGuardian
+    waiverSigned
+    checkedIn
+    checkedOut
+}
+
+mutation checkin($where: ClearTicketWhereUniqueInput!) {
+  clear {
+    checkinout: checkin(where: $where) { checkedIn checkedOut }
+  }
+}
+
+mutation checkout($where: ClearTicketWhereUniqueInput!) {
+  clear {
+    checkinout: checkout(where: $where) { checkedIn checkedOut }
+  }
 }

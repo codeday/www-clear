@@ -229,7 +229,7 @@ export function CreateScholarshipCodeButton({event, children, ...props}) {
                             }
                         }
                     });
-                    await router.push(`promoCodes/${result.clear.createPromoCode.id}`)
+                    await router.push(`/events/${event.id}/promoCodes/${result.clear.createPromoCode.id}`);
                     success('Promo Code Created')
                 } catch (ex) {
                     error(ex.toString())
