@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {print} from 'graphql';
 import Text, {Heading} from '@codeday/topo/Atom/Text';
 import Box, {Grid} from '@codeday/topo/Atom/Box';
@@ -13,7 +13,15 @@ import {CSVLink} from "react-csv";
 import Button from "@codeday/topo/Atom/Button";
 import {UiDownload} from "@codeday/topocons/Icon";
 
-export default function Tickets({event, session}) {
+export default function Tickets({event, session: origSession}) {
+
+    const [session, setSession] = useState(origSession);
+    useEffect(() => {
+      if (typeof window === 'undefined') return () => {};
+      const interval = setInterval(async () => setSession(await getSession()), 28 * 60 * 1000);
+      return () => clearInterval(interval);
+    }, [typeof window]);
+
     if (!event) return <Page/>;
     const headers = [
         "firstName",
