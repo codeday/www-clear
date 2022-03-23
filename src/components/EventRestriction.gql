@@ -1,5 +1,5 @@
-#import "forms/EventRestriction.gql"
-#import "forms/Notes.gql"
+#import "./forms/EventRestriction.gql"
+#import "./forms/Notes.gql"
 
 fragment EventRestrictionFragment on ClearEventRestriction {
     id

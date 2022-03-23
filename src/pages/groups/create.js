@@ -99,7 +99,7 @@ export default function CreateGroup() {
                 onClick={async () => {
                     setLoading(true);
                     try {
-                        const groupResp = await fetch(print(createEventGroup), {data: group});
+                        const groupResp = await fetch(createEventGroup, {data: group});
                         success('Event Group Created');
                     } catch (ex) {
                         error(ex.toString());

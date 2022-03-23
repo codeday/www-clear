@@ -83,7 +83,7 @@ export function CreatePromoCodeModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreatePromoCodeMutation), {
+                                await fetch(CreatePromoCodeMutation, {
                                     data: {
                                         ...formData,
                                         event: {
@@ -142,7 +142,7 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdatePromoCodeMutation), {
+                                await fetch(UpdatePromoCodeMutation, {
                                     where: {id: promocode.id},
                                     data: formDataToUpdateInput(formData)
                                 })
@@ -185,7 +185,7 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeletePromoCodeMutation), {where: {id: promocode.id}})
+                            await fetch(DeletePromoCodeMutation, {where: {id: promocode.id}})
                             await router.replace(router.asPath)
                             success('Promo Code Deleted')
                             onCloseModal()
@@ -216,7 +216,7 @@ export function CreateScholarshipCodeButton({event, children, ...props}) {
             onClick={async () => {
                 setLoading(true)
                 try {
-                    const result = await fetch(print(CreatePromoCodeMutation), {
+                    const result = await fetch(CreatePromoCodeMutation, {
                         data: {
                             code: generatePromoCode(6),
                             type: 'PERCENT',

@@ -71,7 +71,7 @@ export function CreatePersonModal({children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreatePersonMutation), {
+                                await fetch(CreatePersonMutation, {
                                     data: formData,
                                     /* need to connect the new object
                                                       to a parent object? do so here */
@@ -127,7 +127,7 @@ export function UpdatePersonModal({person, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdatePersonMutation), {
+                                await fetch(UpdatePersonMutation, {
                                     where: {id: person.id},
                                     data: formDataToUpdateInput(formData),
                                 });
@@ -173,7 +173,7 @@ export function DeletePersonModal({person, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeletePersonMutation), {where: {id: person.id}});
+                            await fetch(DeletePersonMutation, {where: {id: person.id}});
                             await router.replace(router.asPath);
                             success('Person Deleted');
                             onCloseModal();

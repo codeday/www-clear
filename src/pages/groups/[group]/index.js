@@ -44,7 +44,7 @@ export async function getServerSideProps({req, res, params: {group: groupId}}) {
     const session = await getSession({req})
     const fetch = useFetcher(session);
     if (!session) return {props: {}}
-    const groupResp = await fetch(print(getEventGroup), {'data': {'id': groupId}})
+    const groupResp = await fetch(getEventGroup, {'data': {'id': groupId}})
     return {
         props: {
             group: groupResp.clear.eventGroup

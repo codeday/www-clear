@@ -27,7 +27,7 @@ export default function Notes({notes, updateMutation, updateId, children, ...pro
         onClick={async () => {
             setLoading(true)
             try {
-                await fetch(print(updateMutation), {notes: tempNotes || '', id: updateId})
+                await fetch(updateMutation, {notes: tempNotes || '', id: updateId})
                 await router.replace(router.asPath); // kind of clunky solution to refresh serverSideProps after update; https://www.joshwcomeau.com/nextjs/refreshing-server-side-props/
                 setEditing(false) // wait to set editing until after request, so that in case of failure no data is lost
             } catch (ex) {

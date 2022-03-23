@@ -1,12 +1,12 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
-})
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
 module.exports = {
   ...withBundleAnalyzer({}),
   reactStrictMode: true,
   eslint: {
-    ignoreDuringBuilds: true
+    ignoreDuringBuilds: true,
   },
   serverRuntimeConfig: {
     auth0: {
@@ -26,5 +26,13 @@ module.exports = {
       audience: process.env.GQL_AUDIENCE,
     },
     appUrl: process.env.APP_URL,
+  },
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config?.module?.rules.push({
+      test: /\.(graphql|gql)$/,
+      exclude: /node_modules/,
+      loader: "graphql-tag/loader",
+    });
+    return config;
   },
 };

@@ -67,7 +67,7 @@ export function CreateGuardianModal({ticket, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateGuardianMutation), {
+                                await fetch(CreateGuardianMutation, {
                                     data: {
                                         ... formData
 
@@ -125,7 +125,7 @@ export function UpdateGuardianModal({guardian, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateGuardianMutation), {
+                                await fetch(UpdateGuardianMutation, {
                                     where: {id: guardian.id},
                                     data: formDataToUpdateInput(formData),
                                 });
@@ -171,7 +171,7 @@ export function DeleteGuardianModal({guardian, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteGuardianMutation), {where: {id: guardian.id}});
+                            await fetch(DeleteGuardianMutation, {where: {id: guardian.id}});
                             await router.replace(router.asPath);
                             success('Guardian Deleted');
                             onCloseModal();

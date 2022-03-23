@@ -136,7 +136,7 @@ export function CreateEventModal({group, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateEventMutation), {
+                                await fetch(CreateEventMutation, {
                                     data: {
                                         ...formData,
                                         managers: {
@@ -206,7 +206,7 @@ export function UpdateEventModal({event, children, ...props}) {
                             setLoading(true);
                             try {
                                 console.log('fetch');
-                                await fetch(print(UpdateEventMutation), {
+                                await fetch(UpdateEventMutation, {
                                     where: {id: event.id},
                                     data: formDataToUpdateInput(formData)
                                 });
@@ -253,7 +253,7 @@ export function DeleteEventModal({event, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteEventMutation), {where: {id: event.id}});
+                            await fetch(DeleteEventMutation, {where: {id: event.id}});
                             await router.replace(router.asPath);
                             success('Event Deleted');
                             onCloseModal();

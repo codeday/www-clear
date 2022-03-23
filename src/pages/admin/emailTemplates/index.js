@@ -31,7 +31,7 @@ export async function getServerSideProps({req, res, query}) {
     const session = await getSession({req});
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
-    const emailTemplateResults = await fetch(print(getEmailTemplatesQuery));
+    const emailTemplateResults = await fetch(getEmailTemplatesQuery);
     return {
         props: {
             emailTemplates: emailTemplateResults.clear.emailTemplates,

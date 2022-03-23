@@ -75,7 +75,7 @@ export default function Create({event}) {
                 onClick={async () => {
                     setLoading(true);
                     try {
-                        const createTicketResp = await fetch(print(createTicket), {data: ticket});
+                        const createTicketResp = await fetch(createTicket, {data: ticket});
                         success('Ticket Created');
                     } catch (ex) {
                         error(ex.toString());
@@ -92,7 +92,7 @@ export default function Create({event}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const fetch = useFetcher();
-    const eventResult = await fetch(print(getEvent), {data: {id: eventId}});
+    const eventResult = await fetch(getEvent, {data: {id: eventId}});
 
     return {
         props: {

@@ -58,7 +58,7 @@ export async function getServerSideProps({req, res, query: {scheduleitem: itemId
     const session = await getSession({req});
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
-    const scheduleitemResults = await fetch(print(GetScheduleItemQuery), {data: {id: itemId}});
+    const scheduleitemResults = await fetch(GetScheduleItemQuery, {data: {id: itemId}});
     return {
         props: {
             scheduleitem: scheduleitemResults.clear.scheduleItem,

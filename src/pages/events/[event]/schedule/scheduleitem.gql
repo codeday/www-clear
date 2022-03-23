@@ -1,5 +1,5 @@
 #import "../../../../components/forms/Notes.gql"
-#import "../../../../components/forms/ScheduleItem.gql'
+#import "../../../../components/forms/ScheduleItem.gql"
 
 query GetScheduleItemQuery($data: ClearScheduleItemWhereUniqueInput!) {
     clear {

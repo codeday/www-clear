@@ -85,7 +85,7 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
                     setLoading(true)
                     try {
                         console.log(e)
-                        await fetch(print(RegistrationsToggleMutation), {
+                        await fetch(RegistrationsToggleMutation, {
                             eventWhere: {id: event.id},
                             data: e.target.checked
                         })

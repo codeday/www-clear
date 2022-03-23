@@ -41,7 +41,7 @@ export async function getServerSideProps({req, res, query: {event: eventId, prom
     const session = await getSession({req});
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
-    const codeResults = await fetch(print(GetPromoCodeQuery), {data: {id: codeId}});
+    const codeResults = await fetch(GetPromoCodeQuery, {data: {id: codeId}});
     const code = codeResults?.clear?.promoCode
     if (!code) return {
         redirect: {

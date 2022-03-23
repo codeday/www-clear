@@ -71,7 +71,7 @@ export function CreateEventRestrictionModal({children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateEventRestrictionMutation), {
+                                await fetch(CreateEventRestrictionMutation, {
                                     data: formData
                                     /* need to connect the new object
                                     to a parent object? do so here */
@@ -125,7 +125,7 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateEventRestrictionMutation), {
+                                await fetch(UpdateEventRestrictionMutation, {
                                     where: {id: eventrestriction.id},
                                     data: formDataToUpdateInput(formData)
                                 })
@@ -168,7 +168,7 @@ export function DeleteEventRestrictionModal({eventrestriction, children, ...prop
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteEventRestrictionMutation), {where: {id: eventrestriction.id}})
+                            await fetch(DeleteEventRestrictionMutation, {where: {id: eventrestriction.id}})
                             await router.replace(router.asPath)
                             success('EventRestriction Deleted')
                             onCloseModal()

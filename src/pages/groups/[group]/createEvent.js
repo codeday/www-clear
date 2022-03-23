@@ -84,7 +84,7 @@ export default function CreateEvent({group}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            const eventResp = await fetch(print(createEventMutation), {
+                            const eventResp = await fetch(createEventMutation, {
                                 data: {
                                     ...event,
                                     managers: {
@@ -114,7 +114,7 @@ export default function CreateEvent({group}) {
 
 export async function getServerSideProps({req, res, params: {group: groupId}}) {
     const fetch = useFetcher();
-    const groupResp = await fetch(print(getEventGroup), {data: {id: groupId}});
+    const groupResp = await fetch(getEventGroup, {data: {id: groupId}});
     return {
         props: {
             group: groupResp.clear.eventGroup,

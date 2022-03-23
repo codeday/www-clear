@@ -7,7 +7,7 @@ import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/client';
 import Page from '../../../components/Page';
-import {getEvent} from './index.gql';
+import {getEventQuery} from './index.gql';
 import {useFetcher} from '../../../fetch';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import VenueInfo from '../../../components/VenueInfo';
@@ -104,7 +104,7 @@ export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
-    const eventResults = await fetch(print(getEvent), {data: {id: eventId}});
+    const eventResults = await fetch(getEventQuery, {data: {id: eventId}});
     const event = eventResults?.clear?.event
     if (!event) return {
         redirect: {

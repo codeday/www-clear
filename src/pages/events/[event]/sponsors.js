@@ -29,7 +29,7 @@ export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
-    const eventResults = await fetch(print(SponsorsGetEventQuery), {data: {id: eventId}});
+    const eventResults = await fetch(SponsorsGetEventQuery, {data: {id: eventId}});
     return {
         props: {
             event: eventResults.clear.event,

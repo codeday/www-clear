@@ -31,7 +31,7 @@ export async function generateToken(username) {
         return cachedToken
     }
     const accountToken = sign({scopes: `read:users`}, serverRuntimeConfig.gql.accountSecret, {expiresIn: '10s'});
-    const {account} = await apiFetch(print(GetAccountRolesQuery), {username: username}, {'Authorization': `Bearer ${accountToken}`})
+    const {account} = await apiFetch(GetAccountRolesQuery, {username: username}, {'Authorization': `Bearer ${accountToken}`})
     const roleIds = (account?.getUser?.roles || []).map((r) => r.id);
     const isAdmin = roleIds.includes(serverRuntimeConfig.auth0.roles.admin);
     const isManager = roleIds.includes(serverRuntimeConfig.auth0.roles.manager);

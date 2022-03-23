@@ -109,7 +109,7 @@ export function CreateTicketModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateTicketMutation), {
+                                await fetch(CreateTicketMutation, {
                                     data: {
                                         ...formData,
                                         event: {
@@ -171,7 +171,7 @@ export function UpdateTicketModal({ticket, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateTicketMutation), {
+                                await fetch(UpdateTicketMutation, {
                                     where: {id: ticket.id},
                                     data: formDataToUpdateInput(formData),
                                 });
@@ -217,7 +217,7 @@ export function DeleteTicketModal({ticket, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteTicketMutation), {where: {id: ticket.id}});
+                            await fetch(DeleteTicketMutation, {where: {id: ticket.id}});
                             await router.replace(router.asPath);
                             success('Ticket Deleted');
                             onCloseModal();
