@@ -11,7 +11,7 @@ import Notes from "./forms/Notes";
 import {SetEventRestrictionNotesMutation} from "./forms/Notes.gql"
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import Button from "@codeday/topo/Atom/Button"
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 import {print} from "graphql";
 import {UploadEventRestrictionIconMutation} from "./forms/EventRestriction.gql";

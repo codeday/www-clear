@@ -13,7 +13,7 @@ import {print} from "graphql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import moment from "moment-timezone";
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 
 const schema = {
     type: "object",

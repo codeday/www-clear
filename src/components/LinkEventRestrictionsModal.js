@@ -9,7 +9,7 @@ import {Heading} from "@codeday/topo/Atom/Text"
 import {print} from "graphql";
 import {UpdateEventRestrictionsMutation} from "./LinkEventRestrictionsModal.gql"
 import {useToasts} from "@codeday/topo/utils";
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 
 export default function LinkEventRestrictionsModal({event, restrictions, children, ...props}) {

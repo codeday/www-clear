@@ -2,7 +2,7 @@ import React from 'react';
 import {Heading} from '@codeday/topo/Atom/Text';
 import {print} from 'graphql';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import {useFetcher} from '../../../fetch';
 import {SponsorsGetEventQuery} from './sponsors.gql';
 import SponsorBox from '../../../components/SponsorBox';

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {print} from 'graphql';
+import { useSession } from 'next-auth/react';
 import Text, {Heading} from '@codeday/topo/Atom/Text';
 import Box, {Grid} from '@codeday/topo/Atom/Box';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import {getEventWithTickets} from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Ticket from '../../../../components/Ticket';
@@ -13,15 +14,7 @@ import {CSVLink} from "react-csv";
 import Button from "@codeday/topo/Atom/Button";
 import {UiDownload} from "@codeday/topocons/Icon";
 
-export default function Tickets({event, session: origSession}) {
-
-    const [session, setSession] = useState(origSession);
-    useEffect(() => {
-      if (typeof window === 'undefined') return () => {};
-      const interval = setInterval(async () => setSession(await getSession()), 28 * 60 * 1000);
-      return () => clearInterval(interval);
-    }, [typeof window]);
-
+export default function Tickets({event}) {
     if (!event) return <Page/>;
     const headers = [
         "firstName",
@@ -71,7 +64,7 @@ export default function Tickets({event, session: origSession}) {
             </Box>
             <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}}>
               {event.tickets.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1).map((ticket) => (
-                  <Ticket ticket={ticket} session={session}/>))}
+                  <Ticket ticket={ticket} />))}
             </Grid>
         </Page>
     );
@@ -85,7 +78,6 @@ export async function getServerSideProps({req, res, query: {event: eventId}}) {
     return {
         props: {
             event: eventResult.clear.event,
-            session,
         },
     };
 }

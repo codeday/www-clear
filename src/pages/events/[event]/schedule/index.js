@@ -2,7 +2,7 @@ import React from 'react';
 import {print} from 'graphql';
 import {Heading} from '@codeday/topo/Atom/Text';
 import Box from '@codeday/topo/Atom/Box';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import Page from '../../../../components/Page';
 import {getEventWithSchedule} from './index.gql';
 import {useFetcher} from '../../../../fetch';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {print} from 'graphql';
+import { useSession } from 'next-auth/react';
 import Text from "@codeday/topo/Atom/Text";
 import Box from "@codeday/topo/Atom/Box";
 import Button from '@codeday/topo/Atom/Button';
@@ -9,7 +10,9 @@ import Badge from "./Badge";
 import Alert from "./Alert";
 import {useFetcher} from '../fetch';
 
-export default function Ticket({ticket, session, ...props}) {
+export default function Ticket({ticket, ...props}) {
+    const { data: session } = useSession();
+
     const [loading, setLoading] = useState(false);
     const [checkedIn, setCheckedIn] = useState(ticket.checkedIn);
     const [checkedOut, setCheckedOut] = useState(ticket.checkedOut);

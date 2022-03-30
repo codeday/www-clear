@@ -13,6 +13,7 @@ module.exports = {
       clientId: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
       domain: process.env.AUTH0_DOMAIN,
+      issuer: `https://` + process.env.AUTH0_DOMAIN,
       roles: {
         admin: process.env.AUTH0_ADMIN_ROLE,
         manager: process.env.AUTH0_MANAGER_ROLE,

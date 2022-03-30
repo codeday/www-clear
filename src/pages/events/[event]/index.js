@@ -5,7 +5,7 @@ import Box from '@codeday/topo/Atom/Box';
 import Button from '@codeday/topo/Atom/Button';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import * as Icon from '@codeday/topocons/Icon';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import Page from '../../../components/Page';
 import {getEventQuery} from './index.gql';
 import {useFetcher} from '../../../fetch';
