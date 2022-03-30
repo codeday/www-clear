@@ -9,7 +9,7 @@ import * as Icon from '@codeday/topocons/Icon';
 import {print} from 'graphql';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
-import {getSession} from 'next-auth/react';
+import {useSession} from 'next-auth/react';
 import {CreatePersonMutation, DeletePersonMutation, UpdatePersonMutation} from './Person.gql';
 import {useFetcher} from '../../fetch';
 
@@ -46,8 +46,8 @@ const uiSchema = {
 export function CreatePersonModal({children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -95,8 +95,8 @@ export function CreatePersonModal({children, ...props}) {
 export function UpdatePersonModal({person, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(person);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -149,8 +149,8 @@ export function UpdatePersonModal({person, children, ...props}) {
 
 export function DeletePersonModal({person, children, ...props}) {
     const [open, setOpen] = useState(false);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);

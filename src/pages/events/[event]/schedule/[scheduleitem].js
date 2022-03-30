@@ -4,7 +4,7 @@ import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import {Heading, Link} from '@codeday/topo/Atom/Text';
 import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/react';
-import {useFetcher} from '../../../../fetch';
+import {getFetcher} from '../../../../fetch';
 import {GetScheduleItemQuery} from './scheduleitem.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Page from '../../../../components/Page';
@@ -56,7 +56,7 @@ export default function ScheduleItem({scheduleitem}) {
 
 export async function getServerSideProps({req, res, query: {scheduleitem: itemId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const scheduleitemResults = await fetch(GetScheduleItemQuery, {data: {id: itemId}});
     return {

@@ -11,7 +11,7 @@ import * as Icon from '@codeday/topocons/Icon';
 import {print} from 'graphql';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
-import {getSession} from 'next-auth/react';
+import {useSession} from 'next-auth/react';
 import {CreateVenueMutation, DeleteVenueMutation, UpdateVenueMutation} from './Venue.gql';
 import {useFetcher} from '../../fetch';
 import {InfoAlert} from '../Alert';
@@ -85,8 +85,8 @@ const schema = {
 export function CreateVenueModal({event, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState();
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -137,8 +137,8 @@ export function CreateVenueModal({event, children, ...props}) {
 export function UpdateVenueModal({venue, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(venue);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -190,8 +190,8 @@ export function UpdateVenueModal({venue, children, ...props}) {
 
 export function DeleteVenueModal({venue, children, ...props}) {
     const [open, setOpen] = useState(false);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);

@@ -8,7 +8,7 @@ import {getSession} from 'next-auth/react';
 import EventGroup from '../../components/EventGroup';
 import {getEventGroups} from './index.gql';
 import Page from '../../components/Page';
-import {useFetcher} from '../../fetch';
+import {useFetcher, getFetcher} from '../../fetch';
 import {CreateEventGroupModal} from "../../components/forms/EventGroup";
 
 export default function Groups({groups}) {
@@ -31,7 +31,7 @@ export default function Groups({groups}) {
 
 export async function getServerSideProps({req}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
 
     const groupsResult = await fetch(getEventGroups);

@@ -1,7 +1,7 @@
 import React from 'react';
 import {print} from 'graphql';
 import Page from '../../../../../components/Page';
-import {useFetcher} from '../../../../../fetch';
+import {getFetcher} from '../../../../../fetch';
 import {getTicket} from './ticket.gql';
 import Content from '@codeday/topo/Molecule/Content';
 import Text, {Heading} from '@codeday/topo/Atom/Text';
@@ -67,7 +67,7 @@ export default function TicketPage({ticket}) {
 
                         export async function getServerSideProps({req, query: {event: eventId, ticket: ticketId}}) {
                         const session = await getSession({req})
-                        const fetch = useFetcher(session);
+                        const fetch = getFetcher(session);
                         if (!session) return {props: {}}
                         const ticketResult = await fetch(getTicket, {data: {id: ticketId}})
                         const ticket = ticketResult?.clear?.ticket

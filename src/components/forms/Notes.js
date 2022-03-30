@@ -9,15 +9,15 @@ import {useFetcher} from "../../fetch";
 import {print} from "graphql";
 import {useRouter} from "next/router";
 import Box from "@codeday/topo/Atom/Box"
-import {getSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 
 export default function Notes({notes, updateMutation, updateId, children, ...props}) {
     const [editing, setEditing] = useState(false)
     const [loading, setLoading] = useState(false)
     const [tempNotes, setTempNotes] = useState(notes) // Temporary notes while the user is editing
     const {success, error} = useToasts();
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved))
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const router = useRouter()
 
     const okButton = <Button

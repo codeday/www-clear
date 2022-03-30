@@ -8,7 +8,7 @@ import 'react-responsive-modal/styles.css';
 import * as Icon from "@codeday/topocons/Icon";
 import {InfoAlert} from "../Alert";
 import {useFetcher} from "../../fetch";
-import {getSession} from 'next-auth/react';
+import {useSession} from 'next-auth/react';
 import {
     CreateEmailTemplateMutation,
     UpdateEmailTemplateMutation,
@@ -164,8 +164,8 @@ const uiSchema = {
 export function CreateEmailTemplateModal({children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -211,8 +211,8 @@ export function CreateEmailTemplateModal({children, ...props}) {
 export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(emailtemplate);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -263,8 +263,8 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
 
 export function DeleteEmailTemplateModal({emailtemplate, children, ...props}) {
     const [open, setOpen] = useState(false);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);

@@ -1,6 +1,6 @@
 import React from 'react';
 import {getSession} from "next-auth/react";
-import {useFetcher} from "../../../../fetch";
+import {getFetcher} from "../../../../fetch";
 import {print} from "graphql";
 import {GetPromoCodeQuery} from "./promoCode.gql";
 import Page from "../../../../components/Page";
@@ -39,7 +39,7 @@ export default function PromoCode({code}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId, promoCode: codeId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const codeResults = await fetch(GetPromoCodeQuery, {data: {id: codeId}});
     const code = codeResults?.clear?.promoCode

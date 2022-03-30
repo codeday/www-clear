@@ -8,7 +8,7 @@ import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/react';
 import Page from '../../../components/Page';
 import {getEventQuery} from './index.gql';
-import {useFetcher} from '../../../fetch';
+import {getFetcher} from '../../../fetch';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import VenueInfo from '../../../components/VenueInfo';
 import {CreateVenueModal} from '../../../components/forms/Venue';
@@ -102,7 +102,7 @@ export default function Event({event}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(getEventQuery, {data: {id: eventId}});
     const event = eventResults?.clear?.event

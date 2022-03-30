@@ -11,7 +11,7 @@ import {print} from 'graphql';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import moment from 'moment-timezone';
-import {getSession} from 'next-auth/react';
+import {useSession} from 'next-auth/react';
 import {CreateEventMutation, DeleteEventMutation, UpdateEventMutation} from './Event.gql';
 import {useFetcher} from '../../fetch';
 import {InfoAlert} from '../Alert';
@@ -110,8 +110,8 @@ export function CreateEventModal({group, children, ...props}) {
         earlyBirdCutoff: moment(group.earlyBirdCutoff).utc().format('LL'),
         registrationCutoff: moment(group.registrationCutoff).utc().format('LL'),
     });
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -172,8 +172,8 @@ export function UpdateEventModal({event, children, ...props}) {
         earlyBirdCutoff: moment(event.earlyBirdCutoff).utc().format('LL'),
         registrationCutoff: moment(event.registrationCutoff).utc().format('LL')
     });
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -229,8 +229,8 @@ export function UpdateEventModal({event, children, ...props}) {
 
 export function DeleteEventModal({event, children, ...props}) {
     const [open, setOpen] = useState(false);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);

@@ -8,7 +8,7 @@ import NumericInput, {Field} from '@codeday/topo/Atom/Input/Numeric';
 import {createTicket, getEvent} from './create.gql';
 import SelectTicketType from '../../../../components/SelectTicketType';
 import Page from '../../../../components/Page';
-import {useFetcher} from '../../../../fetch';
+import {getFetcher, useFetcher} from '../../../../fetch';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 
 export default function Create({event}) {
@@ -91,7 +91,8 @@ export default function Create({event}) {
 }
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
-    const fetch = useFetcher();
+    const session = await getSession({req});
+    const fetch = getFetcher(session);
     const eventResult = await fetch(getEvent, {data: {id: eventId}});
 
     return {

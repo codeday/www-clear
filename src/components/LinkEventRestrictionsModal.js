@@ -9,7 +9,7 @@ import {Heading} from "@codeday/topo/Atom/Text"
 import {print} from "graphql";
 import {UpdateEventRestrictionsMutation} from "./LinkEventRestrictionsModal.gql"
 import {useToasts} from "@codeday/topo/utils";
-import {getSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 
 export default function LinkEventRestrictionsModal({event, restrictions, children, ...props}) {
@@ -18,8 +18,8 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
     const {success, error} = useToasts();
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [formData, setFormData] = useState(restrictions.reduce((prev, curr) => {
         return {
             ...prev,

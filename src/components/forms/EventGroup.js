@@ -13,7 +13,7 @@ import {print} from "graphql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import moment from "moment-timezone";
-import {getSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 
 const schema = {
     type: "object",
@@ -70,8 +70,8 @@ export function CreateEventGroupModal({children, ...props}) {
         ticketPrice: 20.00,
         earlyBirdPrice: 15.00,
     });
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -123,8 +123,8 @@ export function UpdateEventGroupModal({eventgroup, children, ...props}) {
         startDate: moment(eventgroup.startDate).utc().format('LL'),
         endDate: moment(eventgroup.endDate).utc().format('LL'),
     });
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -175,8 +175,8 @@ export function UpdateEventGroupModal({eventgroup, children, ...props}) {
 
 export function DeleteEventGroupModal({eventgroup, children, ...props}) {
     const [open, setOpen] = useState(false);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);

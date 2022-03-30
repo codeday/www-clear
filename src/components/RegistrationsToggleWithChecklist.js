@@ -9,7 +9,7 @@ import {useToasts} from "@codeday/topo/utils"
 import {print} from "graphql";
 import {RegistrationsToggleMutation} from "./RegistrationsToggleWithChecklist.gql"
 import {useRouter} from "next/router";
-import {getSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 
 export default function RegistrationsToggleWithChecklist({event, children, ...props}) {
     const checks = [
@@ -63,8 +63,8 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
     const disabled = Boolean(checks.filter((check) => check.severity === "error" && !check.check).length > 0)
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved))
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const router = useRouter();
     return (
         <InfoBox heading="Event Status" headingSize="xl">

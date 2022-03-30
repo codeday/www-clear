@@ -4,7 +4,7 @@ import Text, { Link } from '@codeday/topo/Atom/Text';
 import InfoBox from "./InfoBox";
 import {DeleteEventRestrictionModal, UpdateEventRestrictionModal} from "./forms/EventRestriction";
 import { marked } from "marked";
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import ReactHtmlParser from 'react-html-parser';
 import Image from '@codeday/topo/Atom/Image';
 import Notes from "./forms/Notes";

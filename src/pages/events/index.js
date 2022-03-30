@@ -5,7 +5,7 @@ import Box from '@codeday/topo/Atom/Box';
 import {print} from 'graphql';
 import {getSession} from 'next-auth/react';
 import Page from '../../components/Page';
-import {useFetcher} from '../../fetch';
+import {useFetcher, getFetcher} from '../../fetch';
 import Event from '../../components/Event';
 import {getEvents} from './index.gql';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
@@ -52,7 +52,7 @@ export default function Events({events}) {
 
 export async function getServerSideProps({req, res, query}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(getEvents);
     return {

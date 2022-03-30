@@ -1,5 +1,6 @@
 import React, {useReducer, useState} from 'react';
 import {print} from 'graphql';
+import { getSession, useSession } from 'next-auth/react';
 import Content from '@codeday/topo/Molecule/Content';
 import Text, {Heading, Link} from '@codeday/topo/Atom/Text';
 import Box from '@codeday/topo/Atom/Box';
@@ -12,11 +13,12 @@ import {useToasts} from '@codeday/topo/utils';
 import {AccountDisplayFromUsername} from '../../../components/AccountDisplay';
 import Page from '../../../components/Page';
 import {createEventMutation, getEventGroup} from './createEvent.gql';
-import {useFetcher} from '../../../fetch';
+import {getFetcher, useFetcher} from '../../../fetch';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 
 export default function CreateEvent({group}) {
-    const fetch = useFetcher();
+    const { data: session } = useSession()
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const [manager, setManager] = useState();
     const {success, error} = useToasts();
@@ -113,7 +115,8 @@ export default function CreateEvent({group}) {
 }
 
 export async function getServerSideProps({req, res, params: {group: groupId}}) {
-    const fetch = useFetcher();
+    const session = await getSession();
+    const fetch = getFetcher(session);
     const groupResp = await fetch(getEventGroup, {data: {id: groupId}});
     return {
         props: {

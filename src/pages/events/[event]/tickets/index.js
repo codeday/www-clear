@@ -8,7 +8,7 @@ import {getEventWithTickets} from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Ticket from '../../../../components/Ticket';
 import Page from '../../../../components/Page';
-import {useFetcher} from '../../../../fetch';
+import {getFetcher} from '../../../../fetch';
 import {CreateTicketModal} from '../../../../components/forms/Ticket';
 import {CSVLink} from "react-csv";
 import Button from "@codeday/topo/Atom/Button";
@@ -72,7 +72,7 @@ export default function Tickets({event}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const eventResult = await fetch(getEventWithTickets, {data: {id: eventId}});
     return {

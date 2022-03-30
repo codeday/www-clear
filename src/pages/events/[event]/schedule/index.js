@@ -5,7 +5,7 @@ import Box from '@codeday/topo/Atom/Box';
 import {getSession} from 'next-auth/react';
 import Page from '../../../../components/Page';
 import {getEventWithSchedule} from './index.gql';
-import {useFetcher} from '../../../../fetch';
+import {getFetcher} from '../../../../fetch';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Calendar from '../../../../components/Calendar';
 import {CreateScheduleItemModal} from '../../../../components/forms/ScheduleItem';
@@ -25,7 +25,7 @@ export default function Schedule({event}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(getEventWithSchedule, {data: {id: eventId}});
     return {

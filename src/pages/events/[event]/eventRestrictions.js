@@ -5,7 +5,7 @@ import {EventRestrictionPreview} from "../../../components/EventRestriction";
 import Page from "../../../components/Page"
 import {Heading} from "@codeday/topo/Atom/Text"
 import {getSession} from "next-auth/react";
-import {useFetcher} from "../../../fetch";
+import {getFetcher} from "../../../fetch";
 import {print} from "graphql";
 import {GetEventRestrictionsQuery} from "./eventRestrictions.gql"
 import LinkEventRestrictionsModal from "../../../components/LinkEventRestrictionsModal";
@@ -28,7 +28,7 @@ export default function EventRestrictions({event, restrictions}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(GetEventRestrictionsQuery, {data: {id: eventId}})
     return {

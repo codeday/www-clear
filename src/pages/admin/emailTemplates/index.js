@@ -8,9 +8,9 @@ import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import Page from "../../../components/Page";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import {getSession} from "next-auth/react";
-import {useFetcher} from "../../../fetch";
+import {getFetcher} from "../../../fetch";
 import {print} from "graphql";
-import getEmailTemplatesQuery from "./index.gql"
+import {getEmailTemplatesQuery} from "./index.gql"
 import EmailTemplate from "../../../components/EmailTemplate";
 
 export default function Index({emailTemplates}) {
@@ -29,7 +29,7 @@ export default function Index({emailTemplates}) {
 
 export async function getServerSideProps({req, res, query}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const emailTemplateResults = await fetch(getEmailTemplatesQuery);
     return {

@@ -13,7 +13,7 @@ import {print} from "graphql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import moment from "moment-timezone";
-import {getSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 
 const characters = "ABCDEFGHKPQRSTUVWXYZ";
 function generatePromoCode(length) {
@@ -58,8 +58,8 @@ const uiSchema = {
 export function CreatePromoCodeModal({event, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -110,8 +110,8 @@ export function CreatePromoCodeModal({event, children, ...props}) {
 export function UpdatePromoCodeModal({promocode, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(promocode);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -162,8 +162,8 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
 
 export function DeletePromoCodeModal({promocode, children, ...props}) {
     const [open, setOpen] = useState(false);
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const onOpenModal = () => setOpen(true);
@@ -202,8 +202,8 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
 }
 
 export function CreateScholarshipCodeButton({event, children, ...props}) {
-    let fetch;
-    getSession().then((onResolved) => fetch = useFetcher(onResolved));
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
     const router = useRouter();

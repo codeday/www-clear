@@ -3,7 +3,7 @@ import {Heading} from '@codeday/topo/Atom/Text';
 import {print} from 'graphql';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import {getSession} from 'next-auth/react';
-import {useFetcher} from '../../../fetch';
+import {getFetcher} from '../../../fetch';
 import {SponsorsGetEventQuery} from './sponsors.gql';
 import SponsorBox from '../../../components/SponsorBox';
 import Page from '../../../components/Page';
@@ -27,7 +27,7 @@ export default function Sponsors({event}) {
 
 export async function getServerSideProps({req, res, query: {event: eventId}}) {
     const session = await getSession({req});
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}};
     const eventResults = await fetch(SponsorsGetEventQuery, {data: {id: eventId}});
     return {

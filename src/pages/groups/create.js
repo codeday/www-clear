@@ -13,11 +13,13 @@ import 'react-calendar/dist/Calendar.css';
 import {useToasts} from '@codeday/topo/utils';
 import Page from '../../components/Page';
 import {createEventGroup} from './create.gql';
-import {useFetcher} from '../../fetch';
+import {useFetcher, getFetcher} from '../../fetch';
 import Breadcrumbs from '../../components/Breadcrumbs';
+import { useSession } from 'next-auth/react';
 
 export default function CreateGroup() {
-    const fetch = useFetcher();
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
     const [group, setGroup] = useReducer(

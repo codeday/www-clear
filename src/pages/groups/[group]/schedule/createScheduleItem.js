@@ -14,13 +14,15 @@ import moment from "moment-timezone"
 import Button from '@codeday/topo/Atom/Button'
 import {useToasts} from '@codeday/topo/utils'
 import {createScheduleItem, getEventGroup} from './createScheduleItem.gql';
-import {useFetcher} from "../../../../fetch";
+import {getFetcher, useFetcher} from "../../../../fetch";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import CreatePerson from '../../../../components/CreatePerson'
 import * as Icon from "@codeday/topocons/Icon"
+import { useSession } from 'next-auth/react'
 
 export default function CreateScheduleItem({group}) {
-    const fetch = useFetcher();
+    const { data: session } = useSession();
+    const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts()
     const [scheduleItem, setScheduleItem] = useReducer(
@@ -180,7 +182,7 @@ export default function CreateScheduleItem({group}) {
 }
 
 export async function getServerSideProps({req, res, params: {group: groupId}}) {
-    const fetch = useFetcher()
+    const fetch = getFetcher()
     const groupResp = await fetch(getEventGroup, {data: {'id': groupId}})
     return {
         props: {

@@ -3,7 +3,7 @@ import {getEventGroup} from './index.gql'
 import {Heading} from '@codeday/topo/Atom/Text'
 import Box, {Grid} from '@codeday/topo/Atom/Box';
 import Button from '@codeday/topo/Atom/Button'
-import {useFetcher} from "../../../fetch";
+import {getFetcher} from "../../../fetch";
 import {useRouter} from "next/router";
 import Page from "../../../components/Page";
 import Event from "../../../components/Event";
@@ -42,7 +42,7 @@ export default function Group({group}) {
 
 export async function getServerSideProps({req, res, params: {group: groupId}}) {
     const session = await getSession({req})
-    const fetch = useFetcher(session);
+    const fetch = getFetcher(session);
     if (!session) return {props: {}}
     const groupResp = await fetch(getEventGroup, {'data': {'id': groupId}})
     return {
