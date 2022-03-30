@@ -9,7 +9,7 @@ import {useToasts} from "@codeday/topo/utils"
 import {print} from "graphql";
 import {RegistrationsToggleMutation} from "./RegistrationsToggleWithChecklist.gql"
 import {useRouter} from "next/router";
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 
 export default function RegistrationsToggleWithChecklist({event, children, ...props}) {
     const checks = [

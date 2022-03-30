@@ -3,7 +3,7 @@ import {print} from 'graphql';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import {Heading, Link} from '@codeday/topo/Atom/Text';
 import * as Icon from '@codeday/topocons/Icon';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import {useFetcher} from '../../../../fetch';
 import {GetScheduleItemQuery} from './scheduleitem.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';

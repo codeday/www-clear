@@ -7,7 +7,7 @@ import Header, {Menu, SiteLogo} from '@codeday/topo/Organism/Header';
 import Skelly from '@codeday/topo/Atom/Skelly';
 import getConfig from 'next/config';
 import {DefaultSeo} from 'next-seo';
-import {signIn, signOut, useSession} from 'next-auth/client';
+import {signIn, signOut, useSession} from 'next-auth/react';
 import Content from '@codeday/topo/Molecule/Content';
 import Spinner from '@codeday/topo/Atom/Spinner';
 import {useColorMode} from "@codeday/topo/Theme";
@@ -17,7 +17,8 @@ const {publicRuntimeConfig} = getConfig();
 export default function Page({
                                  children, title, slug, ...props
                              }) {
-    const [session, loading] = useSession();
+    const { data: session, status } = useSession();
+    const loading = status === 'loading';
     // dumb hack because dark mode doesn't work with antd css
     const {setColorMode} = useColorMode()
     if(setColorMode) setColorMode("light")

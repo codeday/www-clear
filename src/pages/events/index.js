@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import {Heading} from '@codeday/topo/Atom/Text';
 import Box from '@codeday/topo/Atom/Box';
 import {print} from 'graphql';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import Page from '../../components/Page';
 import {useFetcher} from '../../fetch';
 import Event from '../../components/Event';

@@ -9,7 +9,7 @@ import ContactBox from './ContactBox';
 import { SetSponsorNotesMutation } from './forms/Notes.gql';
 import { UploadSponsorLogoMutation, UploadSponsorDarkLogoMutation } from './forms/Sponsor.gql'
 import Notes from './forms/Notes';
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 import {print} from 'graphql';
 import Alert, {InfoAlert} from "./Alert";

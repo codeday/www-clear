@@ -8,7 +8,7 @@ import 'react-responsive-modal/styles.css';
 import * as Icon from "@codeday/topocons/Icon";
 import {InfoAlert} from "../Alert";
 import {useFetcher} from "../../fetch";
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import {
     CreateEmailTemplateMutation,
     UpdateEmailTemplateMutation,

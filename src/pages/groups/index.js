@@ -4,7 +4,7 @@ import Box from '@codeday/topo/Atom/Box';
 import Button from '@codeday/topo/Atom/Button';
 import {UiAdd} from '@codeday/topocons/Icon';
 import {print} from 'graphql';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import EventGroup from '../../components/EventGroup';
 import {getEventGroups} from './index.gql';
 import Page from '../../components/Page';

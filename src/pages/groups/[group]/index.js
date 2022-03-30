@@ -9,7 +9,7 @@ import Page from "../../../components/Page";
 import Event from "../../../components/Event";
 import {print} from 'graphql';
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 import {CreateEventModal} from "../../../components/forms/Event";
 import {DeleteEventGroupModal, UpdateEventGroupModal} from "../../../components/forms/EventGroup";
 

@@ -9,7 +9,7 @@ import {TicketTypeBadge} from "../../../../../components/Ticket";
 import Box, {Flex} from '@codeday/topo/Atom/Box'
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import Alert, {GoodAlert} from "../../../../../components/Alert";
-import {getSession} from "next-auth/client";
+import {getSession} from "next-auth/react";
 import {DeleteTicketModal, UpdateTicketModal} from "../../../../../components/forms/Ticket";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import InfoBox from "../../../../../components/InfoBox";

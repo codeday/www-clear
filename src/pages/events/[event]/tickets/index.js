@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {print} from 'graphql';
 import Text, {Heading} from '@codeday/topo/Atom/Text';
 import Box, {Grid} from '@codeday/topo/Atom/Box';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import {getEventWithTickets} from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Ticket from '../../../../components/Ticket';

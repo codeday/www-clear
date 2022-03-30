@@ -11,7 +11,7 @@ import * as Icon from '@codeday/topocons/Icon';
 import {print} from 'graphql';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
-import {getSession} from 'next-auth/client';
+import {getSession} from 'next-auth/react';
 import {CreateVenueMutation, DeleteVenueMutation, UpdateVenueMutation} from './Venue.gql';
 import {useFetcher} from '../../fetch';
 import {InfoAlert} from '../Alert';
