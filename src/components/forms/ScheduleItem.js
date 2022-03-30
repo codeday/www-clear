@@ -138,7 +138,7 @@ export function CreateScheduleItemModal({
                                 };
                             }
                             try {
-                                await fetch(print(CreateScheduleItemMutation), {
+                                await fetch(CreateScheduleItemMutation, {
                                     data: {
                                         ...formData,
                                         ...connect,
@@ -197,7 +197,7 @@ export function UpdateScheduleItemModal({scheduleitem, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateScheduleItemMutation), {
+                                await fetch(UpdateScheduleItemMutation, {
                                     where: {id: scheduleitem.id},
                                     data: formDataToUpdateInput(formData),
                                 });
@@ -243,7 +243,7 @@ export function DeleteScheduleItemModal({scheduleitem, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteScheduleItemMutation), {where: {id: scheduleitem.id}});
+                            await fetch(DeleteScheduleItemMutation, {where: {id: scheduleitem.id}});
                             await router.replace(router.asPath);
                             success('Schedule Item Deleted');
                             onCloseModal();

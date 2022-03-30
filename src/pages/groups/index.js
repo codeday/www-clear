@@ -34,7 +34,7 @@ export async function getServerSideProps({req}) {
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
 
-    const groupsResult = await fetch(print(getEventGroups));
+    const groupsResult = await fetch(getEventGroups);
 
     return {
         props: {

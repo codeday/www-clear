@@ -110,7 +110,7 @@ export function CreateVenueModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                const venueResp = await fetch(print(CreateVenueMutation), {
+                                const venueResp = await fetch(CreateVenueMutation, {
                                     data: {
                                         ...formData,
                                         events: {
@@ -168,7 +168,7 @@ export function UpdateVenueModal({venue, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                const venueResp = await fetch(print(UpdateVenueMutation), {
+                                const venueResp = await fetch(UpdateVenueMutation, {
                                     where: {id: venue.id},
                                     data: formDataToUpdateInput(formData)
                                 });
@@ -214,7 +214,7 @@ export function DeleteVenueModal({venue, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteVenueMutation), {where: {id: venue.id}});
+                            await fetch(DeleteVenueMutation, {where: {id: venue.id}});
                             await router.replace(router.asPath);
                             success('Venue Deleted');
                             onCloseModal();

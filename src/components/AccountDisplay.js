@@ -17,7 +17,7 @@ export function AccountDisplayFromUsername({username, children, props}) {
     const {success, error} = useToasts();
     const refresh = async () => {
         setLoading(true);
-        const userResults = await fetch(print(getAccountByUsername), {username});
+        const userResults = await fetch(getAccountByUsername, {username});
         if (userResults.account.getUser === null) {
             setUserNotFound(true);
             setLoading(false);

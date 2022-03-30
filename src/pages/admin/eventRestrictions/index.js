@@ -28,7 +28,7 @@ export async function getServerSideProps({req, res, query}) {
     const session = await getSession({req});
     const fetch = useFetcher(session);
     if (!session) return {props: {}};
-    const eventRestrictionResults = await fetch(print(getEventRestrictionsQuery));
+    const eventRestrictionResults = await fetch(getEventRestrictionsQuery);
     return {
         props: {
             restrictions: eventRestrictionResults.clear.eventRestrictions,

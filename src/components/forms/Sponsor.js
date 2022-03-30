@@ -93,7 +93,7 @@ export function CreateSponsorModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateSponsorMutation), {
+                                await fetch(CreateSponsorMutation, {
                                     data: {
                                         ...formData,
                                         event: {
@@ -160,7 +160,7 @@ export function UpdateSponsorModal(
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateSponsorMutation), {
+                                await fetch(UpdateSponsorMutation, {
                                     where: {id: sponsor.id},
                                     data: formDataToUpdateInput(formData),
                                 });
@@ -210,7 +210,7 @@ export function DeleteSponsorModal(
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteSponsorMutation), {where: {id: sponsor.id}});
+                            await fetch(DeleteSponsorMutation, {where: {id: sponsor.id}});
                             await router.replace(router.asPath);
                             success('Sponsor Deleted');
                             onCloseModal();

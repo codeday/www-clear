@@ -84,7 +84,7 @@ export default function SponsorBox({sponsor, children, ...props}) {
                                 setUploading(true);
                                 const session = await getSession();
                                 const fetch = useFetcher(session);
-                                const result = await fetch(print(UploadSponsorLogoMutation), { where: {id: sponsor.id}, file })
+                                const result = await fetch(UploadSponsorLogoMutation, { where: {id: sponsor.id}, file })
                                 success('Logo Uploaded!')
                                 setLogoUrl(result.logoImageUri);
                             } catch (e) {
@@ -137,7 +137,7 @@ export default function SponsorBox({sponsor, children, ...props}) {
                                 setUploading(true);
                                 const session = await getSession();
                                 const fetch = useFetcher(session);
-                                const result = await fetch(print(UploadSponsorDarkLogoMutation), { where: {id: sponsor.id}, file })
+                                const result = await fetch(UploadSponsorDarkLogoMutation, { where: {id: sponsor.id}, file })
                                 success('Logo Uploaded!')
                                 setLogoUrl(result.darkLogoImageUri);
                             } catch (e) {

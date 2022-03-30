@@ -69,7 +69,7 @@ export default function TicketPage({ticket}) {
                         const session = await getSession({req})
                         const fetch = useFetcher(session);
                         if (!session) return {props: {}}
-                        const ticketResult = await fetch(print(getTicket), {data: {id: ticketId}})
+                        const ticketResult = await fetch(getTicket, {data: {id: ticketId}})
                         const ticket = ticketResult?.clear?.ticket
                         if (!ticket) return {
                         redirect: {

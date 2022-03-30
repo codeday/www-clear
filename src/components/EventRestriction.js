@@ -8,7 +8,7 @@ import DOMPurify from 'dompurify';
 import ReactHtmlParser from 'react-html-parser';
 import Image from '@codeday/topo/Atom/Image';
 import Notes from "./forms/Notes";
-import {SetEventRestrictionNotesMutation} from "forms/Notes.gql"
+import {SetEventRestrictionNotesMutation} from "./forms/Notes.gql"
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import Button from "@codeday/topo/Atom/Button"
 import {getSession} from "next-auth/react";
@@ -100,7 +100,7 @@ export default function EventRestriction({eventRestriction, ...props}) {
                             setUploading(true);
                             const session = await getSession();
                             const fetch = useFetcher(session);
-                            const result = await fetch(print(UploadEventRestrictionIconMutation), { where: {id: eventRestriction.id}, file })
+                            const result = await fetch(UploadEventRestrictionIconMutation, { where: {id: eventRestriction.id}, file })
                             success('Icon Uploaded!')
                             setLogoUrl(result.iconUri);
                         } catch (e) {

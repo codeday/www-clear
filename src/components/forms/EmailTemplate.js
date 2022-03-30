@@ -189,7 +189,7 @@ export function CreateEmailTemplateModal({children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(CreateEmailTemplateMutation), {
+                                await fetch(CreateEmailTemplateMutation, {
                                     data: formData
                                     /* need to connect the new object
                                     to a parent object? do so here */
@@ -243,7 +243,7 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                await fetch(print(UpdateEmailTemplateMutation), {
+                                await fetch(UpdateEmailTemplateMutation, {
                                     where: {id: emailtemplate.id},
                                     data: formDataToUpdateInput(formData)
                                 })
@@ -286,7 +286,7 @@ export function DeleteEmailTemplateModal({emailtemplate, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
-                            await fetch(print(DeleteEmailTemplateMutation), {where: {id: emailtemplate.id}})
+                            await fetch(DeleteEmailTemplateMutation, {where: {id: emailtemplate.id}})
                             await router.replace(router.asPath)
                             success('EmailTemplate Deleted')
                             onCloseModal()
