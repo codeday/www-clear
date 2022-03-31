@@ -5,4 +5,7 @@ fragment TicketBoxFragment on ClearEvent {
     earlyBirdPrice
     canEarlyBirdRegister
     canRegister
+    region {
+        currencySymbol
+    }
 }
