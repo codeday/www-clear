@@ -9,7 +9,7 @@ export default function Event({event, ...props}) {
         <InfoBox heading={<>{event.name} - {event.eventGroup?.name}</>} id={event.id} as="a" href={`/events/${event.id}`} {...props}>
           <Flex>
             <Box bgColor="gray.50" w="60px" h="60px" mr={4} mb={1} ml={1}>
-              <Image src={event.region.skylinePhoto.url ? event.region.skylinePhoto.url : "/codeday-logo-skyline-substitute.png"} alt="" rounded={3} />
+              <Image src={event.region?.skylinePhoto?.url ? event.region.skylinePhoto.url : "/codeday-logo-skyline-substitute.png"} alt="" rounded={3} />
             </Box>
             <Box>
               <Text mb={0}>{event.displayDate}</Text>
