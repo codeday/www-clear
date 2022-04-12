@@ -9,7 +9,7 @@ import ContactBox from './ContactBox';
 import { SetSponsorNotesMutation } from './forms/Notes.gql';
 import { UploadSponsorLogoMutation, UploadSponsorDarkLogoMutation } from './forms/Sponsor.gql'
 import Notes from './forms/Notes';
-import {getSession} from "next-auth/react";
+import {getSession, useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 import {print} from 'graphql';
 import Alert, {InfoAlert} from "./Alert";
@@ -27,6 +27,8 @@ export default function SponsorBox({sponsor, children, ...props}) {
     const [darkLogoUrl, setDarkLogoUrl] = useState(sponsor.darkLogoImageUri);
     const [uploading, setUploading] = useState(false);
     const { success, error, info } = useToasts();
+    const session = useSession();
+    const fetch = useFetcher(session);
 
     return (
         <InfoBox
@@ -82,8 +84,6 @@ export default function SponsorBox({sponsor, children, ...props}) {
                             }
                             try {
                                 setUploading(true);
-                                const session = await getSession();
-                                const fetch = useFetcher(session);
                                 const result = await fetch(UploadSponsorLogoMutation, { where: {id: sponsor.id}, file })
                                 success('Logo Uploaded!')
                                 setLogoUrl(result.logoImageUri);
@@ -135,8 +135,6 @@ export default function SponsorBox({sponsor, children, ...props}) {
                             }
                             try {
                                 setUploading(true);
-                                const session = await getSession();
-                                const fetch = useFetcher(session);
                                 const result = await fetch(UploadSponsorDarkLogoMutation, { where: {id: sponsor.id}, file })
                                 success('Logo Uploaded!')
                                 setLogoUrl(result.darkLogoImageUri);
