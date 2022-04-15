@@ -4,4 +4,7 @@ fragment RegistrationGraphFragment on ClearEvent {
         createdAt
     }
     soldTickets(onlyStudents: true)
+    interestedEmails {
+        email
+    }
 }

@@ -88,6 +88,10 @@ const schema = {
             title: 'Maximum age to register',
             type: 'number',
             default: 25
+        },
+        requiresPromoCode: {
+            type: 'boolean',
+            title: 'Requires Promo Code'
         }
     },
 };
@@ -98,6 +102,9 @@ const uiSchema = {
             orderable: false,
         },
     },
+    requiresPromoCode: {
+        'ui:help': 'Should people only be allowed to register if they have a promo code? (For instance if the event is invite-only) This should most of the time be false.'
+    }
 };
 
 export function CreateEventModal({group, children, ...props}) {

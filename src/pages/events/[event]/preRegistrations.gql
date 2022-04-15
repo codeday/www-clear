@@ -1,0 +1,12 @@
+query getEventPreRegistrationsQuery($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            id
+            name
+            interestedEmails {
+                id
+                email
+            }
+        }
+    }
+}

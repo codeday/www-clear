@@ -4,6 +4,8 @@ import moment from 'moment';
 import { Heading } from '@codeday/topo/Atom/Text';
 import InfoBox from './InfoBox';
 import Text from '@codeday/topo/Atom/Text';
+import Button from '@codeday/topo/Atom/Button';
+import { Eye } from '@codeday/topocons/Icon';
 
 export default function RegistrationGraph({ event, children, ...props }) {
     const now = moment();
@@ -24,6 +26,7 @@ export default function RegistrationGraph({ event, children, ...props }) {
             <Text m={0} ml={.5} size="sm">{event.soldTickets} students; {event.tickets.length - event.soldTickets} staff</Text>
             {children}
             {event.soldTickets > 0 && <LineGraph data={data} />}
+            {event.interestedEmails.length} pre-registrations <Button as="a" href={`${event.id}/preRegistrations`} pt={1} px={3} d="inline"><Eye /></Button>
         </InfoBox>
     );
 }
