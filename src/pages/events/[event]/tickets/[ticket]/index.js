@@ -59,6 +59,9 @@ export default function TicketPage({ticket}) {
                         Promo Code used: {ticket.promoCode?.code || 'N/A'} <br/>
                         Payment intent ID: {ticket.payment?.stripePaymentIntentId || 'N/A'}
                     </InfoBox>
+                    <InfoBox heading="Metadata">
+                        {JSON.stringify(ticket.metadata, null, 2)}
+                    </InfoBox>
                         </Masonry>
                         </ResponsiveMasonry>
                         </Page>

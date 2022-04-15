@@ -15,6 +15,7 @@ query getEventQuery($data: ClearEventWhereUniqueInput!) {
         event(where: $data) {
             id
             name
+            metadata
             displayDate
             eventGroup {
                 name

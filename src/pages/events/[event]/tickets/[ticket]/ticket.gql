@@ -5,6 +5,8 @@
 query getTicket($data: ClearTicketWhereUniqueInput!) {
     clear {
         ticket(where: $data) {
+            id
+            metadata
             createdAt
             payment {
                 stripePaymentIntentId

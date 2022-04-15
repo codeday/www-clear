@@ -25,6 +25,7 @@ import {CreateScheduleItemModal} from '../../../components/forms/ScheduleItem';
 import ScheduleBox from '../../../components/ScheduleBox';
 import TicketBox from "../../../components/TicketBox";
 import EventRestrictionBox from "../../../components/EventRestrictionBox";
+import InfoBox from "../../../components/InfoBox";
 
 
 export default function Event({event}) {
@@ -85,7 +86,6 @@ export default function Event({event}) {
                         <Button h={6} as="a" href={`${event.id}/promoCodes`}>PROMOS</Button>
                       }
                     />
-                    <Box /> {/* hack for spacing */}
                     <EventRestrictionBox
                         restrictions={event.eventRestrictions}
                         buttons={
@@ -94,6 +94,9 @@ export default function Event({event}) {
                             </Button>
                         }
                     />
+                    <InfoBox heading="Metadata">
+                        {JSON.stringify(event.metadata, null, 2)}
+                    </InfoBox>
                 </Masonry>
             </ResponsiveMasonry>
         </Page>
