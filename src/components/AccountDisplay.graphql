@@ -1,9 +1,0 @@
-query getAccountByUsername($username:String){
-    account {
-        getUser(where: {username: $username}) {
-            id
-            name
-            picture
-        }
-    }
-}
