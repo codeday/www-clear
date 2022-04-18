@@ -1,4 +1,4 @@
-import {Link} from '@codeday/topo/Atom/Text';
+import {Link} from '@codeday/topo/Atom';
 import Page from '../components/Page';
 
 export default function Index() {

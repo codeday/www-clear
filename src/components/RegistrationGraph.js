@@ -1,11 +1,9 @@
 import React from 'react';
 import LineGraph from 'react-line-graph';
 import moment from 'moment';
-import { Heading } from '@codeday/topo/Atom/Text';
+import {Button, Heading, Text} from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
-import Text from '@codeday/topo/Atom/Text';
-import Button from '@codeday/topo/Atom/Button';
-import { Eye } from '@codeday/topocons/Icon';
+import {Eye} from '@codeday/topocons/Icon';
 
 export default function RegistrationGraph({ event, children, ...props }) {
     const now = moment();

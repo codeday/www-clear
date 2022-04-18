@@ -1,6 +1,5 @@
 import React from 'react';
-import {Heading} from '@codeday/topo/Atom/Text';
-import {print} from 'graphql';
+import {Heading} from "@codeday/topo/Atom";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import {getSession} from 'next-auth/react';
 import {getFetcher} from '../../../fetch';

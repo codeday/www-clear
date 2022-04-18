@@ -1,8 +1,5 @@
 import React from 'react';
-import {print} from 'graphql';
-import Text, {Heading, Link} from '@codeday/topo/Atom/Text';
-import Box from '@codeday/topo/Atom/Box';
-import Button from '@codeday/topo/Atom/Button';
+import {Button, Heading, Text} from "@codeday/topo/Atom";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/react';
@@ -95,7 +92,7 @@ export default function Event({event}) {
                         }
                     />
                     <InfoBox heading="Metadata">
-                        {JSON.stringify(event.metadata, null, 2)}
+                        {JSON.stringify(event.metadata, null, 2 )}
                     </InfoBox>
                 </Masonry>
             </ResponsiveMasonry>

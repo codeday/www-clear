@@ -1,14 +1,10 @@
 import React from 'react';
-import {Heading} from '@codeday/topo/Atom/Text';
-import Box from '@codeday/topo/Atom/Box';
-import Button from '@codeday/topo/Atom/Button';
-import {UiAdd} from '@codeday/topocons/Icon';
-import {print} from 'graphql';
+import {Box, Heading} from "@codeday/topo/Atom";
 import {getSession} from 'next-auth/react';
 import EventGroup from '../../components/EventGroup';
 import {getEventGroups} from './index.gql';
 import Page from '../../components/Page';
-import {useFetcher, getFetcher} from '../../fetch';
+import {getFetcher} from '../../fetch';
 import {CreateEventGroupModal} from "../../components/forms/EventGroup";
 
 export default function Groups({groups}) {

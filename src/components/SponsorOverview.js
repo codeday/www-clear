@@ -1,5 +1,5 @@
 import React from 'react';
-import Text, {Heading} from '@codeday/topo/Atom/Text';
+import {Heading, Text} from "@codeday/topo/Atom";
 import InfoBox from './InfoBox';
 
 export default function SponsorOverview({sponsors, children, ...props}) {

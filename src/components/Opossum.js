@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { useEffect, useState } from "react";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import {useEffect} from "react";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
 function Opossum({ height, width }) {
   // const [renderer, setRenderer] = useState();

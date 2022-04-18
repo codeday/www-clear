@@ -1,5 +1,5 @@
 import React from 'react';
-import Box, { Flex } from '@codeday/topo/Atom/Box';
+import {Box, Flex} from '@codeday/topo/Atom';
 
 export default function InfoBox({children, heading, headingSize, buttons, nested, ...props}) {
     return (

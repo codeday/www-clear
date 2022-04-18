@@ -1,8 +1,8 @@
 import React from "react";
 import Page from "../../../components/Page";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import { UiInfo } from "@codeday/topocons/Icon";
-import Text, {Heading} from "@codeday/topo/Atom/Text";
+import {UiInfo} from "@codeday/topocons/Icon";
+import {Heading, Text} from "@codeday/topo/Atom";
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../fetch";
 import {getEventPreRegistrationsQuery} from "./preRegistrations.gql"

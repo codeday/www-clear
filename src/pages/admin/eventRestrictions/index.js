@@ -1,9 +1,7 @@
-import {Link} from '@codeday/topo/Atom/Text';
 import Page from '../../../components/Page';
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../fetch";
-import {print} from "graphql";
 import {getEventRestrictionsQuery} from "./index.gql";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import EventRestriction from "../../../components/EventRestriction";

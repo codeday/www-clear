@@ -1,6 +1,5 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
-import {} from "@codeday/topocons/Icon"
 
 export default function PromoCodeBox({promoCode, children, ...props}) {
      return (

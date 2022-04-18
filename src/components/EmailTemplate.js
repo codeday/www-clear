@@ -1,7 +1,7 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
 import {GoodAlert, InfoAlert} from "./Alert";
-import Text from "@codeday/topo/Atom/Text";
+import {Text} from "@codeday/topo/Atom";
 
 export default function EmailTemplate({template, children, ...props}) {
     return (

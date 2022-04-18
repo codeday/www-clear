@@ -1,12 +1,10 @@
 import React from 'react';
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../../fetch";
-import {print} from "graphql";
 import {GetPromoCodeQuery} from "./promoCode.gql";
 import Page from "../../../../components/Page";
-import {Heading} from "@codeday/topo/Atom/Text"
+import {Heading} from "@codeday/topo/Atom";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import InfoBox from "../../../../components/InfoBox";
 import {DeletePromoCodeModal, UpdatePromoCodeModal} from "../../../../components/forms/PromoCode";
 import Notes from "../../../../components/forms/Notes";
 import {SetPromoCodeNotesMutation} from "../../../../components/forms/Notes.gql"

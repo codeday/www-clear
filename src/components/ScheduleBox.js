@@ -1,6 +1,5 @@
 import React from 'react';
-import Box from '@codeday/topo/Atom/Box';
-import {Heading} from '@codeday/topo/Atom/Text';
+import {Box, Heading} from "@codeday/topo/Atom";
 import InfoBox from './InfoBox';
 
 export default function ({schedule, children, ...props}) {

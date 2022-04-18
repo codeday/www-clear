@@ -1,11 +1,10 @@
 import React from "react";
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../../fetch";
-import {print} from "graphql";
 import {getEventWithPromoCodesQuery} from "./index.gql";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Page from "../../../../components/Page"
-import {Heading} from "@codeday/topo/Atom/Text"
+import {Heading} from "@codeday/topo/Atom";
 import PromoCodeBox from "../../../../components/PromoCodeBox";
 import {CreatePromoCodeModal, CreateScholarshipCodeButton} from "../../../../components/forms/PromoCode";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';

@@ -418,11 +418,6 @@ interface CmsEntry {
     sys: CmsSys!
 }
 
-interface LearnEntry {
-    contentfulMetadata: LearnContentfulMetadata!
-    sys: LearnSys!
-}
-
 "A union of Content Node Types that support revisions"
 union BlogContentRevisionUnion = BlogPage | BlogPost
 
@@ -2070,7 +2065,7 @@ type BlogPost implements BlogContentNode & BlogDatabaseIdentifier & BlogMenuItem
     authorDatabaseId: Int
     "The globally unique identifier of the author of the node"
     authorId: ID
-    "Added to the GraphQL Schema because the ACF Field Group &quot;Author Override&quot; was set to Show in GraphQL."
+    "This will change the author and/or title which is displayed on the blog to be different from the actual author. | Added to the GraphQL Schema because the ACF Field Group &quot;Author Override&quot; was set to Show in GraphQL."
     authorOverride: BlogPost_Authoroverride
     "Connection between the post type and the category type"
     categories(
@@ -2176,6 +2171,8 @@ type BlogPost implements BlogContentNode & BlogDatabaseIdentifier & BlogMenuItem
     lastEditedBy: BlogContentNodeToEditLastConnectionEdge
     "The permalink of the post"
     link: String
+    "Added to the GraphQL Schema because the ACF Field Group &quot;Marketing&quot; was set to Show in GraphQL."
+    marketing: BlogPost_Marketing
     "The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time."
     modified: String
     "The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT."
@@ -2205,6 +2202,8 @@ type BlogPost implements BlogContentNode & BlogDatabaseIdentifier & BlogMenuItem
     previewRevisionDatabaseId: Int
     "Whether the object is a node in the preview state"
     previewRevisionId: ID
+    "Added to the GraphQL Schema because the ACF Field Group &quot;Press Release&quot; was set to Show in GraphQL."
+    release: BlogPost_Release
     "If the current node is a revision, this field exposes the node this is a revision of. Returns null if the node is not a revision of another node."
     revisionOf: BlogNodeWithRevisionsToContentNodeConnectionEdge
     "Connection between the post type and the post type"
@@ -2565,6 +2564,30 @@ type BlogPost_Authoroverride implements BlogAcfFieldGroup {
     fieldGroupName: String
     title: String
     username: String
+}
+
+"Field Group"
+type BlogPost_Marketing implements BlogAcfFieldGroup {
+    "Who does this post most target?"
+    audience: String
+    "The name of the ACF Field Group"
+    fieldGroupName: String
+}
+
+"Field Group"
+type BlogPost_Release implements BlogAcfFieldGroup {
+    "Who to contact with questions about this release."
+    contact: String
+    "Phone number for the release contact."
+    email: String
+    "The name of the ACF Field Group"
+    fieldGroupName: String
+    "The press release&#039;s primary geography, in the format &quot;City Name, WA&quot;."
+    location: String
+    "Phone number for the release contact."
+    phone: String
+    "Primary takeaway."
+    quote: String
 }
 
 "The reading setting type"
@@ -3055,8 +3078,6 @@ type BlogTag implements BlogDatabaseIdentifier & BlogMenuItemLinkable & BlogNode
     databaseId: Int!
     "The description of the object"
     description: String
-    "Added to the GraphQL Schema because the ACF Field Group &quot;Display&quot; was set to Show in GraphQL."
-    display: BlogTag_Display
     "Connection between the TermNode type and the EnqueuedScript type"
     enqueuedScripts(
         "Cursor used along with the \"first\" argument to reference where in the dataset to get data"
@@ -3160,13 +3181,6 @@ type BlogTagToPostConnectionEdge {
 type BlogTagToTaxonomyConnectionEdge {
     "The node of the connection, without the edges"
     node: BlogTaxonomy
-}
-
-"Field Group"
-type BlogTag_Display implements BlogAcfFieldGroup {
-    color: String
-    "The name of the ACF Field Group"
-    fieldGroupName: String
 }
 
 "A taxonomy object"
@@ -3972,6 +3986,7 @@ type ClearEvent {
     contentfulWebname: String
     createdAt: ClearDateTime!
     displayDate: String!
+    displayTime: String!
     earlyBirdCutoff: ClearDateTime!
     earlyBirdPrice: Float!
     endDate: ClearDateTime!
@@ -3983,8 +3998,8 @@ type ClearEvent {
     interestedEmails(cursor: ClearMailingListMemberWhereUniqueInput, distinct: [ClearMailingListMemberScalarFieldEnum!], orderBy: [ClearMailingListMemberOrderByWithRelationInput!], skip: Int, take: Int, where: ClearMailingListMemberWhereInput): [ClearMailingListMember!]!
     majorityAge: Int!
     managers: [String!]!
-    maxAge: Float!
-    minAge: Float!
+    maxAge: Int
+    minAge: Int
     name: String!
     promoCodes(cursor: ClearPromoCodeWhereUniqueInput, distinct: [ClearPromoCodeScalarFieldEnum!], orderBy: [ClearPromoCodeOrderByWithRelationInput!], skip: Int, take: Int, where: ClearPromoCodeWhereInput): [ClearPromoCode!]!
     region: CmsRegion
@@ -4007,6 +4022,8 @@ type ClearEvent {
 type ClearEventAvgAggregate {
     earlyBirdPrice: Float
     majorityAge: Float
+    maxAge: Float
+    minAge: Float
     ticketPrice: Float
 }
 
@@ -4030,7 +4047,9 @@ type ClearEventCountAggregate {
     id: Int!
     majorityAge: Int!
     managers: Int!
+    maxAge: Int!
     metadata: Int!
+    minAge: Int!
     name: Int!
     registrationCutoff: Int!
     registrationsOpen: Int!
@@ -4082,7 +4101,9 @@ type ClearEventGroupBy {
     id: String!
     majorityAge: Int!
     managers: [String!]
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean!
@@ -4178,6 +4199,8 @@ type ClearEventMaxAggregate {
     eventGroupId: String
     id: String
     majorityAge: Int
+    maxAge: Int
+    minAge: Int
     name: String
     registrationCutoff: ClearDateTime
     registrationsOpen: Boolean
@@ -4198,6 +4221,8 @@ type ClearEventMinAggregate {
     eventGroupId: String
     id: String
     majorityAge: Int
+    maxAge: Int
+    minAge: Int
     name: String
     registrationCutoff: ClearDateTime
     registrationsOpen: Boolean
@@ -4275,6 +4300,8 @@ type ClearEventRestrictionMinAggregate {
 type ClearEventSumAggregate {
     earlyBirdPrice: Float
     majorityAge: Int
+    maxAge: Int
+    minAge: Int
     ticketPrice: Float
 }
 
@@ -4332,6 +4359,8 @@ type ClearMailingListMemberMinAggregate {
 }
 
 type ClearMutation {
+    checkin(where: ClearTicketWhereUniqueInput!): ClearTicket
+    checkout(where: ClearTicketWhereUniqueInput!): ClearTicket
     createEmailTemplate(data: ClearEmailTemplateCreateInput!): ClearEmailTemplate!
     createEvent(data: ClearEventCreateInput!): ClearEvent!
     createEventGroup(data: ClearEventGroupCreateInput!): ClearEventGroup!
@@ -4380,8 +4409,8 @@ type ClearMutation {
     deleteSponsor(where: ClearSponsorWhereUniqueInput!): ClearSponsor
     deleteTicket(where: ClearTicketWhereUniqueInput!): ClearTicket
     deleteVenue(where: ClearVenueWhereUniqueInput!): ClearVenue
-    finalizePayment(paymentIntentId: String!): [String!]!
-    registerForEvent(eventWhere: ClearEventWhereUniqueInput!, guardianData: ClearPersonCreateInput, promoCode: String, ticketData: ClearTicketCreateWithoutEventInput, ticketsData: [ClearTicketCreateWithoutEventInput!]): String
+    finalizePayment(paymentIntentId: String!, paymentProvider: ClearPaymentProvider = stripe): [String!]!
+    registerForEvent(eventWhere: ClearEventWhereUniqueInput!, guardianData: ClearPersonCreateInput, paymentProvider: ClearPaymentProvider = stripe, promoCode: String, ticketData: ClearTicketCreateWithoutEventInput, ticketsData: [ClearTicketCreateWithoutEventInput!]): String
     setEmailTemplateMetadata(key: String!, value: String!, where: ClearEmailTemplateWhereUniqueInput!): ClearEmailTemplate
     setEventGroupMetadata(key: String!, value: String!, where: ClearEventGroupWhereUniqueInput!): ClearEventGroup
     setEventMetadata(key: String!, value: String!, where: ClearEventWhereUniqueInput!): ClearEvent
@@ -4434,7 +4463,7 @@ type ClearMutation {
     upsertSponsor(create: ClearSponsorCreateInput!, update: ClearSponsorUpdateInput!, where: ClearSponsorWhereUniqueInput!): ClearSponsor!
     upsertTicket(create: ClearTicketCreateInput!, update: ClearTicketUpdateInput!, where: ClearTicketWhereUniqueInput!): ClearTicket!
     upsertVenue(create: ClearVenueCreateInput!, update: ClearVenueUpdateInput!, where: ClearVenueWhereUniqueInput!): ClearVenue!
-    withdrawFailedPayment(paymentIntentId: String!): Boolean!
+    withdrawFailedPayment(paymentIntentId: String!, paymentProvider: ClearPaymentProvider = stripe): Boolean!
 }
 
 type ClearPayment {
@@ -4443,6 +4472,7 @@ type ClearPayment {
     createdAt: ClearDateTime!
     getMetadata(key: String!): String
     id: String!
+    paymentProvider: String!
     stripePaymentIntentId: String!
     tickets(cursor: ClearTicketWhereUniqueInput, distinct: [ClearTicketScalarFieldEnum!], orderBy: [ClearTicketOrderByWithRelationInput!], skip: Int, take: Int, where: ClearTicketWhereInput): [ClearTicket!]!
     updatedAt: ClearDateTime!
@@ -4458,6 +4488,7 @@ type ClearPaymentCountAggregate {
     createdAt: Int!
     id: Int!
     metadata: Int!
+    paymentProvider: Int!
     stripePaymentIntentId: Int!
     updatedAt: Int!
 }
@@ -4470,6 +4501,7 @@ type ClearPaymentGroupBy {
     createdAt: ClearDateTime!
     id: String!
     metadata: ClearJSON
+    paymentProvider: String!
     stripePaymentIntentId: String!
     updatedAt: ClearDateTime!
 }
@@ -4478,6 +4510,7 @@ type ClearPaymentMaxAggregate {
     complete: Boolean
     createdAt: ClearDateTime
     id: String
+    paymentProvider: String
     stripePaymentIntentId: String
     updatedAt: ClearDateTime
 }
@@ -4486,6 +4519,7 @@ type ClearPaymentMinAggregate {
     complete: Boolean
     createdAt: ClearDateTime
     id: String
+    paymentProvider: String
     stripePaymentIntentId: String
     updatedAt: ClearDateTime
 }
@@ -4956,6 +4990,8 @@ type ClearSponsorSumAggregate {
 type ClearTicket {
     _count: ClearTicketCount
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime!
     email: String
@@ -4990,6 +5026,8 @@ type ClearTicketCount {
 type ClearTicketCountAggregate {
     _all: Int!
     age: Int!
+    checkedIn: Int!
+    checkedOut: Int!
     couponCode: Int!
     createdAt: Int!
     email: Int!
@@ -5014,6 +5052,8 @@ type ClearTicketGroupBy {
     _min: ClearTicketMinAggregate
     _sum: ClearTicketSumAggregate
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime!
     email: String
@@ -5033,6 +5073,8 @@ type ClearTicketGroupBy {
 
 type ClearTicketMaxAggregate {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -5051,6 +5093,8 @@ type ClearTicketMaxAggregate {
 
 type ClearTicketMinAggregate {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -5075,11 +5119,15 @@ type ClearVenue {
     _count: ClearVenueCount
     address: String
     addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
     city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime!
     events(cursor: ClearEventWhereUniqueInput, distinct: [ClearEventScalarFieldEnum!], orderBy: [ClearEventOrderByWithRelationInput!], skip: Int, take: Int, where: ClearEventWhereInput): [ClearEvent!]!
     getMetadata(key: String!): String
@@ -5103,16 +5151,25 @@ type ClearVenueCount {
 type ClearVenueCountAggregate {
     _all: Int!
     address: Int!
+    addressLine1: Int!
+    addressLine2: Int!
+    addressLine3: Int!
     capacity: Int!
+    city: Int!
     contactEmail: Int!
     contactName: Int!
     contactPhone: Int!
+    country: Int!
+    countryAbbreviation: Int!
     createdAt: Int!
     id: Int!
     mapLink: Int!
     metadata: Int!
     name: Int!
+    state: Int!
+    stateAbbreviation: Int!
     updatedAt: Int!
+    zipCode: Int!
 }
 
 type ClearVenueGroupBy {
@@ -5122,42 +5179,69 @@ type ClearVenueGroupBy {
     _min: ClearVenueMinAggregate
     _sum: ClearVenueSumAggregate
     address: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
+    city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime!
     id: String!
     mapLink: String
     metadata: ClearJSON
     name: String!
+    state: String
+    stateAbbreviation: String
     updatedAt: ClearDateTime!
+    zipCode: String
 }
 
 type ClearVenueMaxAggregate {
     address: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
+    city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime
     id: String
     mapLink: String
     name: String
+    state: String
+    stateAbbreviation: String
     updatedAt: ClearDateTime
+    zipCode: String
 }
 
 type ClearVenueMinAggregate {
     address: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
+    city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime
     id: String
     mapLink: String
     name: String
+    state: String
+    stateAbbreviation: String
     updatedAt: ClearDateTime
+    zipCode: String
 }
 
 type ClearVenueSumAggregate {
@@ -5243,12 +5327,14 @@ type CmsAssetLinkingCollections {
 type CmsAward implements CmsEntry {
     contentfulMetadata: CmsContentfulMetadata!
     description(locale: String): String
+    featured(locale: String): Boolean
     icon(locale: String, preview: Boolean): CmsAsset
     id(locale: String): String
     linkedFrom(allowedLocales: [String]): CmsAwardLinkingCollections
     name(locale: String): String
     programs(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): CmsAwardProgramsCollection
     ranking(locale: String): Int
+    suggestedModifiers(locale: String): [String]
     sys: CmsSys!
 }
 
@@ -5614,6 +5700,7 @@ type CmsFormSidebarLinks {
 type CmsGlobalSponsor implements CmsEntry {
     audio(locale: String, preview: Boolean): CmsAsset
     contentfulMetadata: CmsContentfulMetadata!
+    darkLogo(locale: String, preview: Boolean): CmsAsset
     description(locale: String): String
     instagramUsername(locale: String): String
     link(locale: String): String
@@ -6010,6 +6097,8 @@ type CmsRegion implements CmsEntry {
     countryNameAdjective(locale: String): String
     countryNameShort(locale: String): String
     countryNameShortAdjective(locale: String): String
+    currency(locale: String): String
+    currencySymbol(locale: String): String
     e164CountryCode(locale: String): String
     iso3166Alpha2Code(locale: String): String
     iso3166Alpha3Code(locale: String): String
@@ -6017,6 +6106,7 @@ type CmsRegion implements CmsEntry {
     location(locale: String): CmsLocation
     motto(locale: String): String
     name(locale: String): String
+    paymentProvider(locale: String): String
     primaryColor(locale: String): String
     regionPhotos(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): CmsAssetCollection
     skylinePhoto(locale: String, preview: Boolean): CmsAsset
@@ -6312,256 +6402,6 @@ type LabsTrackRecommendation {
     weight: Float!
 }
 
-"Represents a binary file in a space. An asset can be any file type."
-type LearnAsset {
-    contentType(locale: String): String
-    contentfulBaseUrl(locale: String, transform: LearnImageTransformOptions): String
-    contentfulMetadata: LearnContentfulMetadata!
-    description(locale: String): String
-    fileName(locale: String): String
-    height(locale: String): Int
-    linkedFrom(allowedLocales: [String]): LearnAssetLinkingCollections
-    size(locale: String): Int
-    sys: LearnSys!
-    title(locale: String): String
-    url(transform: LearnImageTransformOptions): String
-    width(locale: String): Int
-}
-
-type LearnAssetCollection {
-    items: [LearnAsset]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnAssetLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-    technologies(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnTechnologyCollection
-}
-
-"Display an inline code block inside of rich content for lessons. [See type definition](https://app.contentful.com/spaces/muw2pziidpat/content_types/codeBlock)"
-type LearnCodeBlock implements LearnEntry {
-    code(locale: String): String
-    contentfulMetadata: LearnContentfulMetadata!
-    language(locale: String): String
-    linkedFrom(allowedLocales: [String]): LearnCodeBlockLinkingCollections
-    sys: LearnSys!
-}
-
-type LearnCodeBlockCollection {
-    items: [LearnCodeBlock]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnCodeBlockLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-}
-
-type LearnContentfulMetadata {
-    tags: [LearnContentfulTag]!
-}
-
-"""
-
-Represents a tag entity for finding and organizing content easily.
-Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags
-"""
-type LearnContentfulTag {
-    id: String
-    name: String
-}
-
-"Determines the hardness of a particular lesson. [See type definition](https://app.contentful.com/spaces/muw2pziidpat/content_types/difficulty)"
-type LearnDifficulty implements LearnEntry {
-    contentfulMetadata: LearnContentfulMetadata!
-    hexCodeColor(locale: String): String
-    linkedFrom(allowedLocales: [String]): LearnDifficultyLinkingCollections
-    name(locale: String): String
-    shortDescription(locale: String): String
-    sys: LearnSys!
-}
-
-type LearnDifficultyCollection {
-    items: [LearnDifficulty]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnDifficultyLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-    tracks(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnTrackCollection
-}
-
-type LearnEntryCollection {
-    items: [LearnEntry]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-"A specific topic within a track, a lesson can also be thought of as a page [See type definition](https://app.contentful.com/spaces/muw2pziidpat/content_types/lesson)"
-type LearnLesson implements LearnEntry {
-    content(locale: String): LearnLessonContent
-    contentfulMetadata: LearnContentfulMetadata!
-    hasNextPage(locale: String): Boolean
-    id(locale: String): String
-    linkedFrom(allowedLocales: [String]): LearnLessonLinkingCollections
-    nameHeader(locale: String): String
-    pageNumber(locale: String): Int
-    points(locale: String): Int
-    sys: LearnSys!
-    tags(locale: String): [String]
-    track(locale: String, preview: Boolean): LearnTrack
-}
-
-type LearnLessonCollection {
-    items: [LearnLesson]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnLessonContent {
-    json: LearnJSON!
-    links: LearnLessonContentLinks!
-}
-
-type LearnLessonContentAssets {
-    block: [LearnAsset]!
-    hyperlink: [LearnAsset]!
-}
-
-type LearnLessonContentEntries {
-    block: [LearnEntry]!
-    hyperlink: [LearnEntry]!
-    inline: [LearnEntry]!
-}
-
-type LearnLessonContentLinks {
-    assets: LearnLessonContentAssets!
-    entries: LearnLessonContentEntries!
-}
-
-type LearnLessonLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-    tracks(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnTrackCollection
-}
-
-type LearnQuery {
-    asset(id: String!, locale: String, preview: Boolean): LearnAsset
-    assets(limit: Int = 100, locale: String, order: [LearnAssetOrder], preview: Boolean, skip: Int = 0, where: LearnAssetFilter): LearnAssetCollection
-    codeBlock(id: String!, locale: String, preview: Boolean): LearnCodeBlock
-    codeBlocks(limit: Int = 100, locale: String, order: [LearnCodeBlockOrder], preview: Boolean, skip: Int = 0, where: LearnCodeBlockFilter): LearnCodeBlockCollection
-    difficulties(limit: Int = 100, locale: String, order: [LearnDifficultyOrder], preview: Boolean, skip: Int = 0, where: LearnDifficultyFilter): LearnDifficultyCollection
-    difficulty(id: String!, locale: String, preview: Boolean): LearnDifficulty
-    entries(limit: Int = 100, locale: String, order: [LearnEntryOrder], preview: Boolean, skip: Int = 0, where: LearnEntryFilter): LearnEntryCollection
-    lesson(id: String!, locale: String, preview: Boolean): LearnLesson
-    lessons(limit: Int = 100, locale: String, order: [LearnLessonOrder], preview: Boolean, skip: Int = 0, where: LearnLessonFilter): LearnLessonCollection
-    reward(id: String!, locale: String, preview: Boolean): LearnReward
-    rewards(limit: Int = 100, locale: String, order: [LearnRewardOrder], preview: Boolean, skip: Int = 0, where: LearnRewardFilter): LearnRewardCollection
-    technologies(limit: Int = 100, locale: String, order: [LearnTechnologyOrder], preview: Boolean, skip: Int = 0, where: LearnTechnologyFilter): LearnTechnologyCollection
-    technology(id: String!, locale: String, preview: Boolean): LearnTechnology
-    track(id: String!, locale: String, preview: Boolean): LearnTrack
-    tracks(limit: Int = 100, locale: String, order: [LearnTrackOrder], preview: Boolean, skip: Int = 0, where: LearnTrackFilter): LearnTrackCollection
-}
-
-"A toast which gives out rewards based on how well a user is doing. [See type definition](https://app.contentful.com/spaces/muw2pziidpat/content_types/reward)"
-type LearnReward implements LearnEntry {
-    contentfulMetadata: LearnContentfulMetadata!
-    linkedFrom(allowedLocales: [String]): LearnRewardLinkingCollections
-    name(locale: String): String
-    shortDescription(locale: String): String
-    sys: LearnSys!
-}
-
-type LearnRewardCollection {
-    items: [LearnReward]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnRewardLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-}
-
-type LearnSys {
-    environmentId: String!
-    firstPublishedAt: LearnDateTime
-    id: String!
-    publishedAt: LearnDateTime
-    publishedVersion: Int
-    spaceId: String!
-}
-
-"Describes a specific type of technology such as a programming language, framework, libraries, etc... [See type definition](https://app.contentful.com/spaces/muw2pziidpat/content_types/technology)"
-type LearnTechnology implements LearnEntry {
-    contentfulMetadata: LearnContentfulMetadata!
-    description(locale: String): String
-    image(locale: String, preview: Boolean): LearnAsset
-    linkedFrom(allowedLocales: [String]): LearnTechnologyLinkingCollections
-    name(locale: String): String
-    sys: LearnSys!
-}
-
-type LearnTechnologyCollection {
-    items: [LearnTechnology]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnTechnologyLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-    tracks(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnTrackCollection
-}
-
-"A path that a user can take to start learning a particular topic [See type definition](https://app.contentful.com/spaces/muw2pziidpat/content_types/track)"
-type LearnTrack implements LearnEntry {
-    contentfulMetadata: LearnContentfulMetadata!
-    description(locale: String): String
-    difficulty(locale: String, preview: Boolean): LearnDifficulty
-    id(locale: String): String
-    lessons(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnTrackLessonsCollection
-    linkedFrom(allowedLocales: [String]): LearnTrackLinkingCollections
-    name(locale: String): String
-    previewProjectIds(locale: String): [String]
-    previewProjects: [ShowcaseProject!]!
-    spotlighted(locale: String): Boolean
-    sys: LearnSys!
-    technologies(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnTrackTechnologiesCollection
-}
-
-type LearnTrackCollection {
-    items: [LearnTrack]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnTrackLessonsCollection {
-    items: [LearnLesson]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
-type LearnTrackLinkingCollections {
-    entries(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnEntryCollection
-    lessons(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): LearnLessonCollection
-}
-
-type LearnTrackTechnologiesCollection {
-    items: [LearnTechnology]!
-    limit: Int!
-    skip: Int!
-    total: Int!
-}
-
 type Mutation {
     account: AccountMutation
     advisors: AdvisorsMutation
@@ -6581,7 +6421,6 @@ type Query {
     cms: CmsQuery
     geo: GeoQuery
     labs: LabsQuery
-    learn: LearnQuery
     showYourWork: ShowYourWorkQuery
     showcase: ShowcaseQuery
     twitch: TwitchQuery
@@ -6741,6 +6580,7 @@ type ShowcaseProject {
     region: CmsRegion
     regionId: String
     slug: String
+    tags: [String!]!
     type: ShowcaseProjectType!
     updatedAt: ShowcaseDateTime!
     userJudgement: [ShowcaseJudgement!]
@@ -7520,7 +7360,9 @@ enum ClearEventScalarFieldEnum {
     id
     majorityAge
     managers
+    maxAge
     metadata
+    minAge
     name
     registrationCutoff
     registrationsOpen
@@ -7541,11 +7383,17 @@ enum ClearMailingListMemberScalarFieldEnum {
     updatedAt
 }
 
+enum ClearPaymentProvider {
+    razorpay
+    stripe
+}
+
 enum ClearPaymentScalarFieldEnum {
     complete
     createdAt
     id
     metadata
+    paymentProvider
     stripePaymentIntentId
     updatedAt
 }
@@ -7630,6 +7478,8 @@ enum ClearSponsorScalarFieldEnum {
 
 enum ClearTicketScalarFieldEnum {
     age
+    checkedIn
+    checkedOut
     couponCode
     createdAt
     email
@@ -7658,16 +7508,25 @@ enum ClearTicketType {
 
 enum ClearVenueScalarFieldEnum {
     address
+    addressLine1
+    addressLine2
+    addressLine3
     capacity
+    city
     contactEmail
     contactName
     contactPhone
+    country
+    countryAbbreviation
     createdAt
     id
     mapLink
     metadata
     name
+    state
+    stateAbbreviation
     updatedAt
+    zipCode
 }
 
 enum CmsAnnouncementOrder {
@@ -7719,6 +7578,8 @@ enum CmsAssetOrder {
 }
 
 enum CmsAwardOrder {
+    featured_ASC
+    featured_DESC
     id_ASC
     id_DESC
     name_ASC
@@ -8109,6 +7970,10 @@ enum CmsRegionOrder {
     countryNameShort_DESC
     countryName_ASC
     countryName_DESC
+    currencySymbol_ASC
+    currencySymbol_DESC
+    currency_ASC
+    currency_DESC
     e164CountryCode_ASC
     e164CountryCode_DESC
     iso3166Alpha2Code_ASC
@@ -8119,6 +7984,8 @@ enum CmsRegionOrder {
     motto_DESC
     name_ASC
     name_DESC
+    paymentProvider_ASC
+    paymentProvider_DESC
     primaryColor_ASC
     primaryColor_DESC
     sys_firstPublishedAt_ASC
@@ -8247,204 +8114,6 @@ enum LabsTrack {
     ADVANCED
     BEGINNER
     INTERMEDIATE
-}
-
-enum LearnAssetOrder {
-    contentType_ASC
-    contentType_DESC
-    fileName_ASC
-    fileName_DESC
-    height_ASC
-    height_DESC
-    size_ASC
-    size_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-    url_ASC
-    url_DESC
-    width_ASC
-    width_DESC
-}
-
-enum LearnCodeBlockOrder {
-    language_ASC
-    language_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-}
-
-enum LearnDifficultyOrder {
-    hexCodeColor_ASC
-    hexCodeColor_DESC
-    name_ASC
-    name_DESC
-    shortDescription_ASC
-    shortDescription_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-}
-
-enum LearnEntryOrder {
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-}
-
-enum LearnImageFormat {
-    AVIF
-    "JPG image format."
-    JPG
-    """
-
-    Progressive JPG format stores multiple passes of an image in progressively higher detail.
-    When a progressive image is loading, the viewer will first see a lower quality pixelated version which
-    will gradually improve in detail, until the image is fully downloaded. This is to display an image as
-    early as possible to make the layout look as designed.
-    """
-    JPG_PROGRESSIVE
-    "PNG image format"
-    PNG
-    """
-
-    8-bit PNG images support up to 256 colors and weigh less than the standard 24-bit PNG equivalent.
-    The 8-bit PNG format is mostly used for simple images, such as icons or logos.
-    """
-    PNG8
-    "WebP image format."
-    WEBP
-}
-
-enum LearnImageResizeFocus {
-    "Focus the resizing on the bottom."
-    BOTTOM
-    "Focus the resizing on the bottom left."
-    BOTTOM_LEFT
-    "Focus the resizing on the bottom right."
-    BOTTOM_RIGHT
-    "Focus the resizing on the center."
-    CENTER
-    "Focus the resizing on the largest face."
-    FACE
-    "Focus the resizing on the area containing all the faces."
-    FACES
-    "Focus the resizing on the left."
-    LEFT
-    "Focus the resizing on the right."
-    RIGHT
-    "Focus the resizing on the top."
-    TOP
-    "Focus the resizing on the top left."
-    TOP_LEFT
-    "Focus the resizing on the top right."
-    TOP_RIGHT
-}
-
-enum LearnImageResizeStrategy {
-    "Crops a part of the original image to fit into the specified dimensions."
-    CROP
-    "Resizes the image to the specified dimensions, cropping the image if needed."
-    FILL
-    "Resizes the image to fit into the specified dimensions."
-    FIT
-    """
-
-    Resizes the image to the specified dimensions, padding the image if needed.
-    Uses desired background color as padding color.
-    """
-    PAD
-    "Resizes the image to the specified dimensions, changing the original aspect ratio if needed."
-    SCALE
-    "Creates a thumbnail from the image."
-    THUMB
-}
-
-enum LearnLessonOrder {
-    hasNextPage_ASC
-    hasNextPage_DESC
-    id_ASC
-    id_DESC
-    nameHeader_ASC
-    nameHeader_DESC
-    pageNumber_ASC
-    pageNumber_DESC
-    points_ASC
-    points_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-}
-
-enum LearnRewardOrder {
-    name_ASC
-    name_DESC
-    shortDescription_ASC
-    shortDescription_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-}
-
-enum LearnTechnologyOrder {
-    name_ASC
-    name_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
-}
-
-enum LearnTrackOrder {
-    id_ASC
-    id_DESC
-    name_ASC
-    name_DESC
-    spotlighted_ASC
-    spotlighted_DESC
-    sys_firstPublishedAt_ASC
-    sys_firstPublishedAt_DESC
-    sys_id_ASC
-    sys_id_DESC
-    sys_publishedAt_ASC
-    sys_publishedAt_DESC
-    sys_publishedVersion_ASC
-    sys_publishedVersion_DESC
 }
 
 enum ShowYourWorkResizeStrategy {
@@ -11739,6 +11408,8 @@ input ClearEnumTicketTypeWithAggregatesFilter {
 input ClearEventAvgOrderByAggregateInput {
     earlyBirdPrice: ClearSortOrder
     majorityAge: ClearSortOrder
+    maxAge: ClearSortOrder
+    minAge: ClearSortOrder
     ticketPrice: ClearSortOrder
 }
 
@@ -11752,7 +11423,9 @@ input ClearEventCountOrderByAggregateInput {
     id: ClearSortOrder
     majorityAge: ClearSortOrder
     managers: ClearSortOrder
+    maxAge: ClearSortOrder
     metadata: ClearSortOrder
+    minAge: ClearSortOrder
     name: ClearSortOrder
     registrationCutoff: ClearSortOrder
     registrationsOpen: ClearSortOrder
@@ -11776,7 +11449,9 @@ input ClearEventCreateInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -11801,7 +11476,9 @@ input ClearEventCreateManyEventGroupInput {
     id: String
     majorityAge: Int
     managers: ClearEventCreateManymanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
@@ -11828,7 +11505,9 @@ input ClearEventCreateManyInput {
     id: String
     majorityAge: Int
     managers: ClearEventCreateManymanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
@@ -11850,7 +11529,9 @@ input ClearEventCreateManyVenueInput {
     id: String
     majorityAge: Int
     managers: ClearEventCreateManymanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
@@ -11971,7 +11652,9 @@ input ClearEventCreateWithoutEventGroupInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -11998,7 +11681,9 @@ input ClearEventCreateWithoutEventRestrictionsInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -12025,7 +11710,9 @@ input ClearEventCreateWithoutInterestedEmailsInput {
     id: String
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -12053,7 +11740,9 @@ input ClearEventCreateWithoutPromoCodesInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     registrationCutoff: ClearDateTime!
     registrationsOpen: Boolean
@@ -12080,7 +11769,9 @@ input ClearEventCreateWithoutScheduleInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -12107,7 +11798,9 @@ input ClearEventCreateWithoutSponsorsInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -12134,7 +11827,9 @@ input ClearEventCreateWithoutTicketsInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -12161,7 +11856,9 @@ input ClearEventCreateWithoutVenueInput {
     interestedEmails: ClearMailingListMemberCreateNestedManyWithoutInterestedInEventsInput
     majorityAge: Int
     managers: ClearEventCreatemanagersInput
+    maxAge: Int
     metadata: ClearJSON
+    minAge: Int
     name: String!
     promoCodes: ClearPromoCodeCreateNestedManyWithoutEventInput
     registrationCutoff: ClearDateTime!
@@ -12578,6 +12275,8 @@ input ClearEventMaxOrderByAggregateInput {
     eventGroupId: ClearSortOrder
     id: ClearSortOrder
     majorityAge: ClearSortOrder
+    maxAge: ClearSortOrder
+    minAge: ClearSortOrder
     name: ClearSortOrder
     registrationCutoff: ClearSortOrder
     registrationsOpen: ClearSortOrder
@@ -12598,6 +12297,8 @@ input ClearEventMinOrderByAggregateInput {
     eventGroupId: ClearSortOrder
     id: ClearSortOrder
     majorityAge: ClearSortOrder
+    maxAge: ClearSortOrder
+    minAge: ClearSortOrder
     name: ClearSortOrder
     registrationCutoff: ClearSortOrder
     registrationsOpen: ClearSortOrder
@@ -12628,7 +12329,9 @@ input ClearEventOrderByWithAggregationInput {
     id: ClearSortOrder
     majorityAge: ClearSortOrder
     managers: ClearSortOrder
+    maxAge: ClearSortOrder
     metadata: ClearSortOrder
+    minAge: ClearSortOrder
     name: ClearSortOrder
     registrationCutoff: ClearSortOrder
     registrationsOpen: ClearSortOrder
@@ -12653,7 +12356,9 @@ input ClearEventOrderByWithRelationInput {
     interestedEmails: ClearMailingListMemberOrderByRelationAggregateInput
     majorityAge: ClearSortOrder
     managers: ClearSortOrder
+    maxAge: ClearSortOrder
     metadata: ClearSortOrder
+    minAge: ClearSortOrder
     name: ClearSortOrder
     promoCodes: ClearPromoCodeOrderByRelationAggregateInput
     registrationCutoff: ClearSortOrder
@@ -12910,7 +12615,9 @@ input ClearEventScalarWhereInput {
     id: ClearStringFilter
     majorityAge: ClearIntFilter
     managers: ClearStringNullableListFilter
+    maxAge: ClearIntNullableFilter
     metadata: ClearJsonNullableFilter
+    minAge: ClearIntNullableFilter
     name: ClearStringFilter
     registrationCutoff: ClearDateTimeFilter
     registrationsOpen: ClearBoolFilter
@@ -12935,7 +12642,9 @@ input ClearEventScalarWhereWithAggregatesInput {
     id: ClearStringWithAggregatesFilter
     majorityAge: ClearIntWithAggregatesFilter
     managers: ClearStringNullableListFilter
+    maxAge: ClearIntNullableWithAggregatesFilter
     metadata: ClearJsonNullableWithAggregatesFilter
+    minAge: ClearIntNullableWithAggregatesFilter
     name: ClearStringWithAggregatesFilter
     registrationCutoff: ClearDateTimeWithAggregatesFilter
     registrationsOpen: ClearBoolWithAggregatesFilter
@@ -12950,6 +12659,8 @@ input ClearEventScalarWhereWithAggregatesInput {
 input ClearEventSumOrderByAggregateInput {
     earlyBirdPrice: ClearSortOrder
     majorityAge: ClearSortOrder
+    maxAge: ClearSortOrder
+    minAge: ClearSortOrder
     ticketPrice: ClearSortOrder
 }
 
@@ -12965,7 +12676,9 @@ input ClearEventUpdateInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -12990,7 +12703,9 @@ input ClearEventUpdateManyMutationInput {
     id: ClearStringFieldUpdateOperationsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
@@ -13144,7 +12859,9 @@ input ClearEventUpdateWithoutEventGroupInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13171,7 +12888,9 @@ input ClearEventUpdateWithoutEventRestrictionsInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13198,7 +12917,9 @@ input ClearEventUpdateWithoutInterestedEmailsInput {
     id: ClearStringFieldUpdateOperationsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13226,7 +12947,9 @@ input ClearEventUpdateWithoutPromoCodesInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
     registrationsOpen: ClearBoolFieldUpdateOperationsInput
@@ -13253,7 +12976,9 @@ input ClearEventUpdateWithoutScheduleInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13280,7 +13005,9 @@ input ClearEventUpdateWithoutSponsorsInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13307,7 +13034,9 @@ input ClearEventUpdateWithoutTicketsInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13334,7 +13063,9 @@ input ClearEventUpdateWithoutVenueInput {
     interestedEmails: ClearMailingListMemberUpdateManyWithoutInterestedInEventsInput
     majorityAge: ClearIntFieldUpdateOperationsInput
     managers: ClearEventUpdatemanagersInput
+    maxAge: ClearNullableIntFieldUpdateOperationsInput
     metadata: ClearJSON
+    minAge: ClearNullableIntFieldUpdateOperationsInput
     name: ClearStringFieldUpdateOperationsInput
     promoCodes: ClearPromoCodeUpdateManyWithoutEventInput
     registrationCutoff: ClearDateTimeFieldUpdateOperationsInput
@@ -13414,7 +13145,9 @@ input ClearEventWhereInput {
     interestedEmails: ClearMailingListMemberListRelationFilter
     majorityAge: ClearIntFilter
     managers: ClearStringNullableListFilter
+    maxAge: ClearIntNullableFilter
     metadata: ClearJsonNullableFilter
+    minAge: ClearIntNullableFilter
     name: ClearStringFilter
     promoCodes: ClearPromoCodeListRelationFilter
     registrationCutoff: ClearDateTimeFilter
@@ -14034,6 +13767,7 @@ input ClearPaymentCountOrderByAggregateInput {
     createdAt: ClearSortOrder
     id: ClearSortOrder
     metadata: ClearSortOrder
+    paymentProvider: ClearSortOrder
     stripePaymentIntentId: ClearSortOrder
     updatedAt: ClearSortOrder
 }
@@ -14043,6 +13777,7 @@ input ClearPaymentCreateInput {
     createdAt: ClearDateTime
     id: String
     metadata: ClearJSON
+    paymentProvider: String
     stripePaymentIntentId: String!
     tickets: ClearTicketCreateNestedManyWithoutPaymentInput
     updatedAt: ClearDateTime
@@ -14053,6 +13788,7 @@ input ClearPaymentCreateManyInput {
     createdAt: ClearDateTime
     id: String
     metadata: ClearJSON
+    paymentProvider: String
     stripePaymentIntentId: String!
     updatedAt: ClearDateTime
 }
@@ -14073,6 +13809,7 @@ input ClearPaymentCreateWithoutTicketsInput {
     createdAt: ClearDateTime
     id: String
     metadata: ClearJSON
+    paymentProvider: String
     stripePaymentIntentId: String!
     updatedAt: ClearDateTime
 }
@@ -14081,6 +13818,7 @@ input ClearPaymentMaxOrderByAggregateInput {
     complete: ClearSortOrder
     createdAt: ClearSortOrder
     id: ClearSortOrder
+    paymentProvider: ClearSortOrder
     stripePaymentIntentId: ClearSortOrder
     updatedAt: ClearSortOrder
 }
@@ -14089,6 +13827,7 @@ input ClearPaymentMinOrderByAggregateInput {
     complete: ClearSortOrder
     createdAt: ClearSortOrder
     id: ClearSortOrder
+    paymentProvider: ClearSortOrder
     stripePaymentIntentId: ClearSortOrder
     updatedAt: ClearSortOrder
 }
@@ -14101,6 +13840,7 @@ input ClearPaymentOrderByWithAggregationInput {
     createdAt: ClearSortOrder
     id: ClearSortOrder
     metadata: ClearSortOrder
+    paymentProvider: ClearSortOrder
     stripePaymentIntentId: ClearSortOrder
     updatedAt: ClearSortOrder
 }
@@ -14110,6 +13850,7 @@ input ClearPaymentOrderByWithRelationInput {
     createdAt: ClearSortOrder
     id: ClearSortOrder
     metadata: ClearSortOrder
+    paymentProvider: ClearSortOrder
     stripePaymentIntentId: ClearSortOrder
     tickets: ClearTicketOrderByRelationAggregateInput
     updatedAt: ClearSortOrder
@@ -14128,6 +13869,7 @@ input ClearPaymentScalarWhereWithAggregatesInput {
     createdAt: ClearDateTimeWithAggregatesFilter
     id: ClearStringWithAggregatesFilter
     metadata: ClearJsonNullableWithAggregatesFilter
+    paymentProvider: ClearStringWithAggregatesFilter
     stripePaymentIntentId: ClearStringWithAggregatesFilter
     updatedAt: ClearDateTimeWithAggregatesFilter
 }
@@ -14137,6 +13879,7 @@ input ClearPaymentUpdateInput {
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
+    paymentProvider: ClearStringFieldUpdateOperationsInput
     stripePaymentIntentId: ClearStringFieldUpdateOperationsInput
     tickets: ClearTicketUpdateManyWithoutPaymentInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
@@ -14147,6 +13890,7 @@ input ClearPaymentUpdateManyMutationInput {
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
+    paymentProvider: ClearStringFieldUpdateOperationsInput
     stripePaymentIntentId: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
@@ -14166,6 +13910,7 @@ input ClearPaymentUpdateWithoutTicketsInput {
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     metadata: ClearJSON
+    paymentProvider: ClearStringFieldUpdateOperationsInput
     stripePaymentIntentId: ClearStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
 }
@@ -14183,6 +13928,7 @@ input ClearPaymentWhereInput {
     createdAt: ClearDateTimeFilter
     id: ClearStringFilter
     metadata: ClearJsonNullableFilter
+    paymentProvider: ClearStringFilter
     stripePaymentIntentId: ClearStringFilter
     tickets: ClearTicketListRelationFilter
     updatedAt: ClearDateTimeFilter
@@ -15816,6 +15562,8 @@ input ClearTicketAvgOrderByAggregateInput {
 
 input ClearTicketCountOrderByAggregateInput {
     age: ClearSortOrder
+    checkedIn: ClearSortOrder
+    checkedOut: ClearSortOrder
     couponCode: ClearSortOrder
     createdAt: ClearSortOrder
     email: ClearSortOrder
@@ -15835,6 +15583,8 @@ input ClearTicketCountOrderByAggregateInput {
 
 input ClearTicketCreateInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -15855,6 +15605,8 @@ input ClearTicketCreateInput {
 
 input ClearTicketCreateManyEventInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -15878,6 +15630,8 @@ input ClearTicketCreateManyEventInputEnvelope {
 
 input ClearTicketCreateManyGuardianInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -15901,6 +15655,8 @@ input ClearTicketCreateManyGuardianInputEnvelope {
 
 input ClearTicketCreateManyInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -15920,6 +15676,8 @@ input ClearTicketCreateManyInput {
 
 input ClearTicketCreateManyPaymentInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -15943,6 +15701,8 @@ input ClearTicketCreateManyPaymentInputEnvelope {
 
 input ClearTicketCreateManyPromoCodeInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -16025,6 +15785,8 @@ input ClearTicketCreateOrConnectWithoutSentEmailsInput {
 
 input ClearTicketCreateWithoutEventInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -16044,6 +15806,8 @@ input ClearTicketCreateWithoutEventInput {
 
 input ClearTicketCreateWithoutGuardianInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -16063,6 +15827,8 @@ input ClearTicketCreateWithoutGuardianInput {
 
 input ClearTicketCreateWithoutPaymentInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -16082,6 +15848,8 @@ input ClearTicketCreateWithoutPaymentInput {
 
 input ClearTicketCreateWithoutPromoCodeInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -16101,6 +15869,8 @@ input ClearTicketCreateWithoutPromoCodeInput {
 
 input ClearTicketCreateWithoutSentEmailsInput {
     age: Int
+    checkedIn: ClearDateTime
+    checkedOut: ClearDateTime
     couponCode: String
     createdAt: ClearDateTime
     email: String
@@ -16126,6 +15896,8 @@ input ClearTicketListRelationFilter {
 
 input ClearTicketMaxOrderByAggregateInput {
     age: ClearSortOrder
+    checkedIn: ClearSortOrder
+    checkedOut: ClearSortOrder
     couponCode: ClearSortOrder
     createdAt: ClearSortOrder
     email: ClearSortOrder
@@ -16144,6 +15916,8 @@ input ClearTicketMaxOrderByAggregateInput {
 
 input ClearTicketMinOrderByAggregateInput {
     age: ClearSortOrder
+    checkedIn: ClearSortOrder
+    checkedOut: ClearSortOrder
     couponCode: ClearSortOrder
     createdAt: ClearSortOrder
     email: ClearSortOrder
@@ -16171,6 +15945,8 @@ input ClearTicketOrderByWithAggregationInput {
     _min: ClearTicketMinOrderByAggregateInput
     _sum: ClearTicketSumOrderByAggregateInput
     age: ClearSortOrder
+    checkedIn: ClearSortOrder
+    checkedOut: ClearSortOrder
     couponCode: ClearSortOrder
     createdAt: ClearSortOrder
     email: ClearSortOrder
@@ -16190,6 +15966,8 @@ input ClearTicketOrderByWithAggregationInput {
 
 input ClearTicketOrderByWithRelationInput {
     age: ClearSortOrder
+    checkedIn: ClearSortOrder
+    checkedOut: ClearSortOrder
     couponCode: ClearSortOrder
     createdAt: ClearSortOrder
     email: ClearSortOrder
@@ -16217,6 +15995,8 @@ input ClearTicketScalarWhereInput {
     NOT: [ClearTicketScalarWhereInput!]
     OR: [ClearTicketScalarWhereInput!]
     age: ClearIntNullableFilter
+    checkedIn: ClearDateTimeNullableFilter
+    checkedOut: ClearDateTimeNullableFilter
     couponCode: ClearStringNullableFilter
     createdAt: ClearDateTimeFilter
     email: ClearStringNullableFilter
@@ -16239,6 +16019,8 @@ input ClearTicketScalarWhereWithAggregatesInput {
     NOT: [ClearTicketScalarWhereWithAggregatesInput!]
     OR: [ClearTicketScalarWhereWithAggregatesInput!]
     age: ClearIntNullableWithAggregatesFilter
+    checkedIn: ClearDateTimeNullableWithAggregatesFilter
+    checkedOut: ClearDateTimeNullableWithAggregatesFilter
     couponCode: ClearStringNullableWithAggregatesFilter
     createdAt: ClearDateTimeWithAggregatesFilter
     email: ClearStringNullableWithAggregatesFilter
@@ -16262,6 +16044,8 @@ input ClearTicketSumOrderByAggregateInput {
 
 input ClearTicketUpdateInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16282,6 +16066,8 @@ input ClearTicketUpdateInput {
 
 input ClearTicketUpdateManyMutationInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16416,6 +16202,8 @@ input ClearTicketUpdateWithWhereUniqueWithoutSentEmailsInput {
 
 input ClearTicketUpdateWithoutEventInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16435,6 +16223,8 @@ input ClearTicketUpdateWithoutEventInput {
 
 input ClearTicketUpdateWithoutGuardianInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16454,6 +16244,8 @@ input ClearTicketUpdateWithoutGuardianInput {
 
 input ClearTicketUpdateWithoutPaymentInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16473,6 +16265,8 @@ input ClearTicketUpdateWithoutPaymentInput {
 
 input ClearTicketUpdateWithoutPromoCodeInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16492,6 +16286,8 @@ input ClearTicketUpdateWithoutPromoCodeInput {
 
 input ClearTicketUpdateWithoutSentEmailsInput {
     age: ClearNullableIntFieldUpdateOperationsInput
+    checkedIn: ClearNullableDateTimeFieldUpdateOperationsInput
+    checkedOut: ClearNullableDateTimeFieldUpdateOperationsInput
     couponCode: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     email: ClearNullableStringFieldUpdateOperationsInput
@@ -16544,6 +16340,8 @@ input ClearTicketWhereInput {
     NOT: [ClearTicketWhereInput!]
     OR: [ClearTicketWhereInput!]
     age: ClearIntNullableFilter
+    checkedIn: ClearDateTimeNullableFilter
+    checkedOut: ClearDateTimeNullableFilter
     couponCode: ClearStringNullableFilter
     createdAt: ClearDateTimeFilter
     email: ClearStringNullableFilter
@@ -16576,45 +16374,72 @@ input ClearVenueAvgOrderByAggregateInput {
 
 input ClearVenueCountOrderByAggregateInput {
     address: ClearSortOrder
+    addressLine1: ClearSortOrder
+    addressLine2: ClearSortOrder
+    addressLine3: ClearSortOrder
     capacity: ClearSortOrder
+    city: ClearSortOrder
     contactEmail: ClearSortOrder
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
+    country: ClearSortOrder
+    countryAbbreviation: ClearSortOrder
     createdAt: ClearSortOrder
     id: ClearSortOrder
     mapLink: ClearSortOrder
     metadata: ClearSortOrder
     name: ClearSortOrder
+    state: ClearSortOrder
+    stateAbbreviation: ClearSortOrder
     updatedAt: ClearSortOrder
+    zipCode: ClearSortOrder
 }
 
 input ClearVenueCreateInput {
     address: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
+    city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime
     events: ClearEventCreateNestedManyWithoutVenueInput
     id: String
     mapLink: String
     metadata: ClearJSON
     name: String!
+    state: String
+    stateAbbreviation: String
     updatedAt: ClearDateTime
+    zipCode: String
 }
 
 input ClearVenueCreateManyInput {
     address: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
+    city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime
     id: String
     mapLink: String
     metadata: ClearJSON
     name: String!
+    state: String
+    stateAbbreviation: String
     updatedAt: ClearDateTime
+    zipCode: String
 }
 
 input ClearVenueCreateNestedOneWithoutEventsInput {
@@ -16630,42 +16455,69 @@ input ClearVenueCreateOrConnectWithoutEventsInput {
 
 input ClearVenueCreateWithoutEventsInput {
     address: String
+    addressLine1: String
+    addressLine2: String
+    addressLine3: String
     capacity: Int
+    city: String
     contactEmail: String
     contactName: String
     contactPhone: String
+    country: String
+    countryAbbreviation: String
     createdAt: ClearDateTime
     id: String
     mapLink: String
     metadata: ClearJSON
     name: String!
+    state: String
+    stateAbbreviation: String
     updatedAt: ClearDateTime
+    zipCode: String
 }
 
 input ClearVenueMaxOrderByAggregateInput {
     address: ClearSortOrder
+    addressLine1: ClearSortOrder
+    addressLine2: ClearSortOrder
+    addressLine3: ClearSortOrder
     capacity: ClearSortOrder
+    city: ClearSortOrder
     contactEmail: ClearSortOrder
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
+    country: ClearSortOrder
+    countryAbbreviation: ClearSortOrder
     createdAt: ClearSortOrder
     id: ClearSortOrder
     mapLink: ClearSortOrder
     name: ClearSortOrder
+    state: ClearSortOrder
+    stateAbbreviation: ClearSortOrder
     updatedAt: ClearSortOrder
+    zipCode: ClearSortOrder
 }
 
 input ClearVenueMinOrderByAggregateInput {
     address: ClearSortOrder
+    addressLine1: ClearSortOrder
+    addressLine2: ClearSortOrder
+    addressLine3: ClearSortOrder
     capacity: ClearSortOrder
+    city: ClearSortOrder
     contactEmail: ClearSortOrder
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
+    country: ClearSortOrder
+    countryAbbreviation: ClearSortOrder
     createdAt: ClearSortOrder
     id: ClearSortOrder
     mapLink: ClearSortOrder
     name: ClearSortOrder
+    state: ClearSortOrder
+    stateAbbreviation: ClearSortOrder
     updatedAt: ClearSortOrder
+    zipCode: ClearSortOrder
 }
 
 input ClearVenueOrderByWithAggregationInput {
@@ -16675,31 +16527,49 @@ input ClearVenueOrderByWithAggregationInput {
     _min: ClearVenueMinOrderByAggregateInput
     _sum: ClearVenueSumOrderByAggregateInput
     address: ClearSortOrder
+    addressLine1: ClearSortOrder
+    addressLine2: ClearSortOrder
+    addressLine3: ClearSortOrder
     capacity: ClearSortOrder
+    city: ClearSortOrder
     contactEmail: ClearSortOrder
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
+    country: ClearSortOrder
+    countryAbbreviation: ClearSortOrder
     createdAt: ClearSortOrder
     id: ClearSortOrder
     mapLink: ClearSortOrder
     metadata: ClearSortOrder
     name: ClearSortOrder
+    state: ClearSortOrder
+    stateAbbreviation: ClearSortOrder
     updatedAt: ClearSortOrder
+    zipCode: ClearSortOrder
 }
 
 input ClearVenueOrderByWithRelationInput {
     address: ClearSortOrder
+    addressLine1: ClearSortOrder
+    addressLine2: ClearSortOrder
+    addressLine3: ClearSortOrder
     capacity: ClearSortOrder
+    city: ClearSortOrder
     contactEmail: ClearSortOrder
     contactName: ClearSortOrder
     contactPhone: ClearSortOrder
+    country: ClearSortOrder
+    countryAbbreviation: ClearSortOrder
     createdAt: ClearSortOrder
     events: ClearEventOrderByRelationAggregateInput
     id: ClearSortOrder
     mapLink: ClearSortOrder
     metadata: ClearSortOrder
     name: ClearSortOrder
+    state: ClearSortOrder
+    stateAbbreviation: ClearSortOrder
     updatedAt: ClearSortOrder
+    zipCode: ClearSortOrder
 }
 
 input ClearVenueRelationFilter {
@@ -16712,16 +16582,25 @@ input ClearVenueScalarWhereWithAggregatesInput {
     NOT: [ClearVenueScalarWhereWithAggregatesInput!]
     OR: [ClearVenueScalarWhereWithAggregatesInput!]
     address: ClearStringNullableWithAggregatesFilter
+    addressLine1: ClearStringNullableWithAggregatesFilter
+    addressLine2: ClearStringNullableWithAggregatesFilter
+    addressLine3: ClearStringNullableWithAggregatesFilter
     capacity: ClearIntNullableWithAggregatesFilter
+    city: ClearStringNullableWithAggregatesFilter
     contactEmail: ClearStringNullableWithAggregatesFilter
     contactName: ClearStringNullableWithAggregatesFilter
     contactPhone: ClearStringNullableWithAggregatesFilter
+    country: ClearStringNullableWithAggregatesFilter
+    countryAbbreviation: ClearStringNullableWithAggregatesFilter
     createdAt: ClearDateTimeWithAggregatesFilter
     id: ClearStringWithAggregatesFilter
     mapLink: ClearStringNullableWithAggregatesFilter
     metadata: ClearJsonNullableWithAggregatesFilter
     name: ClearStringWithAggregatesFilter
+    state: ClearStringNullableWithAggregatesFilter
+    stateAbbreviation: ClearStringNullableWithAggregatesFilter
     updatedAt: ClearDateTimeWithAggregatesFilter
+    zipCode: ClearStringNullableWithAggregatesFilter
 }
 
 input ClearVenueSumOrderByAggregateInput {
@@ -16730,31 +16609,49 @@ input ClearVenueSumOrderByAggregateInput {
 
 input ClearVenueUpdateInput {
     address: ClearNullableStringFieldUpdateOperationsInput
+    addressLine1: ClearNullableStringFieldUpdateOperationsInput
+    addressLine2: ClearNullableStringFieldUpdateOperationsInput
+    addressLine3: ClearNullableStringFieldUpdateOperationsInput
     capacity: ClearNullableIntFieldUpdateOperationsInput
+    city: ClearNullableStringFieldUpdateOperationsInput
     contactEmail: ClearNullableStringFieldUpdateOperationsInput
     contactName: ClearNullableStringFieldUpdateOperationsInput
     contactPhone: ClearNullableStringFieldUpdateOperationsInput
+    country: ClearNullableStringFieldUpdateOperationsInput
+    countryAbbreviation: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     events: ClearEventUpdateManyWithoutVenueInput
     id: ClearStringFieldUpdateOperationsInput
     mapLink: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    state: ClearNullableStringFieldUpdateOperationsInput
+    stateAbbreviation: ClearNullableStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    zipCode: ClearNullableStringFieldUpdateOperationsInput
 }
 
 input ClearVenueUpdateManyMutationInput {
     address: ClearNullableStringFieldUpdateOperationsInput
+    addressLine1: ClearNullableStringFieldUpdateOperationsInput
+    addressLine2: ClearNullableStringFieldUpdateOperationsInput
+    addressLine3: ClearNullableStringFieldUpdateOperationsInput
     capacity: ClearNullableIntFieldUpdateOperationsInput
+    city: ClearNullableStringFieldUpdateOperationsInput
     contactEmail: ClearNullableStringFieldUpdateOperationsInput
     contactName: ClearNullableStringFieldUpdateOperationsInput
     contactPhone: ClearNullableStringFieldUpdateOperationsInput
+    country: ClearNullableStringFieldUpdateOperationsInput
+    countryAbbreviation: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     mapLink: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    state: ClearNullableStringFieldUpdateOperationsInput
+    stateAbbreviation: ClearNullableStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    zipCode: ClearNullableStringFieldUpdateOperationsInput
 }
 
 input ClearVenueUpdateOneWithoutEventsInput {
@@ -16769,16 +16666,25 @@ input ClearVenueUpdateOneWithoutEventsInput {
 
 input ClearVenueUpdateWithoutEventsInput {
     address: ClearNullableStringFieldUpdateOperationsInput
+    addressLine1: ClearNullableStringFieldUpdateOperationsInput
+    addressLine2: ClearNullableStringFieldUpdateOperationsInput
+    addressLine3: ClearNullableStringFieldUpdateOperationsInput
     capacity: ClearNullableIntFieldUpdateOperationsInput
+    city: ClearNullableStringFieldUpdateOperationsInput
     contactEmail: ClearNullableStringFieldUpdateOperationsInput
     contactName: ClearNullableStringFieldUpdateOperationsInput
     contactPhone: ClearNullableStringFieldUpdateOperationsInput
+    country: ClearNullableStringFieldUpdateOperationsInput
+    countryAbbreviation: ClearNullableStringFieldUpdateOperationsInput
     createdAt: ClearDateTimeFieldUpdateOperationsInput
     id: ClearStringFieldUpdateOperationsInput
     mapLink: ClearNullableStringFieldUpdateOperationsInput
     metadata: ClearJSON
     name: ClearStringFieldUpdateOperationsInput
+    state: ClearNullableStringFieldUpdateOperationsInput
+    stateAbbreviation: ClearNullableStringFieldUpdateOperationsInput
     updatedAt: ClearDateTimeFieldUpdateOperationsInput
+    zipCode: ClearNullableStringFieldUpdateOperationsInput
 }
 
 input ClearVenueUpsertWithoutEventsInput {
@@ -16791,17 +16697,26 @@ input ClearVenueWhereInput {
     NOT: [ClearVenueWhereInput!]
     OR: [ClearVenueWhereInput!]
     address: ClearStringNullableFilter
+    addressLine1: ClearStringNullableFilter
+    addressLine2: ClearStringNullableFilter
+    addressLine3: ClearStringNullableFilter
     capacity: ClearIntNullableFilter
+    city: ClearStringNullableFilter
     contactEmail: ClearStringNullableFilter
     contactName: ClearStringNullableFilter
     contactPhone: ClearStringNullableFilter
+    country: ClearStringNullableFilter
+    countryAbbreviation: ClearStringNullableFilter
     createdAt: ClearDateTimeFilter
     events: ClearEventListRelationFilter
     id: ClearStringFilter
     mapLink: ClearStringNullableFilter
     metadata: ClearJsonNullableFilter
     name: ClearStringFilter
+    state: ClearStringNullableFilter
+    stateAbbreviation: ClearStringNullableFilter
     updatedAt: ClearDateTimeFilter
+    zipCode: ClearStringNullableFilter
 }
 
 input ClearVenueWhereUniqueInput {
@@ -16949,6 +16864,9 @@ input CmsAwardFilter {
     description_not: String
     description_not_contains: String
     description_not_in: [String]
+    featured: Boolean
+    featured_exists: Boolean
+    featured_not: Boolean
     icon_exists: Boolean
     id: String
     id_contains: String
@@ -16974,6 +16892,10 @@ input CmsAwardFilter {
     ranking_lte: Int
     ranking_not: Int
     ranking_not_in: [Int]
+    suggestedModifiers_contains_all: [String]
+    suggestedModifiers_contains_none: [String]
+    suggestedModifiers_contains_some: [String]
+    suggestedModifiers_exists: Boolean
     sys: CmsSysFilter
 }
 
@@ -17009,6 +16931,7 @@ input CmsBadgeFilter {
     emoji_not: String
     emoji_not_contains: String
     emoji_not_in: [String]
+    grantPermissionOverrideIDs_exists: Boolean
     id: String
     id_contains: String
     id_exists: Boolean
@@ -17046,6 +16969,7 @@ input CmsBumperFilter {
     title_not: String
     title_not_contains: String
     title_not_in: [String]
+    video_exists: Boolean
 }
 
 input CmsCommunityPartnerFilter {
@@ -17125,6 +17049,7 @@ input CmsContentTypeStringFilter {
     AND: [CmsContentTypeStringFilter]
     OR: [CmsContentTypeStringFilter]
     contentfulMetadata: CmsContentfulMetadataFilter
+    json_exists: Boolean
     key: String
     key_contains: String
     key_exists: Boolean
@@ -17280,6 +17205,7 @@ input CmsEventFilter {
     statStudentCount_lte: Int
     statStudentCount_not: Int
     statStudentCount_not_in: [Int]
+    subEventIds_exists: Boolean
     sys: CmsSysFilter
     theme: String
     themeBackgroundsCollection_exists: Boolean
@@ -17347,6 +17273,7 @@ input CmsFormFilter {
     details_exists: Boolean
     details_not_contains: String
     image_exists: Boolean
+    prefill_exists: Boolean
     sidebar_contains: String
     sidebar_exists: Boolean
     sidebar_not_contains: String
@@ -17372,6 +17299,7 @@ input CmsGlobalSponsorFilter {
     OR: [CmsGlobalSponsorFilter]
     audio_exists: Boolean
     contentfulMetadata: CmsContentfulMetadataFilter
+    darkLogo_exists: Boolean
     description: String
     description_contains: String
     description_exists: Boolean
@@ -17671,6 +17599,7 @@ input CmsProgramFilter {
     shortDescription_not: String
     shortDescription_not_contains: String
     shortDescription_not_in: [String]
+    sponsorPerks_exists: Boolean
     sys: CmsSysFilter
     type: String
     type_contains: String
@@ -17767,6 +17696,20 @@ input CmsRegionFilter {
     countryName_not: String
     countryName_not_contains: String
     countryName_not_in: [String]
+    currency: String
+    currencySymbol: String
+    currencySymbol_contains: String
+    currencySymbol_exists: Boolean
+    currencySymbol_in: [String]
+    currencySymbol_not: String
+    currencySymbol_not_contains: String
+    currencySymbol_not_in: [String]
+    currency_contains: String
+    currency_exists: Boolean
+    currency_in: [String]
+    currency_not: String
+    currency_not_contains: String
+    currency_not_in: [String]
     e164CountryCode: String
     e164CountryCode_contains: String
     e164CountryCode_exists: Boolean
@@ -17805,6 +17748,13 @@ input CmsRegionFilter {
     name_not: String
     name_not_contains: String
     name_not_in: [String]
+    paymentProvider: String
+    paymentProvider_contains: String
+    paymentProvider_exists: Boolean
+    paymentProvider_in: [String]
+    paymentProvider_not: String
+    paymentProvider_not_contains: String
+    paymentProvider_not_in: [String]
     primaryColor: String
     primaryColor_contains: String
     primaryColor_exists: Boolean
@@ -18126,6 +18076,7 @@ input CmscfEventNestedFilter {
     statStudentCount_lte: Int
     statStudentCount_not: Int
     statStudentCount_not_in: [Int]
+    subEventIds_exists: Boolean
     sys: CmsSysFilter
     theme: String
     themeBackgroundsCollection_exists: Boolean
@@ -18150,6 +18101,7 @@ input CmscfGlobalSponsorNestedFilter {
     OR: [CmscfGlobalSponsorNestedFilter]
     audio_exists: Boolean
     contentfulMetadata: CmsContentfulMetadataFilter
+    darkLogo_exists: Boolean
     description: String
     description_contains: String
     description_exists: Boolean
@@ -18281,6 +18233,7 @@ input CmscfProgramNestedFilter {
     shortDescription_not: String
     shortDescription_not_contains: String
     shortDescription_not_in: [String]
+    sponsorPerks_exists: Boolean
     sys: CmsSysFilter
     type: String
     type_contains: String
@@ -18377,6 +18330,20 @@ input CmscfRegionNestedFilter {
     countryName_not: String
     countryName_not_contains: String
     countryName_not_in: [String]
+    currency: String
+    currencySymbol: String
+    currencySymbol_contains: String
+    currencySymbol_exists: Boolean
+    currencySymbol_in: [String]
+    currencySymbol_not: String
+    currencySymbol_not_contains: String
+    currencySymbol_not_in: [String]
+    currency_contains: String
+    currency_exists: Boolean
+    currency_in: [String]
+    currency_not: String
+    currency_not_contains: String
+    currency_not_in: [String]
     e164CountryCode: String
     e164CountryCode_contains: String
     e164CountryCode_exists: Boolean
@@ -18415,6 +18382,13 @@ input CmscfRegionNestedFilter {
     name_not: String
     name_not_contains: String
     name_not_in: [String]
+    paymentProvider: String
+    paymentProvider_contains: String
+    paymentProvider_exists: Boolean
+    paymentProvider_in: [String]
+    paymentProvider_not: String
+    paymentProvider_not_contains: String
+    paymentProvider_not_in: [String]
     primaryColor: String
     primaryColor_contains: String
     primaryColor_exists: Boolean
@@ -18577,411 +18551,6 @@ input LabsTagEditInput {
     type: LabsTagType
 }
 
-input LearnAssetFilter {
-    AND: [LearnAssetFilter]
-    OR: [LearnAssetFilter]
-    contentType: String
-    contentType_contains: String
-    contentType_exists: Boolean
-    contentType_in: [String]
-    contentType_not: String
-    contentType_not_contains: String
-    contentType_not_in: [String]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    description: String
-    description_contains: String
-    description_exists: Boolean
-    description_in: [String]
-    description_not: String
-    description_not_contains: String
-    description_not_in: [String]
-    fileName: String
-    fileName_contains: String
-    fileName_exists: Boolean
-    fileName_in: [String]
-    fileName_not: String
-    fileName_not_contains: String
-    fileName_not_in: [String]
-    height: Int
-    height_exists: Boolean
-    height_gt: Int
-    height_gte: Int
-    height_in: [Int]
-    height_lt: Int
-    height_lte: Int
-    height_not: Int
-    height_not_in: [Int]
-    size: Int
-    size_exists: Boolean
-    size_gt: Int
-    size_gte: Int
-    size_in: [Int]
-    size_lt: Int
-    size_lte: Int
-    size_not: Int
-    size_not_in: [Int]
-    sys: LearnSysFilter
-    title: String
-    title_contains: String
-    title_exists: Boolean
-    title_in: [String]
-    title_not: String
-    title_not_contains: String
-    title_not_in: [String]
-    url: String
-    url_contains: String
-    url_exists: Boolean
-    url_in: [String]
-    url_not: String
-    url_not_contains: String
-    url_not_in: [String]
-    width: Int
-    width_exists: Boolean
-    width_gt: Int
-    width_gte: Int
-    width_in: [Int]
-    width_lt: Int
-    width_lte: Int
-    width_not: Int
-    width_not_in: [Int]
-}
-
-input LearnCodeBlockFilter {
-    AND: [LearnCodeBlockFilter]
-    OR: [LearnCodeBlockFilter]
-    code: String
-    code_contains: String
-    code_exists: Boolean
-    code_in: [String]
-    code_not: String
-    code_not_contains: String
-    code_not_in: [String]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    language: String
-    language_contains: String
-    language_exists: Boolean
-    language_in: [String]
-    language_not: String
-    language_not_contains: String
-    language_not_in: [String]
-    sys: LearnSysFilter
-}
-
-input LearnContentfulMetadataFilter {
-    tags: LearnContentfulMetadataTagsFilter
-    tags_exists: Boolean
-}
-
-input LearnContentfulMetadataTagsFilter {
-    id_contains_all: [String]
-    id_contains_none: [String]
-    id_contains_some: [String]
-}
-
-input LearnDifficultyFilter {
-    AND: [LearnDifficultyFilter]
-    OR: [LearnDifficultyFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    hexCodeColor: String
-    hexCodeColor_contains: String
-    hexCodeColor_exists: Boolean
-    hexCodeColor_in: [String]
-    hexCodeColor_not: String
-    hexCodeColor_not_contains: String
-    hexCodeColor_not_in: [String]
-    name: String
-    name_contains: String
-    name_exists: Boolean
-    name_in: [String]
-    name_not: String
-    name_not_contains: String
-    name_not_in: [String]
-    shortDescription: String
-    shortDescription_contains: String
-    shortDescription_exists: Boolean
-    shortDescription_in: [String]
-    shortDescription_not: String
-    shortDescription_not_contains: String
-    shortDescription_not_in: [String]
-    sys: LearnSysFilter
-}
-
-input LearnEntryFilter {
-    AND: [LearnEntryFilter]
-    OR: [LearnEntryFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    sys: LearnSysFilter
-}
-
-input LearnImageTransformOptions {
-    """
-
-    Desired background color, used with corner radius or `PAD` resize strategy.
-    Defaults to transparent (for `PNG`, `PNG8` and `WEBP`) or white (for `JPG` and `JPG_PROGRESSIVE`).
-    """
-    backgroundColor: LearnHexColor
-    """
-
-    Desired corner radius in pixels.
-    Results in an image with rounded corners (pass `-1` for a full circle/ellipse).
-    Defaults to `0`. Uses desired background color as padding color,
-    unless the format is `JPG` or `JPG_PROGRESSIVE` and resize strategy is `PAD`, then defaults to white.
-    """
-    cornerRadius: Int
-    "Desired image format. Defaults to the original image format."
-    format: LearnImageFormat
-    "Desired height in pixels. Defaults to the original image height."
-    height: LearnDimension
-    """
-
-    Desired quality of the image in percents.
-    Used for `PNG8`, `JPG`, `JPG_PROGRESSIVE` and `WEBP` formats.
-    """
-    quality: LearnQuality
-    "Desired resize focus area. Defaults to `CENTER`."
-    resizeFocus: LearnImageResizeFocus
-    "Desired resize strategy. Defaults to `FIT`."
-    resizeStrategy: LearnImageResizeStrategy
-    "Desired width in pixels. Defaults to the original image width."
-    width: LearnDimension
-}
-
-input LearnLessonFilter {
-    AND: [LearnLessonFilter]
-    OR: [LearnLessonFilter]
-    content_contains: String
-    content_exists: Boolean
-    content_not_contains: String
-    contentfulMetadata: LearnContentfulMetadataFilter
-    hasNextPage: Boolean
-    hasNextPage_exists: Boolean
-    hasNextPage_not: Boolean
-    id: String
-    id_contains: String
-    id_exists: Boolean
-    id_in: [String]
-    id_not: String
-    id_not_contains: String
-    id_not_in: [String]
-    nameHeader: String
-    nameHeader_contains: String
-    nameHeader_exists: Boolean
-    nameHeader_in: [String]
-    nameHeader_not: String
-    nameHeader_not_contains: String
-    nameHeader_not_in: [String]
-    pageNumber: Int
-    pageNumber_exists: Boolean
-    pageNumber_gt: Int
-    pageNumber_gte: Int
-    pageNumber_in: [Int]
-    pageNumber_lt: Int
-    pageNumber_lte: Int
-    pageNumber_not: Int
-    pageNumber_not_in: [Int]
-    points: Int
-    points_exists: Boolean
-    points_gt: Int
-    points_gte: Int
-    points_in: [Int]
-    points_lt: Int
-    points_lte: Int
-    points_not: Int
-    points_not_in: [Int]
-    sys: LearnSysFilter
-    tags_contains_all: [String]
-    tags_contains_none: [String]
-    tags_contains_some: [String]
-    tags_exists: Boolean
-    track: LearncfTrackNestedFilter
-    track_exists: Boolean
-}
-
-input LearnRewardFilter {
-    AND: [LearnRewardFilter]
-    OR: [LearnRewardFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    name: String
-    name_contains: String
-    name_exists: Boolean
-    name_in: [String]
-    name_not: String
-    name_not_contains: String
-    name_not_in: [String]
-    shortDescription: String
-    shortDescription_contains: String
-    shortDescription_exists: Boolean
-    shortDescription_in: [String]
-    shortDescription_not: String
-    shortDescription_not_contains: String
-    shortDescription_not_in: [String]
-    sys: LearnSysFilter
-}
-
-input LearnSysFilter {
-    firstPublishedAt: LearnDateTime
-    firstPublishedAt_exists: Boolean
-    firstPublishedAt_gt: LearnDateTime
-    firstPublishedAt_gte: LearnDateTime
-    firstPublishedAt_in: [LearnDateTime]
-    firstPublishedAt_lt: LearnDateTime
-    firstPublishedAt_lte: LearnDateTime
-    firstPublishedAt_not: LearnDateTime
-    firstPublishedAt_not_in: [LearnDateTime]
-    id: String
-    id_contains: String
-    id_exists: Boolean
-    id_in: [String]
-    id_not: String
-    id_not_contains: String
-    id_not_in: [String]
-    publishedAt: LearnDateTime
-    publishedAt_exists: Boolean
-    publishedAt_gt: LearnDateTime
-    publishedAt_gte: LearnDateTime
-    publishedAt_in: [LearnDateTime]
-    publishedAt_lt: LearnDateTime
-    publishedAt_lte: LearnDateTime
-    publishedAt_not: LearnDateTime
-    publishedAt_not_in: [LearnDateTime]
-    publishedVersion: Float
-    publishedVersion_exists: Boolean
-    publishedVersion_gt: Float
-    publishedVersion_gte: Float
-    publishedVersion_in: [Float]
-    publishedVersion_lt: Float
-    publishedVersion_lte: Float
-    publishedVersion_not: Float
-    publishedVersion_not_in: [Float]
-}
-
-input LearnTechnologyFilter {
-    AND: [LearnTechnologyFilter]
-    OR: [LearnTechnologyFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    description: String
-    description_contains: String
-    description_exists: Boolean
-    description_in: [String]
-    description_not: String
-    description_not_contains: String
-    description_not_in: [String]
-    image_exists: Boolean
-    name: String
-    name_contains: String
-    name_exists: Boolean
-    name_in: [String]
-    name_not: String
-    name_not_contains: String
-    name_not_in: [String]
-    sys: LearnSysFilter
-}
-
-input LearnTrackFilter {
-    AND: [LearnTrackFilter]
-    OR: [LearnTrackFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    description: String
-    description_contains: String
-    description_exists: Boolean
-    description_in: [String]
-    description_not: String
-    description_not_contains: String
-    description_not_in: [String]
-    difficulty: LearncfDifficultyNestedFilter
-    difficulty_exists: Boolean
-    id: String
-    id_contains: String
-    id_exists: Boolean
-    id_in: [String]
-    id_not: String
-    id_not_contains: String
-    id_not_in: [String]
-    lessonsCollection_exists: Boolean
-    name: String
-    name_contains: String
-    name_exists: Boolean
-    name_in: [String]
-    name_not: String
-    name_not_contains: String
-    name_not_in: [String]
-    previewProjectIds_contains_all: [String]
-    previewProjectIds_contains_none: [String]
-    previewProjectIds_contains_some: [String]
-    previewProjectIds_exists: Boolean
-    spotlighted: Boolean
-    spotlighted_exists: Boolean
-    spotlighted_not: Boolean
-    sys: LearnSysFilter
-    technologiesCollection_exists: Boolean
-}
-
-input LearncfDifficultyNestedFilter {
-    AND: [LearncfDifficultyNestedFilter]
-    OR: [LearncfDifficultyNestedFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    hexCodeColor: String
-    hexCodeColor_contains: String
-    hexCodeColor_exists: Boolean
-    hexCodeColor_in: [String]
-    hexCodeColor_not: String
-    hexCodeColor_not_contains: String
-    hexCodeColor_not_in: [String]
-    name: String
-    name_contains: String
-    name_exists: Boolean
-    name_in: [String]
-    name_not: String
-    name_not_contains: String
-    name_not_in: [String]
-    shortDescription: String
-    shortDescription_contains: String
-    shortDescription_exists: Boolean
-    shortDescription_in: [String]
-    shortDescription_not: String
-    shortDescription_not_contains: String
-    shortDescription_not_in: [String]
-    sys: LearnSysFilter
-}
-
-input LearncfTrackNestedFilter {
-    AND: [LearncfTrackNestedFilter]
-    OR: [LearncfTrackNestedFilter]
-    contentfulMetadata: LearnContentfulMetadataFilter
-    description: String
-    description_contains: String
-    description_exists: Boolean
-    description_in: [String]
-    description_not: String
-    description_not_contains: String
-    description_not_in: [String]
-    difficulty_exists: Boolean
-    id: String
-    id_contains: String
-    id_exists: Boolean
-    id_in: [String]
-    id_not: String
-    id_not_contains: String
-    id_not_in: [String]
-    lessonsCollection_exists: Boolean
-    name: String
-    name_contains: String
-    name_exists: Boolean
-    name_in: [String]
-    name_not: String
-    name_not_contains: String
-    name_not_in: [String]
-    previewProjectIds_contains_all: [String]
-    previewProjectIds_contains_none: [String]
-    previewProjectIds_contains_some: [String]
-    previewProjectIds_exists: Boolean
-    spotlighted: Boolean
-    spotlighted_exists: Boolean
-    spotlighted_not: Boolean
-    sys: LearnSysFilter
-    technologiesCollection_exists: Boolean
-}
-
 input ShowcaseAddReactionsInput {
     count: Float!
     type: ShowcaseReactionType!
@@ -19013,6 +18582,7 @@ input ShowcaseEditProjectInput {
     name: String
     priorExperience: String
     slug: String
+    tags: [String!]
     type: ShowcaseProjectType
     viewLink: String
 }
@@ -19038,6 +18608,7 @@ input ShowcaseProjectsWhere {
     metadata: [ShowcaseMetadataWhere!]
     program: String
     region: String
+    tags: [String!]
     type: ShowcaseProjectType
     user: String
 }
@@ -19083,26 +18654,6 @@ scalar CalendarDateTime
 
 "The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
 scalar CalendarJSONObject
-
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z,
-compliant with the 'date-time' format outlined in section 5.6 of
-the RFC 3339 profile of the ISO 8601 standard for representation
-of dates and times using the Gregorian calendar.
-"""
-scalar LearnDateTime
-
-"The 'Dimension' type represents dimensions as whole numeric values between `1` and `4000`."
-scalar LearnDimension
-
-"The 'Quality' type represents quality as whole numeric values between `1` and `100`."
-scalar LearnQuality
-
-"The 'HexColor' type represents color in `rgb:ffffff` string format."
-scalar LearnHexColor
-
-"The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
-scalar LearnJSON
 
 "The javascript `Date` as string. Type represents date and time as the ISO Date string."
 scalar LabsDateTime

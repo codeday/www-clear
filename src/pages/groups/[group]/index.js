@@ -1,13 +1,10 @@
 import React from 'react';
 import {getEventGroup} from './index.gql'
-import {Heading} from '@codeday/topo/Atom/Text'
-import Box, {Grid} from '@codeday/topo/Atom/Box';
-import Button from '@codeday/topo/Atom/Button'
+import {Box, Grid, Heading} from "@codeday/topo/Atom";
 import {getFetcher} from "../../../fetch";
 import {useRouter} from "next/router";
 import Page from "../../../components/Page";
 import Event from "../../../components/Event";
-import {print} from 'graphql';
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import {getSession} from "next-auth/react";
 import {CreateEventModal} from "../../../components/forms/Event";

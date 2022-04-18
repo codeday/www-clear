@@ -1,11 +1,9 @@
 import React from 'react';
-import { DateTime } from 'luxon';
-import {Heading} from '@codeday/topo/Atom/Text';
-import Box from '@codeday/topo/Atom/Box';
-import {print} from 'graphql';
+import {DateTime} from 'luxon';
+import {Heading} from "@codeday/topo/Atom";
 import {getSession} from 'next-auth/react';
 import Page from '../../components/Page';
-import {useFetcher, getFetcher} from '../../fetch';
+import {getFetcher} from '../../fetch';
 import Event from '../../components/Event';
 import {getEvents} from './index.gql';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';

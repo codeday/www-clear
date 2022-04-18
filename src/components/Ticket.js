@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {print} from 'graphql';
-import { useSession } from 'next-auth/react';
-import Text from "@codeday/topo/Atom/Text";
-import Box from "@codeday/topo/Atom/Box";
-import Button from '@codeday/topo/Atom/Button';
+import {useSession} from 'next-auth/react';
+import {Box, Button, Text} from "@codeday/topo/Atom";
 import {useToasts} from '@codeday/topo/utils';
 import {checkin, checkout} from './Ticket.gql';
 import Badge from "./Badge";

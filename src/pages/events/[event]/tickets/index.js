@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import {print} from 'graphql';
-import { useSession } from 'next-auth/react';
-import Text, {Heading} from '@codeday/topo/Atom/Text';
-import Box, {Grid} from '@codeday/topo/Atom/Box';
+import React from 'react';
 import {getSession} from 'next-auth/react';
+import {Box, Button, Grid, Heading, Text} from "@codeday/topo/Atom";
 import {getEventWithTickets} from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Ticket from '../../../../components/Ticket';
@@ -11,7 +8,6 @@ import Page from '../../../../components/Page';
 import {getFetcher} from '../../../../fetch';
 import {CreateTicketModal} from '../../../../components/forms/Ticket';
 import {CSVLink} from "react-csv";
-import Button from "@codeday/topo/Atom/Button";
 import {UiDownload} from "@codeday/topocons/Icon";
 
 export default function Tickets({event}) {
