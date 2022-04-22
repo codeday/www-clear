@@ -1,7 +1,7 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
 import {InfoAlert} from "./Alert";
-import Box from "@codeday/topo/Atom/Box"
+import {Box} from "@codeday/topo/Atom";
 
 export default function EventRestrictionBox({restrictions, children, ...props}) {
     return (

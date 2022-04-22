@@ -1,10 +1,8 @@
 import React, {useEffect} from 'react';
-import Box from '@codeday/topo/Atom/Box';
+import {Box, Divider, Text} from "@codeday/topo/Atom";
 import moment from 'moment-timezone';
 import seed from 'random-seed';
 import {useTheme} from '@codeday/topo/utils';
-import Divider from '@codeday/topo/Atom/Divider';
-import Text from '@codeday/topo/Atom/Text';
 import {GoodAlert, InfoAlert, WarningAlert} from './Alert';
 
 export const eventColors = {

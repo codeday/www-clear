@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
 import Form from "@rjsf/antd";
-import Box from "@codeday/topo/Atom/Box"
-import Button from "@codeday/topo/Atom/Button"
-import Text, {Heading} from "@codeday/topo/Atom/Text"
+import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
 import * as Icon from "@codeday/topocons/Icon";
-import {InfoAlert} from "../Alert";
 import {useFetcher} from "../../fetch";
-import {CreateEventGroupMutation, UpdateEventGroupMutation, DeleteEventGroupMutation} from "./EventGroup.gql";
-import {print} from "graphql";
+import {CreateEventGroupMutation, DeleteEventGroupMutation, UpdateEventGroupMutation} from "./EventGroup.gql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import moment from "moment-timezone";

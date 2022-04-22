@@ -3,13 +3,13 @@ import Breadcrumbs from "../../../components/Breadcrumbs";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import {EventRestrictionPreview} from "../../../components/EventRestriction";
 import Page from "../../../components/Page"
-import {Heading} from "@codeday/topo/Atom/Text"
+import {Heading} from "@codeday/topo/Atom";
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../fetch";
-import {print} from "graphql";
 import {GetEventRestrictionsQuery} from "./eventRestrictions.gql"
 import LinkEventRestrictionsModal from "../../../components/LinkEventRestrictionsModal";
 import InfoBox from "../../../components/InfoBox";
+
 export default function EventRestrictions({event, restrictions}) {
     if (!event) return <Page />
     return (

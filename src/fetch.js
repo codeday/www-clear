@@ -1,6 +1,5 @@
-import {apiFetch} from '@codeday/topo/utils'
-import { useToasts } from '@codeday/topo/utils';
-import { useSession } from 'next-auth/react';
+import {apiFetch, useToasts} from '@codeday/topo/utils'
+import {useSession} from 'next-auth/react';
 
 export function useFetcher(_, variables) {
     const { data: session } = useSession();

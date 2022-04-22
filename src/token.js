@@ -1,5 +1,4 @@
 import {JsonWebTokenError, sign, TokenExpiredError, verify} from "jsonwebtoken";
-import {print} from "graphql";
 import {GetAccountRolesQuery} from "./getAccountRoles.gql";
 import {apiFetch} from "@codeday/topo/utils";
 import getConfig from "next/config";

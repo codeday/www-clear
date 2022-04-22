@@ -1,20 +1,17 @@
-import React, { useState, useRef } from 'react';
-import Box from '@codeday/topo/Atom/Box';
-import Image from '@codeday/topo/Atom/Image';
-import { useToasts } from '@codeday/topo/utils';
+import React, {useRef, useState} from 'react';
+import {Box, Button, Image} from "@codeday/topo/Atom";
+import {useToasts} from '@codeday/topo/utils';
 import Masonry from 'react-responsive-masonry';
 import InfoBox from './InfoBox';
-import { DeleteSponsorModal, UpdateSponsorModal } from './forms/Sponsor';
+import {DeleteSponsorModal, UpdateSponsorModal} from './forms/Sponsor';
 import ContactBox from './ContactBox';
-import { SetSponsorNotesMutation } from './forms/Notes.gql';
-import { UploadSponsorLogoMutation, UploadSponsorDarkLogoMutation } from './forms/Sponsor.gql'
+import {SetSponsorNotesMutation} from './forms/Notes.gql';
+import {UploadSponsorDarkLogoMutation, UploadSponsorLogoMutation} from './forms/Sponsor.gql'
 import Notes from './forms/Notes';
-import {getSession, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
-import {print} from 'graphql';
 import Alert, {InfoAlert} from "./Alert";
-import Button from "@codeday/topo/Atom/Button";
-import { UiUpload } from "@codeday/topocons/Icon"
+import {UiUpload} from "@codeday/topocons/Icon"
 
 const WARN_FILE_SIZE = 1024 * 1024 * 5
 const MAX_FILE_SIZE = 1024 * 1024 * 125

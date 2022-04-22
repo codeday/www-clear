@@ -1,12 +1,9 @@
 import React, {useState} from "react";
-import Switch from "@codeday/topo/Atom/Input/Switch"
-import Alert, {GoodAlert, WarningAlert} from "./Alert"
-import Box from "@codeday/topo/Atom/Box"
+import {Box, Switch, Text} from "@codeday/topo/Atom"
+import Alert, {WarningAlert} from "./Alert"
 import InfoBox from "./InfoBox"
-import Text, {Heading} from "@codeday/topo/Atom/Text"
 import {useFetcher} from "../fetch";
 import {useToasts} from "@codeday/topo/utils"
-import {print} from "graphql";
 import {RegistrationsToggleMutation} from "./RegistrationsToggleWithChecklist.gql"
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";

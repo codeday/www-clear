@@ -1,16 +1,11 @@
 import React from 'react';
-import Box from '@codeday/topo/Atom/Box';
-import {Heading} from '@codeday/topo/Atom/Text';
-import Button from '@codeday/topo/Atom/Button';
-import {Clear} from '@codeday/topo/Atom/Logo';
-import Header, {Menu, SiteLogo} from '@codeday/topo/Organism/Header';
-import Skelly from '@codeday/topo/Atom/Skelly';
+import {Box, Button, Clear, Heading, Skelly, Spinner} from '@codeday/topo/Atom';
+import {Content} from '@codeday/topo/Molecule';
+import {Header, Menu, SiteLogo} from '@codeday/topo/Organism';
+import {useColorMode} from "@codeday/topo/Theme";
 import getConfig from 'next/config';
 import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/react';
-import Content from '@codeday/topo/Molecule/Content';
-import Spinner from '@codeday/topo/Atom/Spinner';
-import {useColorMode} from "@codeday/topo/Theme";
 
 const {publicRuntimeConfig} = getConfig();
 

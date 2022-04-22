@@ -1,14 +1,10 @@
 import React, {useState} from "react";
 import InfoBox from "../InfoBox";
-import Text from "@codeday/topo/Atom/Text"
-import TextareaInput from "@codeday/topo/Atom/Input/Textarea"
+import {Box, Button, Text, Textarea as TextareaInput} from "@codeday/topo/Atom";
 import * as Icon from "@codeday/topocons/Icon"
 import {useToasts} from "@codeday/topo/utils";
-import Button from "@codeday/topo/Atom/Button"
 import {useFetcher} from "../../fetch";
-import {print} from "graphql";
 import {useRouter} from "next/router";
-import Box from "@codeday/topo/Atom/Box"
 import {useSession} from "next-auth/react";
 
 export default function Notes({notes, updateMutation, updateId, children, ...props}) {

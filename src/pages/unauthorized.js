@@ -1,7 +1,5 @@
 import Opossum from "../components/Opossum";
-import Text, {Heading} from "@codeday/topo/Atom/Text";
-import Box from "@codeday/topo/Atom/Box";
-import Link from "@codeday/topo/Atom/Text/Link";
+import {Box, Heading, Link, Text} from "@codeday/topo/Atom";
 import Page from "../components/Page"
 
 export default function Unauthorized() {

@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
 import Form from '@rjsf/antd';
-import Box from '@codeday/topo/Atom/Box';
-import Button from '@codeday/topo/Atom/Button';
-import Text, {Heading} from '@codeday/topo/Atom/Text';
+import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import * as Icon from '@codeday/topocons/Icon';
-import {print} from 'graphql';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import {useSession} from 'next-auth/react';

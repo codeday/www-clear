@@ -1,7 +1,5 @@
 import React from 'react';
-import {print} from 'graphql';
-import {Heading} from '@codeday/topo/Atom/Text';
-import Box from '@codeday/topo/Atom/Box';
+import {Box, Heading} from "@codeday/topo/Atom";
 import {getSession} from 'next-auth/react';
 import Page from '../../../../components/Page';
 import {getEventWithSchedule} from './index.gql';

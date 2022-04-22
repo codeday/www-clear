@@ -9,7 +9,6 @@ import Page from "../../../components/Page";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../fetch";
-import {print} from "graphql";
 import {getEmailTemplatesQuery} from "./index.gql"
 import EmailTemplate from "../../../components/EmailTemplate";
 

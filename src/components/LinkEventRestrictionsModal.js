@@ -1,11 +1,8 @@
 import React, {useState} from 'react';
 import {useRouter} from "next/router";
-import Button from "@codeday/topo/Atom/Button";
+import {Box, Button, Checkbox, Heading} from "@codeday/topo/Atom";
 import * as Icon from "@codeday/topocons/Icon";
-import Checkbox from "@codeday/topo/Atom/Input/Checkbox"
-import Box from "@codeday/topo/Atom/Box"
 import {Modal} from "react-responsive-modal";
-import {Heading} from "@codeday/topo/Atom/Text"
 import {print} from "graphql";
 import {UpdateEventRestrictionsMutation} from "./LinkEventRestrictionsModal.gql"
 import {useToasts} from "@codeday/topo/utils";

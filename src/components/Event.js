@@ -1,8 +1,7 @@
 import React from 'react'
-import Text from '@codeday/topo/Atom/Text'
-import Box, { Flex } from '@codeday/topo/Atom/Box';
+import {Box, Flex, Text} from "@codeday/topo/Atom";
 import InfoBox from "./InfoBox";
-import { Image } from '@chakra-ui/react';
+import {Image} from '@chakra-ui/react';
 
 export default function Event({event, ...props}) {
     return (

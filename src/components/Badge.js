@@ -1,5 +1,5 @@
 import React from 'react';
-import Box from '@codeday/topo/Atom/Box';
+import {Box} from "@codeday/topo/Atom";
 
 export default function Badge({children, ...props}) {
     return (

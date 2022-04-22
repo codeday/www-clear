@@ -1,9 +1,9 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
-import { Calendar, PaymentCash, PaymentDiscount } from "@codeday/topocons/Icon"
-import Alert, { GoodAlert } from "./Alert";
+import {Calendar, PaymentCash, PaymentDiscount} from "@codeday/topocons/Icon"
+import Alert, {GoodAlert} from "./Alert";
 import moment from "moment-timezone";
-import Text from "@codeday/topo/Atom/Text"
+import {Text} from "@codeday/topo/Atom";
 
 export default function TicketBox({ event, children, ...props }) {
     return (

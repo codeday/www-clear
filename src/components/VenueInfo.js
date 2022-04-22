@@ -1,9 +1,6 @@
 import React from 'react';
-import Text, {Heading, Link} from '@codeday/topo/Atom/Text';
-import {Flex} from '@codeday/topo/Atom/Box';
+import {Heading, Link, Text} from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
-import Notes from './forms/Notes';
-import {SetVenueNotesMutation} from './forms/Notes.gql';
 import {DeleteVenueModal, UpdateVenueModal} from './forms/Venue';
 import ContactBox from './ContactBox';
 
