@@ -1,13 +1,14 @@
 import React from 'react';
 import {Box} from "@codeday/topo/Atom";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 export default function Badge({children, ...props}) {
     return (
         <Box
             d="inline-flex"
             alignItems="center"
-            bg="gray.200"
-            color="gray.800"
+            bg={useColorModeValue("gray.200", "gray.800")}
+            color={useColorModeValue("gray.800", "gray.200")}
             p={1}
             px={2}
             m={1}

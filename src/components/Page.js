@@ -6,7 +6,7 @@ import {useColorMode} from "@codeday/topo/Theme";
 import getConfig from 'next/config';
 import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/react';
-
+import { useTheme } from "@codeday/topo/utils"
 const {publicRuntimeConfig} = getConfig();
 
 export default function Page({
@@ -14,10 +14,8 @@ export default function Page({
                              }) {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
-    // dumb hack because dark mode doesn't work with antd css
-    const {setColorMode} = useColorMode()
-    if(setColorMode) setColorMode("light")
-
+    const theme = useTheme();
+    console.log(theme)
     if (!session) {
         return (
             <Box position="relative">

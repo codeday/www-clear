@@ -8,6 +8,7 @@ import {UpdateEventRestrictionsMutation} from "./LinkEventRestrictionsModal.gql"
 import {useToasts} from "@codeday/topo/utils";
 import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 export default function LinkEventRestrictionsModal({event, restrictions, children, ...props}) {
     const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading m={2}>
                     Event Restrictions for {event.name}
                 </Heading>

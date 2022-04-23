@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Form from '@rjsf/antd';
+import Form from '@rjsf/chakra-ui';
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import {useSession} from 'next-auth/react';
 import {CreateScheduleItemMutation, DeleteScheduleItemMutation, UpdateScheduleItemMutation} from './ScheduleItem.gql';
 import {useFetcher} from '../../fetch';
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 const schema = {
     type: 'object',
@@ -103,7 +104,7 @@ export function CreateScheduleItemModal({
     return (
         <Box d="inline" {...props}>
             <Button h={6} onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Schedule Item</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Schedule Item</Heading>
                 <Form
                     uiSchema={uiSchema}
@@ -181,7 +182,7 @@ export function UpdateScheduleItemModal({scheduleitem, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -227,7 +228,7 @@ export function DeleteScheduleItemModal({scheduleitem, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove ScheduleItem</Heading>
                 <Text>Are you sure you want to delete this Schedule Item?
                     <br/>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Form from "@rjsf/antd";
+import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
@@ -10,6 +10,7 @@ import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import moment from "moment-timezone";
 import {useSession} from "next-auth/react";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 const schema = {
     type: "object",
@@ -77,7 +78,7 @@ export function CreateEventGroupModal({children, ...props}) {
     return (
         <Box {...props}>
             <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add Event Group</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Event Group</Heading>
                 <Form
                     uiSchema={uiSchema}
@@ -116,8 +117,10 @@ export function UpdateEventGroupModal({eventgroup, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         ...eventgroup,
-        startDate: moment(eventgroup.startDate).utc().format('LL'),
-        endDate: moment(eventgroup.endDate).utc().format('LL'),
+        startDate: moment(eventgroup.startDate).utc().format('YYYY-MM-DD'),
+        endDate: moment(eventgroup.endDate).utc().format('YYYY-MM-DD'),
+        earlyBirdCutoff: moment(eventgroup.earlyBirdCutoff).utc().format('YYYY-MM-DD'),
+        registrationCutoff: moment(eventgroup.registrationCutoff).utc().format('YYYY-MM-DD')
     });
     const { data: session } = useSession();
     const fetch = useFetcher(session);
@@ -138,7 +141,7 @@ export function UpdateEventGroupModal({eventgroup, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -182,7 +185,7 @@ export function DeleteEventGroupModal({eventgroup, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Event Group</Heading>
                 <Text>Are you sure you want to delete this Event Group?
                     <br/>

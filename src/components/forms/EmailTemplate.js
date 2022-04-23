@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Form from "@rjsf/antd";
+import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
@@ -14,6 +14,7 @@ import {
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import {ticketTypeEnum} from "./Ticket";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 const schema = {
     type: "object",
@@ -170,7 +171,7 @@ export function CreateEmailTemplateModal({children, ...props}) {
     return (
         <Box {...props}>
             <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add EmailTemplate</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create EmailTemplate</Heading>
                 <Form
                     uiSchema={uiSchema}
@@ -225,7 +226,7 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -269,7 +270,7 @@ export function DeleteEmailTemplateModal({emailtemplate, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove EmailTemplate</Heading>
                 <Text>Are you sure you want to delete this EmailTemplate?
                     <br/>

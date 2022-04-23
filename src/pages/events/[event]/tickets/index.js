@@ -9,6 +9,7 @@ import {getFetcher} from '../../../../fetch';
 import {CreateTicketModal} from '../../../../components/forms/Ticket';
 import {CSVLink} from "react-csv";
 import {UiDownload} from "@codeday/topocons/Icon";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 export default function Tickets({event}) {
     if (!event) return <Page/>;
@@ -46,7 +47,7 @@ export default function Tickets({event}) {
                     <UiDownload />Download as CSV
                 </CSVLink>
             </Button>
-            <Box p={4} mt={8} mb={4} backgroundColor="blue.50" borderColor="blue.500" borderWidth={1} fontSize="lg">
+            <Box p={4} mt={8} mb={4} backgroundColor={useColorModeValue("blue.50", "blue.500")} borderColor={useColorModeValue("blue.500", "blue.50")} borderWidth={1} fontSize="lg">
                 <Text>
                     Attendees/parents can e-sign missing waivers on their own phone. Have them show you the
                     confirmation screen!

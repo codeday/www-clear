@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Form from "@rjsf/antd";
+import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
@@ -9,6 +9,7 @@ import {CreatePromoCodeMutation, DeletePromoCodeMutation, UpdatePromoCodeMutatio
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 const characters = "ABCDEFGHKPQRSTUVWXYZ";
 function generatePromoCode(length) {
@@ -64,7 +65,7 @@ export function CreatePromoCodeModal({event, children, ...props}) {
     return (
         <Box {...props}>
             <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add Promo Code</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Promo Code</Heading>
                 <Form
                     uiSchema={uiSchema}
@@ -124,7 +125,7 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -168,7 +169,7 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove PromoCode</Heading>
                 <Text>Are you sure you want to delete this Promo Code?
                     <br/>

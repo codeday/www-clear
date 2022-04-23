@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-import Form from '@rjsf/antd';
-import 'antd/lib/input/style/index.css';
-import 'antd/lib/input-number/style/index.css';
+import Form from '@rjsf/chakra-ui';
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
@@ -12,6 +10,7 @@ import {useSession} from 'next-auth/react';
 import {CreateVenueMutation, DeleteVenueMutation, UpdateVenueMutation} from './Venue.gql';
 import {useFetcher} from '../../fetch';
 import {InfoAlert} from '../Alert';
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 const schema = {
     type: 'object',
@@ -93,7 +92,7 @@ export function CreateVenueModal({event, children, ...props}) {
     return (
         <Box {...props}>
             <Button h={6} onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Venue</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Venue</Heading>
                 <InfoAlert>You can leave anything you aren't sure of yet blank and edit later!</InfoAlert>
                 <Form
@@ -153,7 +152,7 @@ export function UpdateVenueModal({venue, children, ...props}) {
     return (
         <Box d="inline" {...props}>
             <Button h={6} d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     schema={schema}
                     formData={formData}
@@ -198,7 +197,7 @@ export function DeleteVenueModal({venue, children, ...props}) {
     return (
         <Box d="inline">
             <Button h={6} d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Venue</Heading>
                 <Text>Are you sure you want to delete this venue?
                     <br/>

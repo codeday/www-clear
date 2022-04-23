@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Form from "@rjsf/antd";
+import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
@@ -13,6 +13,7 @@ import {
 } from "./EventRestriction.gql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 const schema = {
     type: "object",
@@ -52,7 +53,7 @@ export function CreateEventRestrictionModal({children, ...props}) {
     return (
         <Box {...props}>
             <Button onClick={onOpenModal}>{children ? children : <><Icon.UiAdd/>Add Event Restriction</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Event Restriction</Heading>
                 <Form
                     uiSchema={uiSchema}
@@ -107,7 +108,7 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -151,7 +152,7 @@ export function DeleteEventRestrictionModal({eventrestriction, children, ...prop
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove EventRestriction</Heading>
                 <Text>Are you sure you want to delete this Event Restriction?
                     <br/>

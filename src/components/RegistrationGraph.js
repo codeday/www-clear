@@ -4,6 +4,7 @@ import moment from 'moment';
 import {Button, Heading, Text} from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
 import {Eye} from '@codeday/topocons/Icon';
+import {useColorModeValue} from "@codeday/topo/Theme";
 
 export default function RegistrationGraph({ event, children, ...props }) {
     const now = moment();
@@ -23,8 +24,11 @@ export default function RegistrationGraph({ event, children, ...props }) {
             <Heading>{event.tickets.length} Registrations</Heading>
             <Text m={0} ml={.5} size="sm">{event.soldTickets} students; {event.tickets.length - event.soldTickets} staff</Text>
             {children}
-            {event.soldTickets > 0 && <LineGraph data={data} />}
-            {event.interestedEmails.length} pre-registrations <Button as="a" href={`${event.id}/preRegistrations`} pt={1} px={3} d="inline"><Eye /></Button>
+            {event.soldTickets > 0 && <LineGraph
+                data={data}
+                accent={useColorModeValue("black", "white")}
+            />}
+            {event.interestedEmails.length} pre-registrations <Button as="a" href={`${event.id}/preRegistrations`} d="inline"><Eye /></Button>
         </InfoBox>
     );
 }

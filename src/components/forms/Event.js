@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import Form from '@rjsf/antd';
+import Form from '@rjsf/chakra-ui';
 
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import * as Icon from '@codeday/topocons/Icon';
-import {useToasts} from '@codeday/topo/utils';
+import {useColorModeValue} from "@codeday/topo/Theme";
+
+import {useToasts, useTheme} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import moment from 'moment-timezone';
 import {useSession} from 'next-auth/react';
@@ -56,7 +58,7 @@ const schema = {
           type: 'string'
         },
         managers: {
-            title: 'Regional Managers (CodeDay Account usernames)',
+            title: 'Regional Managers',
             type: 'array',
             uniqueItems: true,
             items: {
@@ -98,6 +100,10 @@ const uiSchema = {
         'ui:options': {
             orderable: false,
         },
+        'ui:description': "(CodeDay Account usernames)",
+        "chakra": {
+            color: "blue.200"
+        },
     },
     requiresPromoCode: {
         'ui:help': 'Should people only be allowed to register if they have a promo code? (For instance if the event is invite-only) This should most of the time be false.'
@@ -107,12 +113,12 @@ const uiSchema = {
 export function CreateEventModal({group, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
-        startDate: moment(group.startDate).utc().format('LL'),
-        endDate: moment(group.endDate).utc().format('LL'),
+        startDate: moment(group.startDate).utc().format('YYYY-MM-DD'),
+        endDate: moment(group.endDate).utc().format('YYYY-MM-DD'),
         ticketPrice: group.ticketPrice,
         earlyBirdPrice: group.earlyBirdPrice,
-        earlyBirdCutoff: moment(group.earlyBirdCutoff).utc().format('LL'),
-        registrationCutoff: moment(group.registrationCutoff).utc().format('LL'),
+        earlyBirdCutoff: moment(group.earlyBirdCutoff).utc().format('YYYY-MM-DD'),
+        registrationCutoff: moment(group.registrationCutoff).utc().format('YYYY-MM-DD'),
     });
     const { data: session } = useSession();
     const fetch = useFetcher(session);
@@ -125,7 +131,7 @@ export function CreateEventModal({group, children, ...props}) {
     return (
         <Box {...props}>
             <Button onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Event</>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Event</Heading>
                 <InfoAlert>Default values have been autofilled from the Event Group</InfoAlert>
                 <Form
@@ -171,15 +177,16 @@ export function UpdateEventModal({event, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         ...event,
-        startDate: moment(event.startDate).utc().format('LL'),
-        endDate: moment(event.endDate).utc().format('LL'),
-        earlyBirdCutoff: moment(event.earlyBirdCutoff).utc().format('LL'),
-        registrationCutoff: moment(event.registrationCutoff).utc().format('LL')
+        startDate: moment(event.startDate).utc().format('YYYY-MM-DD'),
+        endDate: moment(event.endDate).utc().format('YYYY-MM-DD'),
+        earlyBirdCutoff: moment(event.earlyBirdCutoff).utc().format('YYYY-MM-DD'),
+        registrationCutoff: moment(event.registrationCutoff).utc().format('YYYY-MM-DD')
     });
     const { data: session } = useSession();
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
+    const theme = useTheme();
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
@@ -192,11 +199,10 @@ export function UpdateEventModal({event, children, ...props}) {
         });
         return ret;
     }
-
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
                     schema={schema}
@@ -244,7 +250,7 @@ export function DeleteEventModal({event, children, ...props}) {
     return (
         <Box d="inline">
             <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
-            <Modal open={open} onClose={onCloseModal} center>
+            <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Event</Heading>
                 <Text>Are you sure you want to delete this event?
                     <br/>
