@@ -2,20 +2,14 @@ import React from 'react';
 import {Box, Button, Clear, Heading, Skelly, Spinner} from '@codeday/topo/Atom';
 import {Content} from '@codeday/topo/Molecule';
 import {Header, Menu, SiteLogo} from '@codeday/topo/Organism';
-import {useColorMode} from "@codeday/topo/Theme";
-import getConfig from 'next/config';
 import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/react';
-import { useTheme } from "@codeday/topo/utils"
-const {publicRuntimeConfig} = getConfig();
 
 export default function Page({
                                  children, title, slug, ...props
                              }) {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
-    const theme = useTheme();
-    console.log(theme)
     if (!session) {
         return (
             <Box position="relative">

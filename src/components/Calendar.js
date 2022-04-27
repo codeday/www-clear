@@ -40,8 +40,6 @@ export default function Calendar({
         drawDays.push(day.startOf('day'));
         day = day.clone().add(1, 'day');
     }
-    console.log(eventsByDay);
-    console.log(drawDays);
     return (
         <Box>
             {drawDays.map((date) => (

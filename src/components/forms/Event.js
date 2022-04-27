@@ -190,7 +190,6 @@ export function UpdateEventModal({event, children, ...props}) {
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
-    console.log(formData);
 
     function formDataToUpdateInput(formData) {
         const ret = {};
@@ -215,12 +214,10 @@ export function UpdateEventModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
-                                console.log('fetch');
                                 await fetch(UpdateEventMutation, {
                                     where: {id: event.id},
                                     data: formDataToUpdateInput(formData)
                                 });
-                                console.log('replace');
                                 await router.replace(router.asPath);
                                 success('Event Updated');
                                 onCloseModal();
