@@ -15,10 +15,17 @@ export default function RegistrationGraph({ event, children, ...props }) {
         if (createdAt <= graphStart) {
             data[0].y += 1;
         } else {
-            data.push({ x: moment.duration(createdAt.diff(graphStart)).as('days'), y: data[data.length - 1].y + 1 });
+            const x = moment.duration(createdAt.diff(graphStart)).as('days')
+            const y = data[data.length - 1].y + 1
+            if(data[data.length - 1].x === x) {
+                data[data.length -1].y += 1
+            } else {
+                data.push({x, y});
+            }
         }
     });
     data.push({ x: 60, y: data[data.length - 1].y });
+    console.log(data)
     return (
         <InfoBox heading="Registrations" headingSize="xl" {...props}>
             <Heading>{event.tickets.length} Registrations</Heading>
