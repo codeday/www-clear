@@ -21,8 +21,9 @@ import Page from "../../../../components/Page";
 import { getFetcher } from "../../../../fetch";
 import { CreateTicketModal } from "../../../../components/forms/Ticket";
 import { CSVLink } from "react-csv";
-import { UiDownload, UiSearch } from "@codeday/topocons/Icon";
+import { UiDownload, Camera } from "@codeday/topocons/Icon";
 import { useColorModeValue } from "@codeday/topo/Theme";
+import { useRouter } from "next/router";
 
 function sortFn(sort, tickets) {
   switch (sort) {
@@ -49,6 +50,7 @@ function sortFn(sort, tickets) {
 
 export default function Tickets({ event }) {
   if (!event) return <Page />;
+  const router = useRouter();
   const headers = [
     "firstName",
     "lastName",
@@ -85,11 +87,17 @@ export default function Tickets({ event }) {
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets</Heading>
       <CreateTicketModal event={event} d="inline" pr={4} />
-      <Button d="inline">
+      <Button d="inline" mr={4}>
         <CSVLink data={csv} headers={headers} filename="tickets.csv">
           <UiDownload />
           Download as CSV
         </CSVLink>
+      </Button>
+      <Button
+        mr={4}
+        onClick={() => router.push({ pathname: "tickets/scan/", query: { event: event?.id } })}
+      >
+        <Camera /> Scan Tickets
       </Button>
       <SortAndFilter
         tickets={tickets}
@@ -105,7 +113,7 @@ export default function Tickets({ event }) {
               .reduce((partialSum, ticket) => partialSum + ticket.age, 0) /
               event.tickets.filter((ticket) => ticket.type == "STUDENT")
                 .length) *
-              10
+            10
           ) / 10}
         </Text>
         <Text>Total Tickets:&nbsp;{event.tickets.length}</Text>
@@ -247,7 +255,7 @@ function SortAndFilter({ tickets, setTickets, event }) {
                       checkedIn
                         ? t.checkedIn && !t.checkedOut
                         : (t.checkedIn && t.checkedOut) ||
-                          (!t.checkedIn && !t.checkedOut)
+                        (!t.checkedIn && !t.checkedOut)
                     )
                   )
                 );
@@ -291,7 +299,7 @@ function SortAndFilter({ tickets, setTickets, event }) {
                     event.tickets.filter((t) =>
                       checkedIn
                         ? (t.checkedIn && t.checkedOut) ||
-                          (!t.checkedIn && !t.checkedOut)
+                        (!t.checkedIn && !t.checkedOut)
                         : t.checkedIn && !t.checkedOut
                     )
                   )

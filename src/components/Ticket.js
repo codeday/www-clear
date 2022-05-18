@@ -11,7 +11,7 @@ import InfoBox from "./InfoBox";
 import * as Icon from "@codeday/topocons/Icon";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function Ticket({ticket, ...props}) {
+export default function Ticket({ticket, eventId, ...props}) {
     const { data: session } = useSession();
 
     const [loading, setLoading] = useState(false);
@@ -22,11 +22,11 @@ export default function Ticket({ticket, ...props}) {
     const checkAction = checkedIn && !checkedOut ? 'out' : 'in';
 
     return (
-        <a href={`tickets/${ticket.id}`}>
+        <a href={eventId ? `/events/${eventId}/tickets/${ticket.id}` : `tickets/${ticket.id}`}>
         <InfoBox
             id={ticket.id}
             buttons={
-                <Button h={6} as="a" href={`tickets/${ticket.id}`}>
+                <Button h={6} as="a" href={eventId ? `/events/${eventId}/tickets/${ticket.id}` : `tickets/${ticket.id}`}>
                 <Icon.Eye />
                 </Button>
             }
@@ -45,7 +45,8 @@ export default function Ticket({ticket, ...props}) {
                   isLoading={loading}
                   disabled={loading}
                   size="sm"
-                  onClick={async () => {
+                  onClick={async (e) => {
+                      e.preventDefault()
                       setLoading(true);
                       try {
                           const res = await fetch(print(checkAction === 'out' ? checkout : checkin), {
