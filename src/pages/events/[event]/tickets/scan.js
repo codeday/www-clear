@@ -98,7 +98,7 @@ export default function Scan({ event }) {
             if (result) {
               setTickets([
                 event.tickets.find((ticket) => ticket.id == result.getText()),
-              ]);
+              ].filter(n => n));
               setOpen(false);
               dismissQrReader();
             }
