@@ -1,0 +1,58 @@
+#import "../../../../components/Ticket.gql"
+#import "../../../../components/forms/Ticket.gql"
+#import "../../../../components/forms/Guardian.gql"
+#import "../../../../components/Ticket.gql"
+
+query getTicket($data: ClearTicketWhereUniqueInput!) {
+  clear {
+    ticket(where: $data) {
+      id
+      metadata
+      createdAt
+      payment {
+        stripePaymentIntentId
+      }
+      event {
+        id
+        name
+        displayDate
+      }
+      promoCode {
+        code
+      }
+      ...Ticket
+      ...TicketFormFragment
+      guardian {
+        ...GuardianFormFragment
+        firstName
+        lastName
+        email
+        phone
+      }
+    }
+  }
+}
+
+query getEventWithTickets($data: ClearEventWhereUniqueInput!) {
+  clear {
+    event(where: $data) {
+      id
+      name
+      tickets {
+        ...Ticket
+        firstName
+        lastName
+        age
+        email
+        phone
+        type
+        guardian {
+          firstName
+          lastName
+          email
+          phone
+        }
+      }
+    }
+  }
+}
