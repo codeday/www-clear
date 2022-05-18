@@ -36,6 +36,14 @@ function sortFn(sort, tickets) {
       return [...tickets].sort((a, b) => b.age - a.age);
     case "age-asc":
       return [...tickets].sort((a, b) => a.age - b.age);
+    case "date-dec":
+      return [...tickets].sort(
+        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
+      );
+    case "date-asc":
+      return [...tickets].sort(
+        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
+      );
   }
 }
 
@@ -191,6 +199,8 @@ function SortAndFilter({ tickets, setTickets, event }) {
           <option value={"alphabetical-first"}>alphabetical, first name</option>
           <option value={"age-dec"}>age high-low</option>
           <option value={"age-asc"}>age low-high</option>
+          <option value={"date-dec"}>signup date newest-oldest</option>
+          <option value={"date-asc"}>signup date oldest-newest</option>
         </Select>
       </HStack>
       <HStack>
