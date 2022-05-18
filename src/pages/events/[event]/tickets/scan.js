@@ -97,8 +97,8 @@ export default function Scan({ event }) {
           onUpdate={async (e, result) => {
             if (result) {
               setTickets([
-                event.tickets.find((ticket) => ticket.id == result.getText()).filter(n => n),
-              ]);
+                event.tickets.find((ticket) => ticket.id == result.getText()),
+              ].filter(n => n));
               setOpen(false);
               dismissQrReader();
             }
