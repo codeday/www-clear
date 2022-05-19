@@ -93,13 +93,13 @@ export default function Calendar({
                                         >
                                             {e.name || 'TBA'}
                                         </Box>
-                                        <Text d="inline" m={2}>{e.displayTime}</Text>
+                                        <Text d="inline" m={2} color="black">{e.displayTime}</Text>
                                         <Box m={4}>
-                                            <Box><b>{e.hostName}</b>{e.hostPronoun ? `(${e.hostPronoun})` : null}</Box>
+                                            <Box color="black"><b>{e.hostName}</b>{e.hostPronoun ? `(${e.hostPronoun})` : null}</Box>
                                             {e.internal ? <InfoAlert>Internal</InfoAlert> : e.finalized ?
                                                 <GoodAlert>Finalized</GoodAlert> :
                                                 <WarningAlert>Not Finalized</WarningAlert>}
-                                            <Box>{e.description}</Box>
+                                            <Box color="black">{e.description}</Box>
                                         </Box>
                                     </Box>
                                 );
