@@ -12,7 +12,7 @@ export default function Alert({children, ...props}) {
             borderWidth={useColorModeValue(1, 0)}
             {...props}
         >
-            <Icon.UiError/>{children}
+	    <Icon.UiError/>{' '}{children}
         </Badge>
     );
 }
@@ -27,7 +27,7 @@ export function InfoAlert({children, ...props}) {
 
             {...props}
         >
-            <Icon.UiInfo/>{children}
+            <Icon.UiInfo/>{' '}{children}
         </Badge>
     );
 }
@@ -41,7 +41,7 @@ export function WarningAlert({children, ...props}) {
             borderWidth={useColorModeValue(1, 0)}
             {...props}
         >
-            <Icon.UiWarning/>{children}
+            <Icon.UiWarning/>{' '}{children}
         </Badge>
     );
 }
@@ -55,7 +55,7 @@ export function GoodAlert({children, ...props}) {
             borderWidth={useColorModeValue(1, 0)}
             {...props}
         >
-            <Icon.UiOk/>{children}
+            <Icon.UiOk/>{' '}{children}
         </Badge>
     );
 }

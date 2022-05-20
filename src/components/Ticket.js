@@ -65,9 +65,9 @@ export default function Ticket({ticket, eventId, ...props}) {
               </Button>
             )}
 	    {ticket.type === "student" && (
-	        {ticket.waiverSigned ? <GoodAlert>Waiver</GoodAlert> : <Alert>Needs waiver</Alert>}
+	        {ticket.waiverSigned ? <GoodAlert>Waiver</GoodAlert> : <Alert>Waiver</Alert>}
 	    )}
-	    {ticket.vaccineVerified ? <GoodAlert>Vax checked</GoodAlert> : <Alert>Needs vax check</Alert>}
+	    {ticket.vaccineVerified ? <GoodAlert>Vaccine</GoodAlert> : <Alert>Vaccine</Alert>}
         </InfoBox></a>)
 }
 
