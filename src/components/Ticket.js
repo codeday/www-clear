@@ -40,6 +40,7 @@ export default function Ticket({ticket, eventId, ...props}) {
             <Text mb={0}><Text as="span" bold>Age:</Text> {ticket.age}</Text>
             {ticket.email && <Text mb={0}><Text as="span" bold>Email:</Text> {ticket.email}</Text>}
             {ticket.phone && <Text mb={0}><Text as="span" bold>Phone:</Text> {ticket.phone}</Text>}
+            {ticket.promoCode && <Text mb={0}><Text as="span" bold>Promo:</Text> {ticket.promoCode.code}</Text>}
             {session && (
               <Button
                   isLoading={loading}
@@ -64,9 +65,7 @@ export default function Ticket({ticket, eventId, ...props}) {
                 Check {checkAction}
               </Button>
             )}
-	    {ticket.type === "student" && (
-	        {ticket.waiverSigned ? <GoodAlert>Waiver</GoodAlert> : <Alert>Waiver</Alert>}
-	    )}
+            {ticket.waiverSigned ? <GoodAlert>Waiver</GoodAlert> : <Alert>Waiver</Alert>}
 	    {ticket.vaccineVerified ? <GoodAlert>Vaccine</GoodAlert> : <Alert>Vaccine</Alert>}
         </InfoBox></a>)
 }

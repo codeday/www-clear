@@ -11,6 +11,9 @@ fragment Ticket on ClearTicket {
     checkedIn
     checkedOut
     vaccineVerified: getMetadata(key: "vaccineVerified")
+    promoCode {
+      code 
+    }
 }
 
 mutation checkin($where: ClearTicketWhereUniqueInput!) {
