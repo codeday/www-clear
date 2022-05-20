@@ -10,6 +10,7 @@ fragment Ticket on ClearTicket {
     waiverSigned
     checkedIn
     checkedOut
+    vaccineVerified: getMetadata(key: "vaccineVerified")
 }
 
 mutation checkin($where: ClearTicketWhereUniqueInput!) {

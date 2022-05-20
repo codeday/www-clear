@@ -5,7 +5,7 @@ import {Box, Button, Text} from "@codeday/topo/Atom";
 import {useToasts} from '@codeday/topo/utils';
 import {checkin, checkout} from './Ticket.gql';
 import Badge from "./Badge";
-import Alert from "./Alert";
+import Alert, {GoodAlert} from "./Alert";
 import {useFetcher} from '../fetch';
 import InfoBox from "./InfoBox";
 import * as Icon from "@codeday/topocons/Icon";
@@ -65,6 +65,7 @@ export default function Ticket({ticket, eventId, ...props}) {
               </Button>
             )}
             {!ticket.waiverSigned && <Alert>No waiver</Alert>}
+            {ticket.vaccineVerified && <GoodAlert>Vaccine Verified</GoodAlert>}
         </InfoBox></a>)
 }
 
