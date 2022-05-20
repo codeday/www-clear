@@ -64,8 +64,10 @@ export default function Ticket({ticket, eventId, ...props}) {
                 Check {checkAction}
               </Button>
             )}
-            {!ticket.waiverSigned && <Alert>No waiver</Alert>}
-            {ticket.vaccineVerified && <GoodAlert>Vaccine Verified</GoodAlert>}
+	    {ticket.type === "student" && (
+	        {ticket.waiverSigned ? <GoodAlert>Waiver</GoodAlert> : <Alert>Needs waiver</Alert>}
+	    )}
+	    {ticket.vaccineVerified ? <GoodAlert>Vax checked</GoodAlert> : <Alert>Needs vax check</Alert>}
         </InfoBox></a>)
 }
 
