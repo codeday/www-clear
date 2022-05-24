@@ -19,9 +19,7 @@ export default function InfoBox({children, heading, headingSize, buttons, nested
                     fontSize={headingSize}
                     justifyContent="space-between"
                     fontWeight="bold"
-                    pl={1}
-                    pr={1}
-                    pb={buttons ? 1 : 0}
+                    p={2}
                 >
                     <Box>{heading}</Box>
                     <Box>{buttons}</Box>

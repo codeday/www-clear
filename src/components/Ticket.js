@@ -123,6 +123,10 @@ export function TicketTypeBadge({ticket, ...props}) {
             color={useColorModeValue(ticketTypeStyles[ticket.type]?.color || "gray.800", ticketTypeStyles[ticket.type]?.bg || "gray.200")}
             textTransform="lowercase"
             fontSize="xs"
+            p={0}
+            position="relative"
+            top="-0.2em"
+            ml={2}
             {...props}
         >
             {ticket.type}

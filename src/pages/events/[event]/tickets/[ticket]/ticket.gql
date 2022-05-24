@@ -8,6 +8,7 @@ query getTicket($data: ClearTicketWhereUniqueInput!) {
             id
             metadata
             createdAt
+            waiverPdfUrl
             payment {
                 stripePaymentIntentId
             }

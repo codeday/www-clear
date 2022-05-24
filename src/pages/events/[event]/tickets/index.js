@@ -14,16 +14,17 @@ import {
   HStack,
   Switch,
 } from "@codeday/topo/Atom";
-import { getEventWithTickets } from "./index.gql";
+import { getEventWithTickets, getWaiverBook  } from "./index.gql";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Ticket from "../../../../components/Ticket";
 import Page from "../../../../components/Page";
-import { getFetcher } from "../../../../fetch";
+import { getFetcher, useFetcher } from "../../../../fetch";
 import { CreateTicketModal } from "../../../../components/forms/Ticket";
 import { CSVLink } from "react-csv";
 import { UiDownload, Camera } from "@codeday/topocons/Icon";
 import { useColorModeValue } from "@codeday/topo/Theme";
 import { useRouter } from "next/router";
+import { Icon } from "@chakra-ui/react";
 
 function sortFn(sort, tickets) {
   switch (sort) {
@@ -51,6 +52,9 @@ function sortFn(sort, tickets) {
 export default function Tickets({ event }) {
   if (!event) return <Page />;
   const router = useRouter();
+  const fetcher = useFetcher();
+  const [waiversLoading, setWaiversLoading] = useState(false);
+  const [waiverBookUrl, setWaiverBookUrl] = useState(null);
   const headers = [
     "firstName",
     "lastName",
@@ -89,15 +93,33 @@ export default function Tickets({ event }) {
       <CreateTicketModal event={event} d="inline" pr={4} />
       <Button d="inline" mr={4}>
         <CSVLink data={csv} headers={headers} filename="tickets.csv">
-          <UiDownload />
+          <Icon mr={2} as={UiDownload} />
           Download as CSV
         </CSVLink>
+      </Button>
+      <Button
+        isLoading={waiversLoading}
+        mr={4}
+        onClick={async () => {
+          if(waiverBookUrl) {
+            window.open(waiverBookUrl);
+            return;
+          }
+          setWaiversLoading(true);
+          const resp = await fetcher(getWaiverBook, { data: { id: event.id } });
+          setWaiverBookUrl(resp.clear.event.waiverBook);
+          window.open(resp.clear.event.waiverBook);
+          setWaiversLoading(false);
+        }}
+      >
+          <Icon mr={2} as={UiDownload} />
+          Download All Waivers
       </Button>
       <Button
         mr={4}
         onClick={() => router.push({ pathname: "tickets/scan/", query: { event: event?.id } })}
       >
-        <Camera /> Scan Tickets
+        <Icon mr={2} as={Camera} />Scan Tickets
       </Button>
       <SortAndFilter
         tickets={tickets}

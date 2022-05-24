@@ -31,3 +31,12 @@ mutation createTicket($data: ClearTicketCreateInput!, ) {
         }
     }
 }
+
+# this is a separate query because it generates it live which takes resources
+query getWaiverBook($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            waiverBook
+        }
+    }
+}

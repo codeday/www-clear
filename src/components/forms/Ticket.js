@@ -3,7 +3,8 @@ import Form from '@rjsf/chakra-ui';
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
-import * as Icon from '@codeday/topocons/Icon';
+import * as Icons from '@codeday/topocons/Icon';
+import { Icon } from '@chakra-ui/react';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import {useSession} from 'next-auth/react';
@@ -92,7 +93,7 @@ export function CreateTicketModal({event, children, ...props}) {
 
     return (
         <Box {...props}>
-            <Button onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Ticket</>}</Button>
+            <Button onClick={onOpenModal}>{children || <>< Icon mr={2} as={Icons.UiAdd} />Add Ticket</>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Ticket</Heading>
                 <Form
@@ -155,7 +156,7 @@ export function UpdateTicketModal({ticket, children, ...props}) {
 
     return (
         <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
+            <Button d="inline" onClick={onOpenModal}>{children || <Icons.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
@@ -201,7 +202,7 @@ export function DeleteTicketModal({ticket, children, ...props}) {
 
     return (
         <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
+            <Button d="inline" onClick={onOpenModal}>{children || <Icons.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Ticket</Heading>
                 <Text>Are you sure you want to delete this Ticket?
@@ -224,9 +225,9 @@ export function DeleteTicketModal({ticket, children, ...props}) {
                         }
                         setLoading(false);
                     }}
-                ><Icon.UiTrash/><b>Delete Ticket</b>
+                ><Icons.UiTrash/><b>Delete Ticket</b>
                 </Button>
-                <Button onClick={onCloseModal}><Icon.UiX/>Cancel</Button>
+                <Button onClick={onCloseModal}><Icons.UiX/>Cancel</Button>
             </Modal>
         </Box>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import Page from '../../../../../components/Page';
 import {getFetcher} from '../../../../../fetch';
 import {getTicket} from './ticket.gql';
-import {Heading, Text} from "@codeday/topo/Atom";
+import {Button, Heading, Text} from "@codeday/topo/Atom";
 import {TicketTypeBadge} from "../../../../../components/Ticket";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
 import Alert from "../../../../../components/Alert";
@@ -33,6 +33,7 @@ export default function TicketPage({ticket}) {
                         <Email />{ticket.email} <br/>
                         <DevicePhone />{ticket.phone} <br/>
                         <IdCard /> {ticket.age} years old
+                        {ticket.waiverPdfUrl && <><br /><Button as="a" target="_blank" href={ticket.waiverPdfUrl}>Waiver</Button></>}
                     </InfoBox>
                     {ticket.age < 18? (
                         <InfoBox
