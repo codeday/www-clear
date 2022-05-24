@@ -8,11 +8,12 @@ fragment Ticket on ClearTicket {
     type
     needsGuardian
     waiverSigned
+    waiverUrl
     checkedIn
     checkedOut
     vaccineVerified: getMetadata(key: "vaccineVerified")
     promoCode {
-      code 
+      code
     }
 }
 
@@ -27,3 +28,10 @@ mutation checkout($where: ClearTicketWhereUniqueInput!) {
     checkinout: checkout(where: $where) { checkedIn checkedOut }
   }
 }
+
+mutation sendWaiverReminder($where: ClearTicketWhereUniqueInput!) {
+  clear {
+    sendWaiverReminder(where: $where)
+  }
+}
+

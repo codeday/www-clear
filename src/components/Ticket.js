@@ -3,7 +3,7 @@ import {print} from 'graphql';
 import {useSession} from 'next-auth/react';
 import {Box, Button, Text} from "@codeday/topo/Atom";
 import {useToasts} from '@codeday/topo/utils';
-import {checkin, checkout} from './Ticket.gql';
+import {checkin, checkout, sendWaiverReminder} from './Ticket.gql';
 import Badge from "./Badge";
 import Alert, {GoodAlert} from "./Alert";
 import {useFetcher} from '../fetch';
@@ -41,6 +41,34 @@ export default function Ticket({ticket, eventId, ...props}) {
             {ticket.email && <Text mb={0}><Text as="span" bold>Email:</Text> {ticket.email}</Text>}
             {ticket.phone && <Text mb={0}><Text as="span" bold>Phone:</Text> {ticket.phone}</Text>}
             {ticket.promoCode && <Text mb={0}><Text as="span" bold>Promo:</Text> {ticket.promoCode.code}</Text>}
+            {!ticket.waiverSigned && (
+                <>
+                    <Button
+                        size="xs"
+                        mr={2}
+                        isLoading={loading}
+                        onClick={async (e) => {
+                            e.preventDefault()
+                            setLoading(true);
+                            try {
+                                const res = await fetch(print(sendWaiverReminder), {
+                                  where: { id: ticket.id },
+                                });
+                                success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
+                            } catch (ex) {
+                                error(ex.toString());
+                            }
+                            setLoading(false);
+                        }}
+                    >
+                      Send Waiver Link
+                    </Button>
+                    {ticket.waiverUrl && (
+                      <Button size="xs" as="a" href={ticket.waiverUrl} target="_blank">Sign Waiver Here</Button>
+                    )}
+                    <br />
+                </>
+            )}
             {session && (
               <Button
                   isLoading={loading}

@@ -127,32 +127,6 @@ export default function Tickets({ event }) {
         </Text>
       </HStack>
 
-      <Box
-        p={4}
-        mt={8}
-        mb={4}
-        backgroundColor={useColorModeValue("blue.50", "blue.500")}
-        borderColor={useColorModeValue("blue.500", "blue.50")}
-        borderWidth={1}
-        fontSize="lg"
-      >
-        <Text>
-          Attendees/parents can e-sign missing waivers on their own phone. Have
-          them show you the confirmation screen!
-        </Text>
-        <Text mb={0}>
-          <Text as="span" bold>
-            CodeDay.to/Waiver
-          </Text>{" "}
-          (under 18)
-        </Text>
-        <Text>
-          <Text as="span" bold>
-            CodeDay.to/AdultWaiver
-          </Text>{" "}
-          (over 18)
-        </Text>
-      </Box>
       <Grid
         templateColumns={{
           base: "1fr",
