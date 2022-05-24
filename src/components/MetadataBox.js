@@ -1,7 +1,12 @@
-import { List, Text, ListItem } from '@codeday/topo/Atom';
+import { Box, List, Text, ListItem } from '@codeday/topo/Atom';
 import InfoBox from "./InfoBox";
 
 function MetadataItem({ mKey, value, ...props }) {
+  if (typeof value === 'undefined' || value === null) return (
+    <ListItem {...props}>
+        <Text fontFamily="mono" d="inline">null</Text>
+    </ListItem>
+  );
   return (
     <ListItem {...props}>
       {mKey && <Text fontWeight="bold" d="inline">{mKey}: </Text>}
@@ -19,9 +24,12 @@ function MetadataItem({ mKey, value, ...props }) {
 export default function MetadataBox({ metadata, ...props }) {
     return (
         <InfoBox heading="Metadata">
-            <List>
+            <List p={1}>
                 <MetadataItem fontSize="xs" value={metadata} />
             </List>
+            <Box mt={4} p={1} fontSize="sm" fontStyle="italic">
+              Reach out to your CodeDay staff contact if you need to make changes to metadata.
+            </Box>
         </InfoBox>
     );
 }
