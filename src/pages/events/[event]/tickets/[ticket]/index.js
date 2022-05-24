@@ -14,6 +14,7 @@ import {DevicePhone, Email, IdCard, Ticket, UiAdd} from "@codeday/topocons/Icon"
 import Confidential from "../../../../../components/Confidential";
 import {CreateGuardianModal, DeleteGuardianModal, UpdateGuardianModal} from "../../../../../components/forms/Guardian";
 import moment from "moment";
+import MetadataBox from '../../../../../components/MetadataBox';
 
 
 export default function TicketPage({ticket}) {
@@ -57,9 +58,7 @@ export default function TicketPage({ticket}) {
                         Promo Code used: {ticket.promoCode?.code || 'N/A'} <br/>
                         Payment intent ID: {ticket.payment?.stripePaymentIntentId || 'N/A'}
                     </InfoBox>
-                    <InfoBox heading="Metadata">
-                        {JSON.stringify(ticket.metadata, null, 2)}
-                    </InfoBox>
+                    <MetadataBox metadata={ticket.metadata} />
                         </Masonry>
                         </ResponsiveMasonry>
                         </Page>

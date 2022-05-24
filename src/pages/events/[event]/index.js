@@ -23,6 +23,7 @@ import ScheduleBox from '../../../components/ScheduleBox';
 import TicketBox from "../../../components/TicketBox";
 import EventRestrictionBox from "../../../components/EventRestrictionBox";
 import InfoBox from "../../../components/InfoBox";
+import MetadataBox from '../../../components/MetadataBox';
 
 
 export default function Event({event}) {
@@ -91,9 +92,7 @@ export default function Event({event}) {
                             </Button>
                         }
                     />
-                    <InfoBox heading="Metadata">
-                        {JSON.stringify(event.metadata, null, 2 )}
-                    </InfoBox>
+                    <MetadataBox metadata={event.metadata} />
                 </Masonry>
             </ResponsiveMasonry>
         </Page>
