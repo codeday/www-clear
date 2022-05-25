@@ -6,7 +6,7 @@ import { Icon } from '@chakra-ui/react';
 
 export default function Index() {
     const session = useSession();
-    if (!session?.data?.isAdmin) window.location = '/events';
+    if (session?.data && !session?.data?.isAdmin && typeof window !== 'undefined') window.location = '/events';
     return (
         <Page slug="/">
             <Grid templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)'}} gap={4}>
