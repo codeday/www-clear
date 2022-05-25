@@ -20,7 +20,7 @@ const options = {
         },
         session: async ({ session, token }) => Promise.resolve({
             ...session,
-            clearAuthToken: await generateToken(token.user.nickname),
+            ...await generateToken(token.user.nickname),
             user: token.user,
         }),
     },

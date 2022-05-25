@@ -1,10 +1,13 @@
 #import "../../components/Event.gql"
 
-query getEvents {
+query getEvents($where: ClearEventWhereInput) {
     clear {
-        events (editable: true) {
-            endDate
-            ...EventFragment
+        eventGroups(orderBy:[{startDate:desc}]) {
+            name
+            events (orderBy: [{startDate:asc}], where: $where) {
+                endDate
+                ...EventFragment
+            }
         }
     }
 }

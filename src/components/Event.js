@@ -1,11 +1,20 @@
 import React from 'react'
 import {Box, Flex, Text} from "@codeday/topo/Atom";
+import { DateTime } from 'luxon';
 import InfoBox from "./InfoBox";
 import {Image} from '@chakra-ui/react';
 
 export default function Event({event, ...props}) {
+    const now = DateTime.now();
     return (
-        <InfoBox heading={<>{event.name} - {event.eventGroup?.name}</>} id={event.id} as="a" href={`/events/${event.id}`} {...props}>
+        <InfoBox
+          heading={<>{event.name} - {event.eventGroup?.name}</>}
+          id={event.id}
+          as="a"
+          href={`/events/${event.id}`}
+          opacity={DateTime.fromISO(event.endDate) < now ? 0.5 : 1}
+          {...props}
+        >
           <Flex>
             <Box w="60px" h="60px" mr={4} mb={1} ml={1}>
               <Image src={event.region?.skylinePhoto?.url ? event.region.skylinePhoto.url : "/codeday-logo-skyline-substitute.png"} alt="" rounded={3} />

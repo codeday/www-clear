@@ -41,6 +41,7 @@ export async function generateToken(username) {
     } else if (isManager) {
         token = signToken({t: 'm', u: username})
     }
-    cache.set(username, token)
-    return token
+    const tokenInfo = { clearAuthToken: token, isAdmin, isManager }
+    cache.set(username, tokenInfo)
+    return tokenInfo;
 }

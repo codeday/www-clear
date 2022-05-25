@@ -1,49 +1,33 @@
 import React from 'react';
 import {DateTime} from 'luxon';
-import {Heading} from "@codeday/topo/Atom";
+import {Heading, Box} from "@codeday/topo/Atom";
 import {getSession} from 'next-auth/react';
 import Page from '../../components/Page';
 import {getFetcher} from '../../fetch';
 import Event from '../../components/Event';
 import {getEvents} from './index.gql';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
+import getConfig from "next/config";
+const {serverRuntimeConfig} = getConfig();
 
 
-export default function Events({events}) {
-    if (!events) return <Page/>;
+export default function Events({eventGroups}) {
+    if (!eventGroups) return <Page/>;
     const now = DateTime.now().minus({ days: 1 });
-    const upcomingEvents = events.filter((e) => DateTime.fromISO(e.endDate) >= now);
-    const pastEvents = events.filter((e) => DateTime.fromISO(e.endDate) < now);
     return (
         <Page title="Events">
-            {upcomingEvents.length > 0 && (
-                <>
-                    <Heading>
-                        Upcoming Events
-                    </Heading>
-                    <ResponsiveMasonry>
-                        <Masonry>
-                            {upcomingEvents.map((event) => (
-                                <Event key={event.id} m={4} event={event}/>
-                            ))}
-                        </Masonry>
-                    </ResponsiveMasonry>
-                </>
-            )}
-            {pastEvents.length > 0 && (
-                <>
-                    <Heading>
-                        Past Events
-                    </Heading>
-                    <ResponsiveMasonry>
-                        <Masonry>
-                            {pastEvents.map((event) => (
-                                <Event key={event.id} m={4} event={event}/>
-                            ))}
-                        </Masonry>
-                    </ResponsiveMasonry>
-                </>
-            )}
+          {eventGroups.map((eg) => (
+            <Box mb={12}>
+              <Heading textAlign="center">{eg.name}</Heading>
+              <ResponsiveMasonry>
+                  <Masonry>
+                      {eg.events.map((event) => (
+                          <Event key={event.id} m={4} event={event}/>
+                      ))}
+                  </Masonry>
+              </ResponsiveMasonry>
+            </Box>
+          ))}
         </Page>
     );
 }
@@ -52,10 +36,13 @@ export async function getServerSideProps({req, res, query}) {
     const session = await getSession({req});
     const fetch = getFetcher(session);
     if (!session) return {props: {}};
-    const eventResults = await fetch(getEvents);
+    const eventResults = await fetch(
+      getEvents,
+      session.isAdmin ? null : { where: { managers: { hasSome: [session.user.nickname] } } }
+    );
     return {
         props: {
-            events: eventResults.clear.events,
+            eventGroups: eventResults.clear.eventGroups.filter((e) => e.events.length > 0),
         },
     };
 }
