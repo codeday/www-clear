@@ -48,7 +48,7 @@ export default function Page({
             <Box position="relative" {...props}>
                 <Header underscore position="relative">
                     <SiteLogo>
-                        <a href="/">
+                        <a href={session.isAdmin ? '/' : '/events'}>
                             <Clear withText/>
                         </a>
                     </SiteLogo>
