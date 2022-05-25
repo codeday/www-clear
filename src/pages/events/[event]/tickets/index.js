@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { getSession } from "next-auth/react";
 import {
   Box,
@@ -14,7 +14,7 @@ import {
   HStack,
   Switch,
 } from "@codeday/topo/Atom";
-import { getEventWithTickets, getWaiverBook  } from "./index.gql";
+import { getEventWithTickets, getWaiverBook } from "./index.gql";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Ticket from "../../../../components/Ticket";
 import Page from "../../../../components/Page";
@@ -91,17 +91,18 @@ export default function Tickets({ event }) {
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets</Heading>
       <CreateTicketModal event={event} d="inline" pr={4} />
-      <Button d="inline" mr={4}>
-        <CSVLink data={csv} headers={headers} filename="tickets.csv">
-          <Icon mr={2} as={UiDownload} />
-          Download as CSV
-        </CSVLink>
-      </Button>
+      <CSVExport
+        d="inline"
+        mr={4}
+        data={csv}
+        headers={headers}
+        filename="tickets.csv"
+      />
       <Button
         isLoading={waiversLoading}
         mr={4}
         onClick={async () => {
-          if(waiverBookUrl) {
+          if (waiverBookUrl) {
             window.open(waiverBookUrl);
             return;
           }
@@ -112,8 +113,8 @@ export default function Tickets({ event }) {
           setWaiversLoading(false);
         }}
       >
-          <Icon mr={2} as={UiDownload} />
-          Download All Waivers
+        <Icon mr={2} as={UiDownload} />
+        Download All Waivers
       </Button>
       <Button
         mr={4}
@@ -135,7 +136,7 @@ export default function Tickets({ event }) {
               .reduce((partialSum, ticket) => partialSum + ticket.age, 0) /
               event.tickets.filter((ticket) => ticket.type == "STUDENT")
                 .length) *
-            10
+              10
           ) / 10}
         </Text>
         <Text>Total Tickets:&nbsp;{event.tickets.length}</Text>
@@ -251,7 +252,7 @@ function SortAndFilter({ tickets, setTickets, event }) {
                       checkedIn
                         ? t.checkedIn && !t.checkedOut
                         : (t.checkedIn && t.checkedOut) ||
-                        (!t.checkedIn && !t.checkedOut)
+                          (!t.checkedIn && !t.checkedOut)
                     )
                   )
                 );
@@ -295,7 +296,7 @@ function SortAndFilter({ tickets, setTickets, event }) {
                     event.tickets.filter((t) =>
                       checkedIn
                         ? (t.checkedIn && t.checkedOut) ||
-                        (!t.checkedIn && !t.checkedOut)
+                          (!t.checkedIn && !t.checkedOut)
                         : t.checkedIn && !t.checkedOut
                     )
                   )
@@ -308,3 +309,30 @@ function SortAndFilter({ tickets, setTickets, event }) {
     </HStack>
   );
 }
+
+export const CSVExport = ({
+  data,
+  headers,
+  filename = "data.csv",
+  ...props
+}) => {
+  const ref = useRef(null);
+  return (
+    <Button
+      onClick={() => {
+        ref && ref.current && ref.current.link.click();
+      }}
+      {...props}
+    >
+      <CSVLink
+        style={{ display: "none" }}
+        data={data}
+        headers={headers}
+        filename={filename}
+        ref={ref}
+      />
+      <Icon mr={2} as={UiDownload} />
+      Download as CSV
+    </Button>
+  );
+};
