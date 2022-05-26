@@ -1,12 +1,14 @@
-import {Box, Grid, Button} from '@codeday/topo/Atom';
+import {Box, Grid, Button, Spinner} from '@codeday/topo/Atom';
 import { useSession } from 'next-auth/react';
 import { TransportBusSchool, UiFolder, ToTheMoon } from '@codeday/topocons/Icon';
 import Page from '../components/Page';
-import { Icon } from '@chakra-ui/react';
 
 export default function Index() {
     const session = useSession();
     if (session?.data && !session?.data?.isAdmin && typeof window !== 'undefined') window.location = '/events';
+    if (!session?.data || session.status === "loading" || !session.data.isAdmin) {
+      return (<Page slug="/"><Box textAlign="center"><Spinner /></Box></Page>);
+    }
     return (
         <Page slug="/">
             <Grid templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)'}} gap={4}>
