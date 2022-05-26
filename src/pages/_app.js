@@ -1,15 +1,15 @@
-import {ThemeProvider} from '@codeday/topo/Theme';
+import {ThemeProvider, getServerSideProps} from '@codeday/topo/Theme';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import {getSession, SessionProvider} from "next-auth/react"
 import {QueryProvider} from '../providers/query';
 
-export default function CustomApp({ Component, pageProps: {query, ...pageProps}, session }) {
+export default function CustomApp({ Component, pageProps: {query, cookies, ...pageProps}, session }) {
     moment.tz.setDefault('Etc/UTC');
 
     return (
       <SessionProvider session={session} refetchInterval={15 * 60}>
-        <ThemeProvider brandColor="red">
+        <ThemeProvider brandColor="red" cookies={cookies}>
             <QueryProvider value={query || {}}>
                 <Component {...pageProps} />
             </QueryProvider>
@@ -25,7 +25,10 @@ CustomApp.defaultProps = {
     pageProps: {},
 };
 CustomApp.getInitialProps = async ({ ctx }) => {
-	const session = await getSession(ctx);
-	return { session };
+  console.log(getServerSideProps({ req: ctx.req }).props);
+	return {
+    session: await getSession(ctx),
+    ...getServerSideProps({ req: ctx.req }).props,
+  };
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Document, {Head, Html, Main, NextScript,} from 'next/document';
+import { ColorModeScript } from '@codeday/topo/Theme';
 
 export default class CustomDocument extends Document {
   static async getInitialProps(ctx) {
@@ -21,6 +22,7 @@ export default class CustomDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
         </Head>
         <body>
+          <ColorModeScript initialColorMode="system" />
           <Main />
           <NextScript />
         </body>
