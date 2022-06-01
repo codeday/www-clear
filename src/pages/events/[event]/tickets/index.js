@@ -61,11 +61,13 @@ export default function Tickets({ event }) {
     "age",
     "email",
     "phone",
+    "whatsApp",
     "type",
     "guardianFirstName",
     "guardianLastName",
     "guardianEmail",
     "guardianPhone",
+    "guardianWhatsApp",
   ];
   const csv = event.tickets
     .map((t) =>
@@ -75,11 +77,13 @@ export default function Tickets({ event }) {
         t.age,
         t.email,
         t.phone,
+        t.whatsApp,
         t.type,
         t.guardian?.firstName || "",
         t.guardian?.lastName || "",
         t.guardian?.email || "",
         t.guardian?.phone || "",
+        t.guardian?.whatsApp || "",
       ].join(",")
     )
     .join(`\n`);

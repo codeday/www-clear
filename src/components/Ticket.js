@@ -22,7 +22,7 @@ export default function Ticket({ticket, eventId, ...props}) {
     const checkAction = checkedIn && !checkedOut ? 'out' : 'in';
 
     return (
-        <a href={eventId ? `/events/${eventId}/tickets/${ticket.id}` : `tickets/${ticket.id}`}>
+        <a href={(eventId || ticket.event?.id) ? `/events/${eventId || ticket.event.id}/tickets/${ticket.id}` : `tickets/${ticket.id}`}>
         <InfoBox
             id={ticket.id}
             buttons={
@@ -40,6 +40,7 @@ export default function Ticket({ticket, eventId, ...props}) {
             <Text mb={0}><Text as="span" bold>Age:</Text> {ticket.age}</Text>
             {ticket.email && <Text mb={0}><Text as="span" bold>Email:</Text> {ticket.email}</Text>}
             {ticket.phone && <Text mb={0}><Text as="span" bold>Phone:</Text> {ticket.phone}</Text>}
+            {ticket.whatsApp && <Text mb={0}><Text as="span" bold>WhatsApp:</Text> {ticket.whatsApp}</Text>}
             {ticket.promoCode && <Text mb={0}><Text as="span" bold>Promo:</Text> {ticket.promoCode.code}</Text>}
             {!ticket.waiverSigned && (
                 <>

@@ -5,6 +5,7 @@ fragment Ticket on ClearTicket {
     age
     email
     phone
+    whatsApp
     type
     needsGuardian
     waiverSigned
@@ -14,6 +15,9 @@ fragment Ticket on ClearTicket {
     vaccineVerified: getMetadata(key: "vaccineVerified")
     promoCode {
       code
+    }
+    event {
+      id
     }
 }
 

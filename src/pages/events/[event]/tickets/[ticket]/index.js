@@ -30,8 +30,9 @@ export default function TicketPage({ticket}) {
             <ResponsiveMasonry>
                 <Masonry>
                     <InfoBox heading="Attendee details">
-                        <Email />{ticket.email} <br/>
-                        <DevicePhone />{ticket.phone} <br/>
+                        {ticket.email && <><Email /> Email: {ticket.email} <br/></>}
+                        {ticket.phone && <><DevicePhone /> Phone: {ticket.phone} <br/></>}
+                        {ticket.whatsApp && <><DevicePhone /> WhatsApp: {ticket.whatsApp} <br/></>}
                         <IdCard /> {ticket.age} years old
                         {ticket.waiverPdfUrl && <><br /><Button as="a" target="_blank" href={ticket.waiverPdfUrl}>Waiver</Button></>}
                     </InfoBox>
@@ -47,8 +48,9 @@ export default function TicketPage({ticket}) {
                             {ticket.guardian? (
                                     <>
                                         <IdCard />{ticket.guardian.firstName} {ticket.guardian.lastName} <br/>
-                                        <Email />{ticket.guardian.email} <br/>
-                                        <DevicePhone />{ticket.guardian.phone} <br/>
+                                        {ticket.guardian.email && <><Email />Email: {ticket.guardian.email} <br/></>}
+                                        {ticket.guardian.phone && <><DevicePhone />Phone: {ticket.guardian.phone} <br/></>}
+                                        {ticket.guardian.whatsApp && <><DevicePhone />WhatsApp: {ticket.guardian.whatsApp} <br/></>}
                                     </>) : (
                                         <Alert>No Guardian Info</Alert>
                             )}
