@@ -9,6 +9,7 @@ query SponsorsGetEventQuery($data: ClearEventWhereUniqueInput!) {
               currencySymbol
             }
             sponsors {
+                id
                 ...SponsorBoxFragment
             }
         }
