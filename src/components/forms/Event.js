@@ -42,6 +42,11 @@ const schema = {
             type: 'number',
             multipleOf: 0.01,
         },
+        groupPrice: {
+            type: "number",
+            multipleOf: 0.01,
+            title: "School Group Price"
+        },
         earlyBirdCutoff: {
             title: 'Early Bird Registration Cutoff',
             description: 'Usually set to a month before the event',
@@ -117,6 +122,7 @@ export function CreateEventModal({group, children, ...props}) {
         endDate: moment(group.endDate).utc().format('YYYY-MM-DD'),
         ticketPrice: group.ticketPrice,
         earlyBirdPrice: group.earlyBirdPrice,
+        groupPrice: group.groupPrice,
         earlyBirdCutoff: moment(group.earlyBirdCutoff).utc().format('YYYY-MM-DD'),
         registrationCutoff: moment(group.registrationCutoff).utc().format('YYYY-MM-DD'),
     });

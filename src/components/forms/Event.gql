@@ -4,6 +4,7 @@ fragment EventFormFragment on ClearEvent {
     endDate
     ticketPrice
     earlyBirdPrice
+    groupPrice
     earlyBirdCutoff
     registrationCutoff
     managers

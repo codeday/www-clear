@@ -5,7 +5,7 @@ import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
 import * as Icon from "@codeday/topocons/Icon";
 import {useFetcher} from "../../fetch";
-import {CreatePromoCodeMutation, DeletePromoCodeMutation, UpdatePromoCodeMutation} from "./PromoCode.gql";
+import {CreatePromoCodeMutation, DeletePromoCodeMutation, UpdatePromoCodeMutation, SetPromoCodeMetatataMutation} from "./PromoCode.gql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
@@ -41,14 +41,30 @@ const schema = {
             type: 'number',
             multipleOf: 1,
             title: 'Uses'
-        }
+        },
+        enablesUber: {
+          type: 'boolean',
+          title: 'Enables requesting a free Uber ride?',
+          description: '(For promo codes provided exclusively to low-income schools.)',
+        },
+        enablesLaptops: {
+          type: 'boolean',
+          title: 'Enables requesting a free laptop?',
+          description: '(For promo codes provided exclusively to low-income schools.)',
+        },
     }
 }
 
 const uiSchema = {
     uses: {
         "ui:help": "Leave this blank for the code to have unlimited uses"
-    }
+    },
+    enablesUber: {
+      "ui:help": '(For promo codes provided exclusively to low-income schools.)',
+    },
+    enablesLaptops: {
+      "ui:help": '(This is for a laptop to keep, NOT a loaner laptop. For promo codes provided exclusively to low-income schools.)',
+    },
 }
 
 export function CreatePromoCodeModal({event, children, ...props}) {
@@ -79,9 +95,14 @@ export function CreatePromoCodeModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+                                const { enablesUber, enablesLaptops, ...baseData } = formData;
                                 await fetch(CreatePromoCodeMutation, {
                                     data: {
-                                        ...formData,
+                                        ...baseData,
+                                        metadata: {
+                                          ...(enablesUber ? { uber: "true" } : {}),
+                                          ...(enablesLaptops ? { laptop: "true" } : {}),
+                                        },
                                         event: {
                                             connect: {
                                                 id: event.id
@@ -137,15 +158,31 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
                         disabled={loading}
                         onClick={async () => {
                             setLoading(true);
+                            const { enablesUber, enablesLaptops, ...baseData } = formDataToUpdateInput(formData);
                             try {
                                 await fetch(UpdatePromoCodeMutation, {
                                     where: {id: promocode.id},
-                                    data: formDataToUpdateInput(formData)
-                                })
+                                    data: baseData,
+                                });
+                                if (typeof enablesUber !== 'undefined') {
+                                  await fetch(SetPromoCodeMetatataMutation, {
+                                    id: promocode.id,
+                                    key: "uber",
+                                    value: enablesUber.set ? "true" : "",
+                                  });
+                                }
+                                if (typeof enablesLaptops !== 'undefined') {
+                                  await fetch(SetPromoCodeMetatataMutation, {
+                                    id: promocode.id,
+                                    key: "laptop",
+                                    value: enablesLaptops.set ? "true" : "",
+                                  });
+                                }
                                 await router.replace(router.asPath)
                                 success('Promo Code Updated')
                                 onCloseModal()
                             } catch (ex) {
+                                console.error(ex);
                                 error(ex.toString())
                             }
                             setLoading(false)

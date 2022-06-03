@@ -11,6 +11,7 @@ import {SetPromoCodeNotesMutation} from "../../../../components/forms/Notes.gql"
 import PromoCodeBox from "../../../../components/PromoCodeBox";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import Ticket from "../../../../components/Ticket";
+import MetadataBox from '../../../../components/MetadataBox';
 
 
 export default function PromoCode({code}) {
@@ -23,6 +24,7 @@ export default function PromoCode({code}) {
                 <Masonry>
                     <PromoCodeBox promoCode={code} heading="details"/>
                     <Notes notes={code.notes} updateId={code.id} updateMutation={SetPromoCodeNotesMutation} />
+                    <MetadataBox metadata={code.metadata} />
                 </Masonry>
             </ResponsiveMasonry>
             Registrations using this code:

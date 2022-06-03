@@ -4,6 +4,7 @@ fragment EventGroupFormFragment on ClearEventGroup {
     endDate
     ticketPrice
     earlyBirdPrice
+    groupPrice
     earlyBirdCutoff
     registrationCutoff
     showcaseId

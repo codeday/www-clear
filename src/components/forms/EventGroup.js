@@ -39,6 +39,11 @@ const schema = {
             multipleOf: 0.01,
             title: "Early Bird Price"
         },
+        groupPrice: {
+            type: "number",
+            multipleOf: 0.01,
+            title: "School Group Price"
+        },
         earlyBirdCutoff: {
             type: 'string',
             format: 'date',

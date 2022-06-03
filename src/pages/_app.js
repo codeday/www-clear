@@ -25,7 +25,6 @@ CustomApp.defaultProps = {
     pageProps: {},
 };
 CustomApp.getInitialProps = async ({ ctx }) => {
-  console.log(getServerSideProps({ req: ctx.req }).props);
 	return {
     session: await getSession(ctx),
     ...getServerSideProps({ req: ctx.req }).props,

@@ -3,6 +3,8 @@ fragment PromoCodeFormFragment on ClearPromoCode {
     code
     amount
     uses
+    enablesUber: getMetadata(key: "uber")
+    enablesLaptops: getMetadata(key: "laptop")
 }
 
 mutation CreatePromoCodeMutation($data: ClearPromoCodeCreateInput!) {
@@ -27,4 +29,10 @@ mutation DeletePromoCodeMutation($where: ClearPromoCodeWhereUniqueInput!) {
             id
         }
     }
+}
+
+mutation SetPromoCodeMetatataMutation($id: String!, $key: String!, $value: String!) {
+  clear {
+    setPromoCodeMetadata(where: {id: $id}, key: $key, value: $value) { id }
+  }
 }

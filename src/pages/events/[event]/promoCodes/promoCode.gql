@@ -15,6 +15,7 @@ query GetPromoCodeQuery($data: ClearPromoCodeWhereUniqueInput!) {
             }
             uses
             usesRemaining
+            metadata
             ...PromoCodeFormFragment
             ...PromoCodeNotesFragment
         }
