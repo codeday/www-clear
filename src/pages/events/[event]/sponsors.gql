@@ -5,6 +5,9 @@ query SponsorsGetEventQuery($data: ClearEventWhereUniqueInput!) {
         event(where: $data) {
             id
             name
+            region {
+              currencySymbol
+            }
             sponsors {
                 ...SponsorBoxFragment
             }

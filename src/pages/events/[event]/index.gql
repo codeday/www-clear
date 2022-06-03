@@ -20,6 +20,9 @@ query getEventQuery($data: ClearEventWhereUniqueInput!) {
             eventGroup {
                 name
             }
+            region {
+              currencySymbol
+            }
             venue {
                 ...VenueInfoFragment
                 ...VenueFormFragment

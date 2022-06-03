@@ -46,6 +46,7 @@ export default function Event({event}) {
                     <SponsorOverview
                         sponsors={event.sponsors}
                         heading="Sponsors"
+                        currencySymbol={event.region?.currencySymbol}
                         buttons={
                           <>
                             <Button h={6} as="a" href={`${event.id}/sponsors`}><Icon.Eye /></Button>

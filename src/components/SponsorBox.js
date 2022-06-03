@@ -17,7 +17,7 @@ const WARN_FILE_SIZE = 1024 * 1024 * 5
 const MAX_FILE_SIZE = 1024 * 1024 * 125
 const MIME_IMAGE = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
 
-export default function SponsorBox({sponsor, children, ...props}) {
+export default function SponsorBox({sponsor, currencySymbol, children, ...props}) {
     const logoUploaderRef = useRef(null);
     const darkLogoUploaderRef = useRef(null);
     const [logoUrl, setLogoUrl] = useState(sponsor.logoImageUri);
@@ -41,7 +41,7 @@ export default function SponsorBox({sponsor, children, ...props}) {
             <Masonry columnsCount={2}>
                 <InfoBox heading="Description">{sponsor.description}</InfoBox>
                 <InfoBox heading="Contribution">
-                    Amount: ${sponsor.amount}
+                    Amount: {currencySymbol || '$'}{sponsor.amount}
                     <br/>
                     Perks: {sponsor.perks}
                 </InfoBox>

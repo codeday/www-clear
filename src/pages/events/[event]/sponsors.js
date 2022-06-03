@@ -17,7 +17,7 @@ export default function Sponsors({event}) {
             <Heading>{event.name} sponsors <CreateSponsorModal event={event}/></Heading>
             <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2}}>
                 <Masonry>
-                    {event.sponsors.map((sponsor) => <SponsorBox sponsor={sponsor}/>)}
+                    {event.sponsors.map((sponsor) => <SponsorBox currencySymbol={event.region?.currencySymbol} sponsor={sponsor}/>)}
                 </Masonry>
             </ResponsiveMasonry>
         </Page>
