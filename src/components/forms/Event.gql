@@ -12,6 +12,7 @@ fragment EventFormFragment on ClearEvent {
     showcaseId
     timezone
     majorityAge
+    overnightMinAge
     minAge
     maxAge
 }

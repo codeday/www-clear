@@ -83,6 +83,11 @@ const schema = {
             type: 'number',
             default: 18
         },
+        overnightMinAge: {
+            title: 'Minimum age to stay overnight',
+            type: 'number',
+            default: 14
+        },
         minAge: {
             title: 'Minimum age to register',
             type: 'number',
