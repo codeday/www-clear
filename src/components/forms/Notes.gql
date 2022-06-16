@@ -26,6 +26,10 @@ fragment EmailTemplateNotesFragment on ClearEmailTemplate {
     notes: getMetadata(key: "notes")
 }
 
+fragment TicketNotesFragment on ClearTicket {
+    notes: getMetadata(key: "notes")
+}
+
 mutation SetPromoCodeNotesMutation($id: String! $notes: String!) {
     clear {
         setNotes: setPromoCodeMetadata(where: {id: $id}, key: "notes", value: $notes) {
@@ -78,6 +82,14 @@ mutation SetEmailTemplateNotesMutation($id: String! $notes: String!) {
     clear {
         setNotes: setEmailTemplateMetadata(where: {id: $id}, key: "notes", value: $notes) {
             ...EmailTemplateNotesFragment
+        }
+    }
+}
+
+mutation SetTicketNotesMutation($id: String! $notes: String!) {
+    clear {
+        setNotes: setTicketMetadata(where: {id: $id}, key: "notes", value: $notes) {
+            ...TicketNotesFragment
         }
     }
 }

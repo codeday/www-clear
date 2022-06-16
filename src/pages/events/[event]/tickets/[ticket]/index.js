@@ -15,6 +15,8 @@ import Confidential from "../../../../../components/Confidential";
 import {CreateGuardianModal, DeleteGuardianModal, UpdateGuardianModal} from "../../../../../components/forms/Guardian";
 import moment from "moment";
 import MetadataBox from '../../../../../components/MetadataBox';
+import {SetTicketNotesMutation} from '../../../../../components/forms/Notes.gql';
+import Notes from "../../../../../components/forms/Notes";
 
 
 export default function TicketPage({ticket}) {
@@ -62,6 +64,12 @@ export default function TicketPage({ticket}) {
                         Payment intent ID: {ticket.payment?.stripePaymentIntentId || 'N/A'}
                     </InfoBox>
                     <MetadataBox metadata={ticket.metadata} />
+                    <Notes
+                        notes={ticket.notes}
+                        updateId={ticket.id}
+                        headingSize="xl"
+                        updateMutation={SetTicketNotesMutation}
+                    />
                         </Masonry>
                         </ResponsiveMasonry>
                         </Page>
