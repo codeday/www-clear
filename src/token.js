@@ -8,7 +8,7 @@ const cache = new NodeCache()
 const {serverRuntimeConfig} = getConfig();
 
 function signToken(payload) {
-    return sign(payload, serverRuntimeConfig.gql.secret, {expiresIn: '30m', audience: serverRuntimeConfig.gql.audience})
+    return sign(payload, serverRuntimeConfig.gql.secret, {expiresIn: '90m', audience: serverRuntimeConfig.gql.audience})
 }
 
 export function checkToken(token) {
