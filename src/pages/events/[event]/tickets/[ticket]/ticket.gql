@@ -1,7 +1,7 @@
 #import "../../../../../components/Ticket.gql"
 #import "../../../../../components/forms/Ticket.gql"
 #import "../../../../../components/forms/Guardian.gql"
-
+#import "../../../../../components/forms/Notes.gql"
 query getTicket($data: ClearTicketWhereUniqueInput!) {
     clear {
         ticket(where: $data) {
@@ -22,6 +22,7 @@ query getTicket($data: ClearTicketWhereUniqueInput!) {
             }
             ...Ticket
             ...TicketFormFragment
+            ...TicketNotesFragment
             guardian {
                 ...GuardianFormFragment
                 firstName
