@@ -191,7 +191,7 @@ export function UpdateEventModal({event, children, ...props}) {
         startDate: moment(event.startDate).utc().format('YYYY-MM-DD'),
         endDate: moment(event.endDate).utc().format('YYYY-MM-DD'),
         earlyBirdCutoff: moment(event.earlyBirdCutoff).utc().format('YYYY-MM-DD'),
-        registrationCutoff: moment(event.registrationCutoff).utc().format('YYYY-MM-DD')
+        registrationCutoff: moment(event.registrationCutoff).utc().format('YYYY-MM-DD'),
     });
     const { data: session } = useSession();
     const fetch = useFetcher(session);

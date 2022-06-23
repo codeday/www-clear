@@ -5,8 +5,7 @@ import Page from '../components/Page';
 
 export default function Token() {
     const session = useSession();
-    if (session?.data && !session?.data?.isAdmin && typeof window !== 'undefined') window.location = '/events';
-    if (!session?.data || session.status === "loading" || !session.data.isAdmin) {
+    if (!session?.data || session.status === "loading") {
       return (<Page slug="/"><Box textAlign="center"><Spinner /></Box></Page>);
     }
     return (

@@ -13,6 +13,7 @@ fragment EventFormFragment on ClearEvent {
     timezone
     majorityAge
     overnightMinAge
+    requiresPromoCode
     minAge
     maxAge
 }
