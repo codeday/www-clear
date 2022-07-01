@@ -13,7 +13,7 @@ export default function PromoCodes({event}) {
     return (
         <Page title="Promo Codes">
             <Breadcrumbs event={event} />
-            <Heading>{event.name} ~ Promo Codes <CreatePromoCodeModal event={event} /> <CreateScholarshipCodeButton event={event} /></Heading>
+            <Heading>{event.name} ~ Promo Codes <CreatePromoCodeModal d="inline" event={event} /> <CreateScholarshipCodeButton event={event} /></Heading>
             <ResponsiveMasonry>
                 <Masonry>
                     {event.promoCodes.map((promoCode) => {

@@ -3,6 +3,7 @@ fragment PromoCodeBoxFragment on ClearPromoCode {
     type
     amount
     uses
+    usesCount
     usesRemaining
     id
 }
