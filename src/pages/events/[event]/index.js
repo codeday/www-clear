@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Heading, Text} from "@codeday/topo/Atom";
+import {Button, Heading, Text, Box} from "@codeday/topo/Atom";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/react';
@@ -93,6 +93,9 @@ export default function Event({event}) {
                             </Button>
                         }
                     />
+                    <InfoBox heading="Notifications">
+                      <Button as="a" href={`${event.id}/notification`}>Send Notification</Button>
+                    </InfoBox>
                     <MetadataBox metadata={event.metadata} />
                 </Masonry>
             </ResponsiveMasonry>
