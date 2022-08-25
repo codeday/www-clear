@@ -7,7 +7,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import ReactHtmlParser from 'react-html-parser';
 import Notes from "./forms/Notes";
 import {SetEventRestrictionNotesMutation} from "./forms/Notes.gql"
-import {getSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 import {UploadEventRestrictionIconMutation} from "./forms/EventRestriction.gql";
 import Alert from "./Alert";
@@ -35,6 +35,8 @@ function transform(node) {
 }
 
 export default function EventRestriction({eventRestriction, ...props}) {
+    const session = useSession();
+    const fetch = useFetcher(session);
     const uploaderRef = useRef(null);
     const [logoUrl, setLogoUrl] = useState(eventRestriction.iconUri);
     const [uploading, setUploading] = useState(false);
@@ -93,8 +95,6 @@ export default function EventRestriction({eventRestriction, ...props}) {
                         }
                         try {
                             setUploading(true);
-                            const session = await getSession();
-                            const fetch = useFetcher(session);
                             const result = await fetch(UploadEventRestrictionIconMutation, { where: {id: eventRestriction.id}, file })
                             success('Icon Uploaded!')
                             setLogoUrl(result.iconUri);
