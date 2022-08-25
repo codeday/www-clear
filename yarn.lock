@@ -1339,10 +1339,10 @@
     eslint-plugin-react-hooks "^2.3.0"
     eslint-plugin-sonarjs "^0.5.0"
 
-"@codeday/topo@^7.0.12":
-  version "7.0.12"
-  resolved "https://registry.yarnpkg.com/@codeday/topo/-/topo-7.0.12.tgz#a31fb7663b3a275adb7576be947103557a72389b"
-  integrity sha512-epzSsjaa8N5RYwbMwWvRWsa1LexOixjfvgqV4M/ANZJixQSfxWN3dwgDrSqS0zUVKzNy94SHdoT4TZny0isMKg==
+"@codeday/topo@^7.2.5":
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/@codeday/topo/-/topo-7.2.5.tgz#afe96ef7559143f4bc243c3021eac1213711402f"
+  integrity sha512-iygI+eEIpqdBckaw66+Rhrf53riArwPqhQVrs7bbZXAOUeqmMhea8zgUyNXTvZZzO+HgoSP3thPuW4sPmbqGBA==
   dependencies:
     "@accessible/use-id" "^1.1.2"
     "@chakra-ui/cli" "^1.6.0"

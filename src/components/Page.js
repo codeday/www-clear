@@ -1,7 +1,7 @@
 import React from 'react';
-import {Box, Button, Clear, Heading, Skelly, Spinner} from '@codeday/topo/Atom';
+import {Box, Button, Clear, Heading, Skelly, Spinner, Link} from '@codeday/topo/Atom';
 import {Content} from '@codeday/topo/Molecule';
-import {Header, Menu, SiteLogo} from '@codeday/topo/Organism';
+import {Header, Menu, SiteLogo, Footer, CustomLinks} from '@codeday/topo/Organism';
 import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/react';
 
@@ -59,6 +59,12 @@ export default function Page({
                 <Content mt={-8}>
                     {children}
                 </Content>
+                <Footer repository="www-clear" branch="master" mt={16}>
+                  <CustomLinks>
+                    <Link href="/events" d="block">Events</Link>
+                    <Link href="/token" d="block">API Token</Link>
+                  </CustomLinks>
+                </Footer>
             </Box>
         </>
     );
