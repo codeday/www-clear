@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Heading, Text, Box} from "@codeday/topo/Atom";
+import {Button, Heading, Text, Link} from "@codeday/topo/Atom";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/react';
@@ -31,7 +31,11 @@ export default function Event({event}) {
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event}/>
-            <Heading>{event.name} ({event.displayDate})<UpdateEventModal event={event}/><DeleteEventModal event={event} /></Heading>
+            <Heading>
+                {event.name} ({event.displayDate})
+                <UpdateEventModal event={event}/>
+                <DeleteEventModal event={event} />
+            </Heading>
             <Text>{event.eventGroup.name}</Text>
             <DaysUntilEvent event={event}/>
             <ResponsiveMasonry>
@@ -99,6 +103,7 @@ export default function Event({event}) {
                     <MetadataBox metadata={event.metadata} />
                 </Masonry>
             </ResponsiveMasonry>
+            <Link href={`${event.id}/advancedConfig`}>Advanced Config</Link>
         </Page>
     );
 }

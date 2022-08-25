@@ -1,0 +1,17 @@
+query getEventAdvancedConfigQuery($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            id
+            name
+            registrationCustomForm: getMetadata(key: "registration.custom-form")
+            registrationCollectOrg: getMetadata(key: "registration.collect-org")
+            dateDisplay: getMetadata(key: "date.display")
+            sponsorsHideGlobal: getMetadata(key: "sponsors.hide-global")
+            covidHide: getMetadata(key: "covid.hide")
+            legal: getMetadata(key: "legal")
+            noticeHero: getMetadata(key: "notice.hero")
+            noticeTop: getMetadata(key: "notice.top")
+            noticeBox: getMetadata(key: "notice.box")
+        }
+    }
+}

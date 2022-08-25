@@ -1,0 +1,7 @@
+mutation SetEventMetadataMutation($id: String!, $key: String!, $value: String!) {
+    clear {
+        setEventMetadata(where: {id: $id}, key: $key, value: $value) {
+            id
+        }
+    }
+}
