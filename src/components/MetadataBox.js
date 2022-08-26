@@ -21,15 +21,17 @@ function MetadataItem({ mKey, value, ...props }) {
   );
 }
 
-export default function MetadataBox({ metadata, ...props }) {
+export default function MetadataBox({ metadata, children, ...props }) {
     return (
         <InfoBox heading="Metadata">
             <List p={1}>
                 <MetadataItem fontSize="xs" value={metadata} />
             </List>
-            <Box mt={4} p={1} fontSize="sm" fontStyle="italic">
-              Reach out to your CodeDay staff contact if you need to make changes to metadata.
-            </Box>
+            {children ? children : (
+              <Box mt={4} p={1} fontSize="sm" fontStyle="italic">
+                Reach out to your CodeDay staff contact if you need to make changes to metadata.
+              </Box>
+            )}
         </InfoBox>
     );
 }

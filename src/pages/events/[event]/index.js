@@ -97,13 +97,18 @@ export default function Event({event}) {
                             </Button>
                         }
                     />
-                    <InfoBox heading="Notifications">
-                      <Button as="a" href={`${event.id}/notification`}>Send Notification</Button>
+                    <InfoBox heading="Actions">
+                      <Button w="100%" mb={2} as="a" href={`${event.id}/tickets/scan`}>Check-In/Out</Button>
+                      <Button w="100%" mb={2} as="a" href={`${event.id}/notification`}>Send Notification</Button>
+                      <Button w="100%" mb={2} as="a" href={`${event.id}/advancedConfig`}>Edit Advanced Config</Button>
+                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/projects/all/event=${event.id}`}>View Projects</Button>
+                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/upload-photos`}>Upload Photos</Button>
                     </InfoBox>
-                    <MetadataBox metadata={event.metadata} />
+                    <MetadataBox metadata={event.metadata}>
+                      <Link href={`${event.id}/advancedConfig`}>Set metadata (advanced)</Link>
+                    </MetadataBox>
                 </Masonry>
             </ResponsiveMasonry>
-            <Link href={`${event.id}/advancedConfig`}>Advanced Config</Link>
         </Page>
     );
 }

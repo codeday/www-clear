@@ -1,8 +1,8 @@
 import React from 'react';
-import {Box, Flex} from '@codeday/topo/Atom';
+import {Box, Flex, Text} from '@codeday/topo/Atom';
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function InfoBox({children, heading, headingSize, buttons, nested, ...props}) {
+export default function InfoBox({children, heading, subHeading, headingSize, buttons, nested, ...props}) {
     return (
         <Box
             d="block"
@@ -13,17 +13,17 @@ export default function InfoBox({children, heading, headingSize, buttons, nested
             {...props}
         >
             {heading && (
-
-                <Flex
-                    backgroundColor={useColorModeValue(nested ? 'gray.100' : 'gray.200', nested ? 'gray.1000' : 'gray.1200')}
-                    fontSize={headingSize}
-                    justifyContent="space-between"
-                    fontWeight="bold"
-                    p={2}
-                >
+              <Box
+                backgroundColor={useColorModeValue(nested ? 'gray.100' : 'gray.200', nested ? 'gray.1000' : 'gray.1200')}
+                fontSize={headingSize}
+                p={2}
+              >
+                <Flex fontWeight="bold" justifyContent="space-between">
                     <Box>{heading}</Box>
                     <Box>{buttons}</Box>
                 </Flex>
+                {subHeading && <Text color="current.textLight" fontSize="sm">{subHeading}</Text>}
+              </Box>
             )}
             <Box
                 mt={1}
