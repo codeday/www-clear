@@ -17,6 +17,7 @@
     "@codeday/topo": "^7.2.6",
     "@codeday/topocons": "^1.5.0",
     "@emotion/utils": "1.0.0",
+    "@headwayapp/react-widget": "^0.0.4",
     "@rjsf/antd": "^3.1.0",
     "@rjsf/chakra-ui": "^4.1.1",
     "@rjsf/core": "^3.1.0",

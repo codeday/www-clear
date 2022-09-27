@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {Box, Button, Clear, Heading, Skelly, Spinner, Link} from '@codeday/topo/Atom';
 import {Content} from '@codeday/topo/Molecule';
 import {Header, Menu, SiteLogo, Footer, CustomLinks} from '@codeday/topo/Organism';
 import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/react';
+import HeadwayWidget from '@headwayapp/react-widget';
 
 export default function Page({
                                  children, title, slug, ...props
                              }) {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
+
     if (!session) {
         return (
             <Box position="relative">
@@ -51,6 +53,9 @@ export default function Page({
                         <a href={session.isAdmin ? '/' : '/events'}>
                             <Clear withText/>
                         </a>
+                        <div style={{ display: 'inline-block', marginLeft: '0.4em', position: 'relative', top: '-0.15em' }}>
+                            <HeadwayWidget account="xaBzA7"></HeadwayWidget>
+                        </div>
                     </SiteLogo>
                     <Menu>
                         {loading ? <Skelly/> : menuItems}
