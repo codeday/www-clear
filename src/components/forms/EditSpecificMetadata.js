@@ -7,7 +7,7 @@ import {useFetcher} from "../../fetch";
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
 
-export default function EditSpecificMetadata({ metadataKey, value, setMutation, updateId, displayKeyAs, children, ...props}) {
+export default function EditSpecificMetadata({ metadataKey, value, setMutation, updateId, displayKeyAs, description, placeholder, children, ...props}) {
     const [editing, setEditing] = useState(false)
     const [loading, setLoading] = useState(false)
     const [tempValue, setTempValue] = useState(value) // Temporary value while the user is editing
@@ -46,14 +46,23 @@ export default function EditSpecificMetadata({ metadataKey, value, setMutation, 
         }}><Icon.UiEdit/></Button>
     const buttons = editing ? <Box>{okButton} {trashButton}</Box> : editButton;
     return (
-        <InfoBox heading={displayKeyAs? displayKeyAs : metadataKey} buttons={buttons} {...props}>
+        <InfoBox
+          heading={displayKeyAs? displayKeyAs : metadataKey}
+          subHeading={description}
+          buttons={buttons}
+          mb={4}
+          {...props}
+        >
+          <Box p={1}>
             {editing ?
                 <TextareaInput
                     value={tempValue}
                     onChange={(e) => setTempValue(e.target.value)}
+                    placeholder={placeholder}
                 /> :
                 value?.split("\n").map((val) => <Text>{val}</Text>)}
             {children}
+          </Box>
         </InfoBox>
     )
 }

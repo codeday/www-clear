@@ -67,10 +67,13 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
         <InfoBox heading="Event Status" headingSize="xl">
             <Box fontSize="2xl" fontWeight="bold">
                 <Text as="span">Registrations are&nbsp;</Text>
-                {event.registrationsOpen ?
+                {event.tickets.length >= event.venue?.capacity ? (
+                  <Text as="span" color="red.500">sold out.</Text>
+                ) : (
+                  event.registrationsOpen ?
                     <Text as="span" color="green">open.</Text> :
                     <Text as="span" color="gray.500">closed.</Text>
-                }
+                )}
             </Box>
             <Switch
                 m={2}
@@ -93,6 +96,12 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
                     setLoading(false)
                 }}
             />
+            {event.registrationsOpen && (
+              <Text fontSize="sm">
+                WARNING: Closing registrations will show the event as canceled. Registrations close as sold-out
+                automatically when the venue capacity is reached.
+              </Text>
+            )}
             <Box m={2}>
                 {checks.filter((check) => !check.check).map((check) => {
                     if (check.severity === "warning") {
