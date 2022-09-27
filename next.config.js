@@ -14,6 +14,7 @@ module.exports = withBundleAnalyzer({
       domain: process.env.AUTH0_DOMAIN,
       issuer: `https://` + process.env.AUTH0_DOMAIN,
       roles: {
+        employee: process.env.AUTH0_EMPLOYEE_ROLE,
         admin: process.env.AUTH0_ADMIN_ROLE,
         manager: process.env.AUTH0_MANAGER_ROLE,
         volunteer: process.env.AUTH0_VOLUNTEER_ROLE,
