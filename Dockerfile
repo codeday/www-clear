@@ -1,4 +1,4 @@
-FROM node:lts-alpine as dependencies
+FROM node:16-alpine as dependencies
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
