@@ -3,10 +3,17 @@ query getEventPreRegistrationsQuery($data: ClearEventWhereUniqueInput!) {
         event(where: $data) {
             id
             name
+            contentfulWebname
             interestedEmails {
                 id
                 email
             }
         }
+    }
+}
+
+mutation SendEventPreRegsitrationsEmail($eventId: String!, $subject: String!, $body: String!) {
+    clear {
+        sendInterestedEmail(eventWhere: {id: $eventId}, subject: $subject, body: $body)
     }
 }
