@@ -63,6 +63,14 @@ export default function AdvancedConfig({event}) {
                 updateId={event.id}
             />
             <EditSpecificMetadata
+                displayKeyAs="Require both phone AND email?"
+                description="By default events require either a phone OR an email. Set this to 1 if you want your event to require both."
+                metadataKey="registration.contact-and"
+                value={event.registrationContactAnd}
+                setMutation={SetEventMetadataMutation}
+                updateId={event.id}
+            />
+            <EditSpecificMetadata
                 displayKeyAs="Legal text"
                 description="Sponsor trademark notice or other required legal text."
                 metadataKey="legal"
