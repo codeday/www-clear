@@ -19,6 +19,7 @@ query getEventWithTickets($data: ClearEventWhereUniqueInput!) {
                     email
                     phone
                 }
+                organization: getMetadata(key: "organization")
             }
         }
     }
