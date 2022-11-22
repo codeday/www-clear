@@ -64,6 +64,10 @@ const schema = {
             type: 'string',
             title: 'Phone',
         },
+        whatsApp: {
+            type: 'string',
+            title: 'WhatsApp',
+        },
         age: {
             type: 'integer',
             title: 'Age',
@@ -73,7 +77,11 @@ const schema = {
             title: 'Type',
             default: 'STUDENT',
             anyOf: ticketTypeEnum
-        }
+        },
+        username: {
+            type: 'string',
+            title: 'Username',
+        },
     },
     required: ['firstName', 'lastName']
 };

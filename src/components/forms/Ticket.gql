@@ -3,8 +3,10 @@ fragment TicketFormFragment on ClearTicket {
     lastName
     email
     phone
+    whatsApp
     age
     type
+    username
 }
 mutation CreateTicketMutation($data: ClearTicketCreateInput!) {
     clear {

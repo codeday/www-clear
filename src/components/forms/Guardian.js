@@ -30,6 +30,14 @@ export const schema = {
             type: 'string',
             title: 'Phone',
         },
+        whatsApp: {
+            type: 'string',
+            title: 'WhatsApp',
+        },
+        username: {
+            type: 'string',
+            title: 'Username',
+        },
     },
 };
 

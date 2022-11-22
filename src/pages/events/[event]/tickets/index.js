@@ -68,6 +68,8 @@ export default function Tickets({ event }) {
     "guardianEmail",
     "guardianPhone",
     "guardianWhatsApp",
+    "waiverSigned",
+    "waiverUrl",
     "organization"
   ];
   const csv = event.tickets
@@ -85,6 +87,8 @@ export default function Tickets({ event }) {
         t.guardian?.email || "",
         t.guardian?.phone || "",
         t.guardian?.whatsApp || "",
+        t.waiverSigned ? 'signed' : 'not signed',
+        t.waiverUrl,
         t.organization || "",
       ].join(",")
     )

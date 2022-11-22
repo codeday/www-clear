@@ -4,6 +4,8 @@ fragment GuardianFormFragment on ClearPerson {
     lastName
     email
     phone
+    whatsApp
+    username
 }
 
 mutation AddGuardianMutation($ticketId: String! $data: ClearPersonCreateWithoutTicketInput!) {

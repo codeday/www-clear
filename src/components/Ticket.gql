@@ -33,9 +33,9 @@ mutation checkout($where: ClearTicketWhereUniqueInput!) {
   }
 }
 
-mutation sendWaiverReminder($where: ClearTicketWhereUniqueInput!) {
+mutation sendWaiverReminder($where: ClearTicketWhereUniqueInput!, $regenerate: Boolean) {
   clear {
-    sendWaiverReminder(where: $where)
+    sendWaiverReminder(where: $where, regenerate: $regenerate)
   }
 }
 

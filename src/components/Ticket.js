@@ -43,7 +43,8 @@ export default function Ticket({ticket, eventId, ...props}) {
             {ticket.whatsApp && <Text mb={0}><Text as="span" bold>WhatsApp:</Text> {ticket.whatsApp}</Text>}
             {ticket.promoCode && <Text mb={0}><Text as="span" bold>Promo:</Text> {ticket.promoCode.code}</Text>}
             {!ticket.waiverSigned && (
-                <>
+                <Box>
+                    <Text as="span" bold>Waiver:</Text>{' '}
                     <Button
                         size="xs"
                         mr={2}
@@ -62,13 +63,34 @@ export default function Ticket({ticket, eventId, ...props}) {
                             setLoading(false);
                         }}
                     >
-                      Send Waiver Link
+                      Remind
+                    </Button>
+                    <Button
+                        size="xs"
+                        mr={2}
+                        isLoading={loading}
+                        onClick={async (e) => {
+                            e.preventDefault()
+                            setLoading(true);
+                            try {
+                                const res = await fetch(print(sendWaiverReminder), {
+                                  where: { id: ticket.id },
+                                  regenerate: true,
+                                });
+                                success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
+                            } catch (ex) {
+                                error(ex.toString());
+                            }
+                            setLoading(false);
+                        }}
+                    >
+                      Fix Link
                     </Button>
                     {ticket.waiverUrl && (
-                      <Button size="xs" as="a" href={ticket.waiverUrl} target="_blank">Sign Waiver Here</Button>
+                      <Button size="xs" as="a" href={ticket.waiverUrl} target="_blank">Sign Here</Button>
                     )}
                     <br />
-                </>
+                </Box>
             )}
             {session && (
               <Button
