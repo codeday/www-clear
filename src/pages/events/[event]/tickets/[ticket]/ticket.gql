@@ -30,6 +30,7 @@ query getTicket($data: ClearTicketWhereUniqueInput!) {
                 email
                 phone
                 whatsApp
+                username
             }
         }
     }
