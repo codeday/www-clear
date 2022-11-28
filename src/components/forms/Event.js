@@ -70,10 +70,6 @@ const schema = {
                 type: 'string',
             },
         },
-        showcaseId: {
-            title: 'Showcase ID',
-            type: 'string'
-        },
         timezone: {
             title: 'Timezone (IANA)',
             type: 'string'

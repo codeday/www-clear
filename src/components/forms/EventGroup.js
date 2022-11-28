@@ -54,12 +54,12 @@ const schema = {
             format: 'date',
             title: 'Registration Cutoff'
         },
-        showcaseId: {
+        contentfulId: {
             type: 'string',
-            title: 'Showcase ID'
+            title: 'Contentful ID'
         }
     },
-    required: ['name', 'startDate', 'endDate', 'ticketPrice', 'earlyBirdPrice', 'earlyBirdCutoff', 'registrationCutoff']
+    required: ['name', 'startDate', 'endDate', 'ticketPrice', 'earlyBirdPrice', 'earlyBirdCutoff', 'registrationCutoff', 'contentfulId']
 }
 
 const uiSchema = {

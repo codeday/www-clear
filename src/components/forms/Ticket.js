@@ -86,7 +86,11 @@ const schema = {
     required: ['firstName', 'lastName']
 };
 
-const uiSchema = {};
+const uiSchema = {
+    username: {
+        'ui:help': 'Username from account.codeday.org. RECOMMENDED FOR STAFF as this affects how you are displayed to the public on event pages.'
+    }
+};
 
 export function CreateTicketModal({event, children, ...props}) {
     const [open, setOpen] = useState(false);

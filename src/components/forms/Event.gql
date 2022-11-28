@@ -9,7 +9,6 @@ fragment EventFormFragment on ClearEvent {
     registrationCutoff
     managers
     contentfulWebname
-    showcaseId
     timezone
     majorityAge
     overnightMinAge
