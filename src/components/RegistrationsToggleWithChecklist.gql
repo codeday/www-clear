@@ -1,5 +1,6 @@
 fragment RegistrationsToggleWithChecklistFragment on ClearEvent {
     id
+    registrationsOpen
     venue {
         capacity
         contactName
@@ -8,13 +9,27 @@ fragment RegistrationsToggleWithChecklistFragment on ClearEvent {
         address
         mapLink
     }
+    eventRestrictions {
+        id
+    }
     schedule {
         finalized
     }
     sponsors {
         id
     }
-    registrationsOpen
+    promoCodes {
+        id
+    }
+    allRegistrations: tickets {
+        id
+    }
+    studentRegistrations: tickets(where: { type: {equals: STUDENT} }) {
+        id
+    }
+    region {
+        countryName
+    }
 }
 
 mutation RegistrationsToggleMutation($eventWhere: ClearEventWhereUniqueInput!, $data: Boolean!) {

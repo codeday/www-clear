@@ -44,7 +44,6 @@ export default function Event({event}) {
                       venue={event.venue}
                       buttons={!event.venue && <CreateVenueModal event={event}><Icon.UiAdd/></CreateVenueModal>}
                     >
-                        {!event.venue && <Alert>No Venue</Alert>}
                     </VenueInfo>
                     <RegistrationsToggleWithChecklist event={event}/>
                     <SponsorOverview
