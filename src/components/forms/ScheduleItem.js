@@ -21,6 +21,12 @@ const schema = {
         type: {
             type: 'string',
             title: 'Type',
+            examples: [
+              "Workshop",
+              "Activity",
+              "Meal",
+              "Deadline",
+            ]
         },
         description: {
             type: 'string',
@@ -62,7 +68,7 @@ const schema = {
         },
         finalized: {
             type: 'boolean',
-            title: 'Finalized',
+            title: 'Published',
         },
         internal: {
             type: 'boolean',
@@ -76,13 +82,13 @@ const schema = {
 
 const uiSchema = {
     type: {
-        'ui:help': 'What kind of Schedule Item is this? (Workshop, Activity, Deadline, Meal, etc)',
+        'ui:help': 'What kind of Schedule Item is this?',
     },
     finalized: {
-        'ui:help': 'Non-finalized items will not be displayed on the public event schedule',
+        'ui:help': 'Is this schedule item ready to be displayed on the event website?',
     },
     internal: {
-        'ui:help': 'Internal Schedule Items are only shown to volunteers and staff',
+        'ui:help': 'Internal Schedule Items are only shown to volunteers and staff. An internal event must still be marked as "published" to be displayed internally',
     },
 };
 
