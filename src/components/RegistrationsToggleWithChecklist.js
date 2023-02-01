@@ -93,7 +93,7 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
       checklist: [
         {
           name: "Create a promo code",
-          description: "Very few CodeDay attendees end up paying full price, and this is 100% intended! We reccommend creating different promo codes for different schools/groups/etc you reach out to, this helps them feel special, as well as helps you track the most effective outreach methods!",
+          description: "Very few CodeDay attendees end up paying full price, and this is 100% intended! We recommend creating different promo codes for different schools/groups/etc you reach out to, this helps them feel special, as well as helps you track the most effective outreach methods!",
           check: Boolean(event.promoCodes.length > 0)
         },
         {
