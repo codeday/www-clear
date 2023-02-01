@@ -7,9 +7,9 @@ export default function ContactBox({
                                    }) {
     return (
         <InfoBox heading="Contact" {...props}>
-            <Icon.IdCard/>{name}<br/>
-            <Icon.Email/>{email}<br/>
-            <Icon.DevicePhone/>{phone}{children ? <br/> : null}
+            <Icon.IdCard/> {name}<br/>
+            <Icon.Email/> {email}<br/>
+            <Icon.DevicePhone/> {phone}{children ? <br/> : null}
             {children}
         </InfoBox>
     );
