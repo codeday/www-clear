@@ -1,4 +1,4 @@
-fragment EventRestrictionBoxFragment on ClearEventRestriction {
+fragment EventRestrictionBoxFragment on CmsEventRestriction {
     id
     name
 }

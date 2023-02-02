@@ -22,13 +22,20 @@ query getEventQuery($data: ClearEventWhereUniqueInput!) {
             }
             region {
               currencySymbol
+              localizationConfig {
+                requiredEventRestrictions {
+                    items {
+                        ...EventRestrictionBoxFragment
+                    }
+                }
+              }
+            }
+            newEventRestrictions {
+                ...EventRestrictionBoxFragment
             }
             venue {
                 ...VenueInfoFragment
                 ...VenueFormFragment
-            }
-            eventRestrictions {
-                ...EventRestrictionBoxFragment
             }
             ...RegistrationsToggleWithChecklistFragment
             ...SponsorOverviewFragment

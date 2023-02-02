@@ -90,7 +90,10 @@ export default function Event({event}) {
                       }
                     />
                     <EventRestrictionBox
-                        restrictions={event.eventRestrictions}
+                        restrictions={[
+                            ...(event?.region?.localizationConfig?.requiredEventRestrictions?.items || []),
+                            ...event.newEventRestrictions
+                        ]}
                         buttons={
                             <Button h={6} as="a" href={`${event.id}/eventRestrictions`}>
                                 <Icon.Eye />

@@ -21,7 +21,7 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
     const [formData, setFormData] = useState(restrictions.reduce((prev, curr) => {
         return {
             ...prev,
-            [curr.id]: event.eventRestrictions.filter(restriction => restriction.id === curr.id).length > 0
+            [curr.id]: (event.contentfulEventRestrictions || []).filter(restriction => restriction.id === curr.id).length > 0
         }}, {}))
     const router = useRouter();
     return (
@@ -53,7 +53,7 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
                                 print(UpdateEventRestrictionsMutation),
                                 {
                                     where: {id: event.id},
-                                    restrictions: {set: setQuery}
+                                    restrictions: {set: setQuery.map(e => e.id)}
                                 }
                             )
                             await router.replace(router.asPath)

@@ -1,11 +1,11 @@
-fragment LinkEventRestrictionsModalFragment on ClearEventRestriction {
+fragment LinkEventRestrictionsModalFragment on CmsEventRestriction {
         id
         name
 }
 
-mutation UpdateEventRestrictionsMutation($where: ClearEventWhereUniqueInput! $restrictions: ClearEventRestrictionUpdateManyWithoutEventsInput! ) {
+mutation UpdateEventRestrictionsMutation($where: ClearEventWhereUniqueInput! $restrictions: ClearEventUpdatecontentfulEventRestrictionsInput! ) {
         clear {
-                updateEvent(where: $where, data: {eventRestrictions: $restrictions}) {
+                updateEvent(where: $where, data: {contentfulEventRestrictions: $restrictions}) {
                         id
                 }
         }

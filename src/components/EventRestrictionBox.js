@@ -4,6 +4,7 @@ import {InfoAlert} from "./Alert";
 import {Box} from "@codeday/topo/Atom";
 
 export default function EventRestrictionBox({restrictions, children, ...props}) {
+    console.log(restrictions);
     return (
         <InfoBox heading="Event Restrictions" headingSize="xl" {...props}>
             <Box pl={4}>
