@@ -11,6 +11,7 @@ import {useFetcher} from "../fetch";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
 export default function LinkEventRestrictionsModal({event, restrictions, requiredRestrictions, children, ...props}) {
+    console.log(requiredRestrictions)
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false)
     const onOpenModal = () => setOpen(true);
@@ -38,9 +39,10 @@ export default function LinkEventRestrictionsModal({event, restrictions, require
                 {restrictions.map((r) => (
                         <Checkbox
                             d="block"
-                            isChecked={formData[r.id] || requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            isChecked={formData[r.id]}
+                            isReadOnly={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            isRequired={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             onChange={(e) => {setFormData({...formData, [r.id]:!formData[r.id]})}}
-                            disabled={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                         >
                             {r.name}
                         </Checkbox>
