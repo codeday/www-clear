@@ -28,6 +28,7 @@ import MetadataBox from '../../../components/MetadataBox';
 
 export default function Event({event}) {
     if (!event) return <Page/>;
+    console.log(event.cmsEventRestrictions)
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event}/>
@@ -92,7 +93,7 @@ export default function Event({event}) {
                     <EventRestrictionBox
                         restrictions={[
                             ...(event?.region?.localizationConfig?.requiredEventRestrictions?.items || []),
-                            ...event.newEventRestrictions
+                            ...event.cmsEventRestrictions
                         ]}
                         buttons={
                             <Button h={6} as="a" href={`${event.id}/eventRestrictions`}>

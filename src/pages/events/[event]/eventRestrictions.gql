@@ -6,7 +6,7 @@ query GetEventRestrictionsQuery($data: ClearEventWhereUniqueInput!) {
         event(where: $data) {
             id
             name
-            newEventRestrictions {
+            cmsEventRestrictions {
                 id
                 name
             }

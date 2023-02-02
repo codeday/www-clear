@@ -25,12 +25,16 @@ query getEventQuery($data: ClearEventWhereUniqueInput!) {
               localizationConfig {
                 requiredEventRestrictions {
                     items {
+                        id
+                        name
                         ...EventRestrictionBoxFragment
                     }
                 }
               }
             }
-            newEventRestrictions {
+            cmsEventRestrictions {
+                id
+                name
                 ...EventRestrictionBoxFragment
             }
             venue {

@@ -10,7 +10,7 @@ import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function LinkEventRestrictionsModal({event, restrictions, children, ...props}) {
+export default function LinkEventRestrictionsModal({event, restrictions, requiredRestrictions, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false)
     const onOpenModal = () => setOpen(true);
@@ -21,8 +21,12 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
     const [formData, setFormData] = useState(restrictions.reduce((prev, curr) => {
         return {
             ...prev,
-            [curr.id]: (event.contentfulEventRestrictions || []).filter(restriction => restriction.id === curr.id).length > 0
+            [curr.id]: (
+                (event.cmsEventRestrictions || []).filter(restriction => restriction.id === curr.id).length > 0
+                && !((requiredRestrictions || []).filter(restriction => restriction.id === curr.id).length > 0)
+            ),
         }}, {}))
+
     const router = useRouter();
     return (
         <Box d="inline" {...props}>
@@ -34,8 +38,9 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
                 {restrictions.map((r) => (
                         <Checkbox
                             d="block"
-                            isChecked={formData[r.id]}
+                            isChecked={formData[r.id] || requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             onChange={(e) => {setFormData({...formData, [r.id]:!formData[r.id]})}}
+                            disabled={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                         >
                             {r.name}
                         </Checkbox>

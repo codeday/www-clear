@@ -12,6 +12,7 @@ import InfoBox from "../../../components/InfoBox";
 
 export default function EventRestrictions({event, restrictions}) {
     const requiredRestrictions = event?.region?.localizationConfig?.requiredEventRestrictions?.items || [];
+    console.log(event.region);
     if (!event) return <Page />
     return (
         <Page title={event.name}>
@@ -21,7 +22,7 @@ export default function EventRestrictions({event, restrictions}) {
             <ResponsiveMasonry>
                 <Masonry>
                     {[
-                        ...event.newEventRestrictions,
+                        ...event.cmsEventRestrictions,
                         ...requiredRestrictions,
                     ].map((r) => <InfoBox heading={r.name}><EventRestrictionPreview eventRestriction={r} /></InfoBox>)}
                 </Masonry>

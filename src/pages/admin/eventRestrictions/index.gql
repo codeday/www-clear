@@ -1,9 +1,0 @@
-#import "../../../components/EventRestriction.gql"
-
-query getEventRestrictionsQuery {
-    clear {
-        eventRestrictions {
-            ...EventRestrictionFragment
-        }
-    }
-}
