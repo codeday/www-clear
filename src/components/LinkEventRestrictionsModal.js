@@ -39,7 +39,9 @@ export default function LinkEventRestrictionsModal({event, restrictions, require
                 {restrictions.map((r) => (
                         <Checkbox
                             d="block"
-                            isChecked={formData[r.id] || requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            isChecked={formData[r.id]}
+                            isReadOnly={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            isRequired={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             onChange={(e) => {setFormData({...formData, [r.id]:!formData[r.id]})}}
                             disabled={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             colorScheme={requiredRestrictions.filter(rq => rq.id === r.id).length > 0 ? 'red' : 'blue'}
