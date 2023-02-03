@@ -11,15 +11,19 @@ import LinkEventRestrictionsModal from "../../../components/LinkEventRestriction
 import InfoBox from "../../../components/InfoBox";
 
 export default function EventRestrictions({event, restrictions}) {
+    const requiredRestrictions = event?.region?.localizationConfig?.requiredEventRestrictions?.items || [];
     if (!event) return <Page />
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event} />
             <Heading d="inline">{event.name} ~ Event Restrictions</Heading>
-            <LinkEventRestrictionsModal event={event} restrictions={restrictions} />
+            <LinkEventRestrictionsModal event={event} restrictions={restrictions.items} requiredRestrictions={requiredRestrictions} />
             <ResponsiveMasonry>
                 <Masonry>
-                    {event.eventRestrictions.map((r) => <InfoBox heading={r.name}><EventRestrictionPreview eventRestriction={r} /></InfoBox>)}
+                    {[
+                        ...event.cmsEventRestrictions,
+                        ...requiredRestrictions,
+                    ].map((r) => <InfoBox heading={r.name}><EventRestrictionPreview eventRestriction={r} /></InfoBox>)}
                 </Masonry>
             </ResponsiveMasonry>
         </Page>
@@ -34,7 +38,7 @@ export async function getServerSideProps({req, res, query: {event: eventId}}) {
     return {
         props: {
             event: eventResults.clear.event,
-            restrictions: eventResults.clear.eventRestrictions
+            restrictions: eventResults.cms.eventRestrictions
         }
     }
 

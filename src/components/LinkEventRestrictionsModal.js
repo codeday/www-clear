@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useRouter} from "next/router";
-import {Box, Button, Checkbox, Heading} from "@codeday/topo/Atom";
+import {Box, Button, Checkbox, Heading, Text} from "@codeday/topo/Atom";
 import * as Icon from "@codeday/topocons/Icon";
 import {Modal} from "react-responsive-modal";
 import {print} from "graphql";
@@ -10,7 +10,7 @@ import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function LinkEventRestrictionsModal({event, restrictions, children, ...props}) {
+export default function LinkEventRestrictionsModal({event, restrictions, requiredRestrictions, children, ...props}) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false)
     const onOpenModal = () => setOpen(true);
@@ -21,21 +21,30 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
     const [formData, setFormData] = useState(restrictions.reduce((prev, curr) => {
         return {
             ...prev,
-            [curr.id]: event.eventRestrictions.filter(restriction => restriction.id === curr.id).length > 0
+            [curr.id]: (
+                (event.cmsEventRestrictions || []).filter(restriction => restriction.id === curr.id).length > 0
+                && !((requiredRestrictions || []).filter(restriction => restriction.id === curr.id).length > 0)
+            ),
         }}, {}))
+
     const router = useRouter();
     return (
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
-                <Heading m={2}>
+                <Heading m={2} mb={0}>
                     Event Restrictions for {event.name}
                 </Heading>
+                <Text mb={2}>(Red checkmarks are required for your location and cannot be disabled.)</Text>
                 {restrictions.map((r) => (
                         <Checkbox
                             d="block"
                             isChecked={formData[r.id]}
+                            isReadOnly={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            isRequired={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             onChange={(e) => {setFormData({...formData, [r.id]:!formData[r.id]})}}
+                            disabled={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            colorScheme={requiredRestrictions.filter(rq => rq.id === r.id).length > 0 ? 'red' : 'blue'}
                         >
                             {r.name}
                         </Checkbox>
@@ -53,7 +62,7 @@ export default function LinkEventRestrictionsModal({event, restrictions, childre
                                 print(UpdateEventRestrictionsMutation),
                                 {
                                     where: {id: event.id},
-                                    restrictions: {set: setQuery}
+                                    restrictions: {set: setQuery.map(e => e.id)}
                                 }
                             )
                             await router.replace(router.asPath)

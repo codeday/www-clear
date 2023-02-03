@@ -6,9 +6,6 @@ export default function Index() {
         <Page slug="/admin">
             <ul>
                 <li>
-                    <Link href="admin/eventRestrictions">Event Restrictions</Link>
-                </li>
-                <li>
                     <Link href="admin/emailTemplates">Email templates</Link>
                 </li>
             </ul>

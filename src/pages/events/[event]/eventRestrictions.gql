@@ -6,12 +6,28 @@ query GetEventRestrictionsQuery($data: ClearEventWhereUniqueInput!) {
         event(where: $data) {
             id
             name
-            eventRestrictions {
-                ...EventRestrictionFragment
+            cmsEventRestrictions {
+                id
+                name
+            }
+            region {
+                localizationConfig {
+                    requiredEventRestrictions {
+                        items {
+                            id
+                            name
+                        }
+                    }
+                }
             }
         }
+    }
+
+    cms {
         eventRestrictions {
-            ...LinkEventRestrictionsModalFragment
+            items {
+                ...LinkEventRestrictionsModalFragment
+            }
         }
     }
 }
