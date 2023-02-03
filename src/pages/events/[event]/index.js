@@ -28,7 +28,6 @@ import MetadataBox from '../../../components/MetadataBox';
 
 export default function Event({event}) {
     if (!event) return <Page/>;
-    console.log(event.cmsEventRestrictions)
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event}/>

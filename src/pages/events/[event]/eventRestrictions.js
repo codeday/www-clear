@@ -12,7 +12,6 @@ import InfoBox from "../../../components/InfoBox";
 
 export default function EventRestrictions({event, restrictions}) {
     const requiredRestrictions = event?.region?.localizationConfig?.requiredEventRestrictions?.items || [];
-    console.log(event.region);
     if (!event) return <Page />
     return (
         <Page title={event.name}>

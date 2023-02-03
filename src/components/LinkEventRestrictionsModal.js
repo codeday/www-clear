@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useRouter} from "next/router";
-import {Box, Button, Checkbox, Heading} from "@codeday/topo/Atom";
+import {Box, Button, Checkbox, Heading, Text} from "@codeday/topo/Atom";
 import * as Icon from "@codeday/topocons/Icon";
 import {Modal} from "react-responsive-modal";
 import {print} from "graphql";
@@ -32,15 +32,17 @@ export default function LinkEventRestrictionsModal({event, restrictions, require
         <Box d="inline" {...props}>
             <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
-                <Heading m={2}>
+                <Heading m={2} mb={0}>
                     Event Restrictions for {event.name}
                 </Heading>
+                <Text mb={2}>(Red checkmarks are required for your location and cannot be disabled.)</Text>
                 {restrictions.map((r) => (
                         <Checkbox
                             d="block"
                             isChecked={formData[r.id] || requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             onChange={(e) => {setFormData({...formData, [r.id]:!formData[r.id]})}}
                             disabled={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
+                            colorScheme={requiredRestrictions.filter(rq => rq.id === r.id).length > 0 ? 'red' : 'blue'}
                         >
                             {r.name}
                         </Checkbox>
