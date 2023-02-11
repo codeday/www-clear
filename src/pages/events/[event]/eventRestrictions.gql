@@ -9,6 +9,10 @@ query GetEventRestrictionsQuery($data: ClearEventWhereUniqueInput!) {
             cmsEventRestrictions {
                 id
                 name
+                details
+                icon {
+                    url
+                }
             }
             region {
                 localizationConfig {

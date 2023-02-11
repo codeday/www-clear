@@ -132,7 +132,7 @@ export function EventRestrictionPreview({eventRestriction, ...props}) {
     return (
             <Box>
                 <Image
-                    src={eventRestriction.iconUri}
+                    src={eventRestriction.icon.url}
                     width={24}
                     display="block"
                     ml="auto"
