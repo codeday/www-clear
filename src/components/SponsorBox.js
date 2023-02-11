@@ -46,7 +46,7 @@ export default function SponsorBox({sponsor, currencySymbol, children, ...props}
                     Perks: {sponsor.perks}
                 </InfoBox>
                 <ContactBox name={sponsor.contactName} email={sponsor.contactEmail} phone={sponsor.contactPhone}/>
-                <InfoBox heading="Logo">
+                <InfoBox heading="Logo" backgroundColor="gray.100">
                     <Image src={logoUrl} onClick={() => logoUploaderRef.current.click()} />
                     <input
                         type="file"
@@ -97,7 +97,7 @@ export default function SponsorBox({sponsor, currencySymbol, children, ...props}
                         </Button>
                     </> : null}
                 </InfoBox>
-                <InfoBox heading="Logo (Dark Mode)">
+                <InfoBox heading="Logo (Dark Mode)" backgroundColor="gray.1200">
                     <Image src={darkLogoUrl} onClick={() => darkLogoUploaderRef.current.click()} />
                     <input
                         type="file"
