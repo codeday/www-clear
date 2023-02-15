@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {DateTime} from 'luxon';
 import {Box, Grid, Heading, List, ListItem, Text, Spinner} from "@codeday/topo/Atom";
+import {useColorModeValue} from '@codeday/topo/Theme'
 import {Select} from 'chakra-react-select';
 import {useHotkeys} from 'react-hotkeys-hook';
 import {getSession} from 'next-auth/react';
@@ -44,6 +45,17 @@ export default function Events({ eventGroups, isAdmin }) {
           boxShadow="base"
           options={events}
           placeholder="Search Events"
+          chakraStyles={{
+            menuList: (provided) => ({
+              ...provided,
+              background: useColorModeValue('white', 'gray.1100'),
+            }),
+            option: (provided, state) => ({
+              ...provided,
+              bg: state.isFocused? useColorModeValue('gray.100', 'gray.800') : useColorModeValue('white', 'gray.1100')
+            })
+            }
+          }
           components={{
             DropdownIndicator: () => (<><Kbd>ctrl</Kbd> + <Kbd>K</Kbd></>)
           }}
