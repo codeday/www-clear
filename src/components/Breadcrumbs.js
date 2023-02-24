@@ -39,7 +39,7 @@ export default function Breadcrumbs({
     return (
         <Breadcrumb color="gray.500">
             {/* <BreadcrumbItem> */}
-            {/*    <BreadcrumbLink href="/" d="flex"> */}
+            {/*    <BreadcrumbLink href="/" display="flex"> */}
             {/*        CLEAR */}
             {/*    </BreadcrumbLink> */}
             {/* </BreadcrumbItem> */}

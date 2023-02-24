@@ -5,7 +5,7 @@ import {useColorModeValue} from "@codeday/topo/Theme";
 export default function Badge({children, ...props}) {
     return (
         <Box
-            d="inline-flex"
+            display="inline-flex"
             alignItems="center"
             bg={useColorModeValue("gray.200", "gray.800")}
             color={useColorModeValue("gray.800", "gray.200")}

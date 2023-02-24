@@ -150,8 +150,8 @@ export function UpdateVenueModal({venue, children, ...props}) {
     }
 
     return (
-        <Box d="inline" {...props}>
-            <Button h={6} d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button h={6} display="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     schema={schema}
@@ -195,8 +195,8 @@ export function DeleteVenueModal({venue, children, ...props}) {
     const router = useRouter();
 
     return (
-        <Box d="inline">
-            <Button h={6} d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
+        <Box display="inline">
+            <Button h={6} display="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Venue</Heading>
                 <Text>Are you sure you want to delete this venue?

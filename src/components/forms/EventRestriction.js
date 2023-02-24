@@ -106,8 +106,8 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
     }
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
@@ -150,8 +150,8 @@ export function DeleteEventRestrictionModal({eventrestriction, children, ...prop
     const router = useRouter();
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove EventRestriction</Heading>
                 <Text>Are you sure you want to delete this Event Restriction?

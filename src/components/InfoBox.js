@@ -5,7 +5,7 @@ import {useColorModeValue} from "@codeday/topo/Theme";
 export default function InfoBox({children, heading, subHeading, headingSize, buttons, nested, ...props}) {
     return (
       <Box
-        d="block"
+        display="block"
         borderWidth={0}
         rounded={nested ? 1 : 3}
         boxShadow="base"

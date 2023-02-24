@@ -4,18 +4,18 @@ import InfoBox from "./InfoBox";
 function MetadataItem({ mKey, value, ...props }) {
   if (typeof value === 'undefined' || value === null) return (
     <ListItem {...props}>
-        <Text fontFamily="mono" d="inline">null</Text>
+        <Text fontFamily="mono" display="inline">null</Text>
     </ListItem>
   );
   return (
     <ListItem {...props}>
-      {mKey && <Text fontWeight="bold" d="inline">{mKey}: </Text>}
+      {mKey && <Text fontWeight="bold" display="inline">{mKey}: </Text>}
       {typeof value === 'object'
         ? (
           <List pl={4} styleType="disc">
             {Object.keys(value).map((k) => <MetadataItem key={k} mKey={k} value={value[k]} />)}
           </List>
-        ) : <Text fontFamily="mono" d="inline">{value}</Text>
+        ) : <Text fontFamily="mono" display="inline">{value}</Text>
       }
     </ListItem>
   );

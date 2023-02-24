@@ -66,8 +66,8 @@ export default function Page({
                 </Content>
                 <Footer repository="www-clear" branch="master" mt={16}>
                   <CustomLinks>
-                    <Link href="/events" d="block">Events</Link>
-                    <Link href="/token" d="block">API Token</Link>
+                    <Link href="/events" display="block">Events</Link>
+                    <Link href="/token" display="block">API Token</Link>
                   </CustomLinks>
                 </Footer>
             </Box>

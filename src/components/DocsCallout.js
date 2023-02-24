@@ -6,7 +6,7 @@ import { FileDoc } from '@codeday/topocons/Icon'
 export default function DocsCallout({children, ...props}) {
   return (
     <Box
-      d="inline-flex"
+      display="inline-flex"
       alignItems="center"
       p={1}
       px={2}
@@ -18,7 +18,7 @@ export default function DocsCallout({children, ...props}) {
       {...props}
     >
       <HStack>
-        <Box d="inline-block">
+        <Box display="inline-block">
           <FileDoc />
         </Box>
         <Box>

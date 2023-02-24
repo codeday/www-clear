@@ -75,7 +75,7 @@ export function CreateSponsorModal({event, children, ...props}) {
     const router = useRouter();
 
     return (
-        <Box d="inline" {...props}>
+        <Box display="inline" {...props}>
             <Button h={6} onClick={onOpenModal}>{children || <><Icon.UiAdd/>Add Sponsor</>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Create Sponsor</Heading>
@@ -143,8 +143,8 @@ export function UpdateSponsorModal(
     }
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
@@ -193,8 +193,8 @@ export function DeleteSponsorModal(
     const router = useRouter();
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Sponsor</Heading>
                 <Text>Are you sure you want to delete this Sponsor?

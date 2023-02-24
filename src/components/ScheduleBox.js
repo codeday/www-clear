@@ -9,13 +9,13 @@ export default function ({schedule, children, ...props}) {
     return (
         <InfoBox heading="Schedule" headingSize="xl" {...props}>
             <Box>
-                <Heading d="inline" color="green">{finalizedExternalEvents.length}</Heading> Published Events
+                <Heading display="inline" color="green">{finalizedExternalEvents.length}</Heading> Published Events
             </Box>
             <Box>
-                <Heading d="inline" color="orange">{nonfinalizedExternalEvents.length}</Heading> Unpublished Events
+                <Heading display="inline" color="orange">{nonfinalizedExternalEvents.length}</Heading> Unpublished Events
             </Box>
             <Box>
-                <Heading d="inline" color="purple">{internalEvents.length}</Heading> Internal Events
+                <Heading display="inline" color="purple">{internalEvents.length}</Heading> Internal Events
             </Box>
             {children}
         </InfoBox>

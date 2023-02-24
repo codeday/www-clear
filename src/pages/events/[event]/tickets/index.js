@@ -100,9 +100,9 @@ export default function Tickets({ event }) {
     <Page title={event.name}>
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets</Heading>
-      <CreateTicketModal event={event} d="inline" pr={4} />
+      <CreateTicketModal event={event} display="inline" pr={4} />
       <CSVExport
-        d="inline"
+        display="inline"
         mr={4}
         data={csv}
         headers={headers}

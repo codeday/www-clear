@@ -167,8 +167,8 @@ export function UpdateTicketModal({ticket, children, ...props}) {
     }
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icons.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children || <Icons.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
@@ -213,8 +213,8 @@ export function DeleteTicketModal({ticket, children, ...props}) {
     const router = useRouter();
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icons.UiTrash/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children || <Icons.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Ticket</Heading>
                 <Text>Are you sure you want to delete this Ticket?

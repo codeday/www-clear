@@ -59,7 +59,7 @@ export default function Calendar({
                                 return (
                                     <Box
                                         as="a"
-                                        d="block"
+                                        display="block"
                                         href={`schedule/${e.id}`}
                                         m={1}
                                         ml={10}
@@ -69,7 +69,7 @@ export default function Calendar({
                                         backgroundColor={`${baseColor}.50`}
                                     >
                                         <Box
-                                            d="inline-block"
+                                            display="inline-block"
                                             p={2}
                                             pb={1}
                                             color={`${baseColor}.800`}
@@ -82,7 +82,7 @@ export default function Calendar({
                                             {e.type || 'Event'}
                                         </Box>
                                         <Box
-                                            d="inline-block"
+                                            display="inline-block"
                                             pl={2}
                                             pr={2}
                                             pb={1}
@@ -93,7 +93,7 @@ export default function Calendar({
                                         >
                                             {e.name || 'TBA'}
                                         </Box>
-                                        <Text d="inline" m={2} color="black">{e.displayTime}</Text>
+                                        <Text display="inline" m={2} color="black">{e.displayTime}</Text>
                                         <Box m={4}>
                                             <Box color="black"><b>{e.hostName}</b>{e.hostPronoun ? `(${e.hostPronoun})` : null}</Box>
                                             {e.internal ? <InfoAlert>Internal</InfoAlert> : e.finalized ?

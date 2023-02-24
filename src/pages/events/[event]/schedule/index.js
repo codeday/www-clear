@@ -14,7 +14,7 @@ export default function Schedule({event}) {
         <Page title={event.name}>
             <Breadcrumbs event={event}/>
             <Heading>{event.name} - Schedule <CreateScheduleItemModal event={event}/> </Heading>
-            <Box d="inline-block">
+            <Box display="inline-block">
                 <Calendar event={event}/>
             </Box>
         </Page>

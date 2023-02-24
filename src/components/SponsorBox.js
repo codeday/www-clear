@@ -32,7 +32,7 @@ export default function SponsorBox({sponsor, currencySymbol, children, ...props}
             id={sponsor.id}
             heading={(
                 <>
-                    {sponsor.name}<Box d="inline-block"><UpdateSponsorModal sponsor={sponsor}/><DeleteSponsorModal
+                    {sponsor.name}<Box display="inline-block"><UpdateSponsorModal sponsor={sponsor}/><DeleteSponsorModal
                     sponsor={sponsor}/></Box>
                 </>
             )}

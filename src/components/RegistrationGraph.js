@@ -71,7 +71,7 @@ export default function RegistrationGraph({ event, children, ...props }) {
                   </Box>
                 )}</SizeMe>
             )}
-            {event.interestedEmails.length} pre-registrations <Button as="a" href={`${event.id}/preRegistrations`} d="inline"><Eye /></Button>
+            {event.interestedEmails.length} pre-registrations <Button as="a" href={`${event.id}/preRegistrations`} display="inline"><Eye /></Button>
         </InfoBox>
     );
 }

@@ -29,8 +29,8 @@ export default function LinkEventRestrictionsModal({event, restrictions, require
 
     const router = useRouter();
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading m={2} mb={0}>
                     Event Restrictions for {event.name}
@@ -38,7 +38,7 @@ export default function LinkEventRestrictionsModal({event, restrictions, require
                 <Text mb={2}>(Red checkmarks are required for your location and cannot be disabled.)</Text>
                 {restrictions.map((r) => (
                         <Checkbox
-                            d="block"
+                            display="block"
                             isChecked={formData[r.id]}
                             isReadOnly={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}
                             isRequired={requiredRestrictions.filter(rq => rq.id === r.id).length > 0}

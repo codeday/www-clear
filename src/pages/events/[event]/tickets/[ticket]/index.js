@@ -25,7 +25,7 @@ export default function TicketPage({ticket}) {
         <Page>
             <Breadcrumbs event={ticket.event} ticket={ticket}/>
             <Confidential />
-            <Heading d="inline"><Ticket />{ticket.firstName} {ticket.lastName}</Heading>
+            <Heading display="inline"><Ticket />{ticket.firstName} {ticket.lastName}</Heading>
             <TicketTypeBadge ml={2} ticket={ticket}/>
             <UpdateTicketModal ticket={ticket}/>
             <DeleteTicketModal ticket={ticket}/>
@@ -41,11 +41,11 @@ export default function TicketPage({ticket}) {
                     {ticket.age < 18? (
                         <InfoBox
                             heading={<>
-                                <Text d="inline">Guardian details</Text>
+                                <Text display="inline">Guardian details</Text>
                                 {ticket.guardian? <>
                                         <UpdateGuardianModal guardian={ticket.guardian}/>
                                     <DeleteGuardianModal guardian={ticket.guardian} />
-                                </>: <CreateGuardianModal ticket={ticket} d="inline"><UiAdd /></CreateGuardianModal>}
+                                </>: <CreateGuardianModal ticket={ticket} display="inline"><UiAdd /></CreateGuardianModal>}
                             </>}>
                             {ticket.guardian? (
                                     <>

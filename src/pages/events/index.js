@@ -101,7 +101,7 @@ export default function Events({ eventGroups, isAdmin }) {
                   ))}
                 </Grid>
               </Box>
-              <Box d={{ base: 'none', lg: hasOther ? 'block' : 'none'}}>
+              <Box display={{ base: 'none', lg: hasOther ? 'block' : 'none'}}>
                 <Heading as="h3" fontSize="lg" mb={2}>
                   {eg.otherEvents.length} more this season:
                 </Heading>

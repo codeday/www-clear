@@ -144,8 +144,8 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
     }
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children ? children : <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
@@ -204,8 +204,8 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
     const router = useRouter();
 
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children ? children : <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove PromoCode</Heading>
                 <Text>Are you sure you want to delete this Promo Code?
@@ -243,7 +243,7 @@ export function CreateScholarshipCodeButton({event, children, ...props}) {
 
     return (
         <Button
-            d="inline"
+            display="inline"
             isLoading={loading}
             disabled={loading}
             onClick={async () => {

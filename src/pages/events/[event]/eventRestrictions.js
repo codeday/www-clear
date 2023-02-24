@@ -16,7 +16,7 @@ export default function EventRestrictions({event, restrictions}) {
     return (
         <Page title={event.name}>
             <Breadcrumbs event={event} />
-            <Heading d="inline">{event.name} ~ Event Restrictions</Heading>
+            <Heading display="inline">{event.name} ~ Event Restrictions</Heading>
             <LinkEventRestrictionsModal event={event} restrictions={restrictions.items} requiredRestrictions={requiredRestrictions} />
             <ResponsiveMasonry>
                 <Masonry>

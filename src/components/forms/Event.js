@@ -206,8 +206,8 @@ export function UpdateEventModal({event, children, ...props}) {
         return ret;
     }
     return (
-        <Box d="inline" {...props}>
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
+        <Box display="inline" {...props}>
+            <Button display="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
@@ -252,8 +252,8 @@ export function DeleteEventModal({event, children, ...props}) {
     const router = useRouter();
 
     return (
-        <Box d="inline">
-            <Button d="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
+        <Box display="inline">
+            <Button display="inline" onClick={onOpenModal}>{children || <Icon.UiTrash/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Heading>Remove Event</Heading>
                 <Text>Are you sure you want to delete this event?
