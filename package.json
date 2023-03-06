@@ -14,10 +14,10 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.5.1",
-    "@codeday/topo": "^9.1.1",
+    "@codeday/topo": "^9.2.0",
+    "@codeday/topocons": "^2.0.2",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
-    "@codeday/topocons": "^1.5.0",
     "@emotion/utils": "1.0.0",
     "@headwayapp/react-widget": "^0.0.4",
     "@rjsf/antd": "^3.1.0",
@@ -72,6 +72,8 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-next": "11.1.0",
+    "eslint-import-resolver-exports": "^1.0.0-beta.5",
+    "formdata-node": "^5.0.0",
     "npm-check": "^5.9.2"
   }
 }

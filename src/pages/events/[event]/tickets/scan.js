@@ -1,32 +1,32 @@
-import React, { useState } from "react";
-import dynamic from "next/dynamic";
-import Page from "../../../../components/Page";
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
   Button,
   TextInput,
   InputGroup,
   InputRightElement,
   FormControl,
-} from "@codeday/topo/Atom";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { useColorModeValue } from "@codeday/topo/Theme";
-import Ticket from "../../../../components/Ticket";
-import { getEventWithTickets } from "./scan.gql";
-import { getSession } from "next-auth/react";
-import { getFetcher } from "../../../../fetch";
-import UiSearch from "@codeday/topocons/Icon/UiSearch";
+} from '@codeday/topo/Atom';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { useColorModeValue } from '@codeday/topo/Theme';
+import { getSession } from 'next-auth/react';
+import { UiSearch } from '@codeday/topocons';
+import Ticket from '../../../../components/Ticket';
+import { getEventWithTickets } from './scan.gql';
+import { getFetcher } from '../../../../fetch';
+import Page from '../../../../components/Page';
 
 const BarcodeScannerComponent = dynamic(
-  () => import("react-qr-barcode-scanner"),
-  { ssr: false }
+  () => import('react-qr-barcode-scanner'),
+  { ssr: false },
 );
 
 export default function Scan({ event }) {
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [tickets, setTickets] = useState(null);
 
   const [stopStream, setStopStream] = useState(false);
@@ -41,9 +41,7 @@ export default function Scan({ event }) {
         onSubmit={(e) => {
           e.preventDefault();
           setTickets(
-            event?.tickets?.filter((ticket) =>
-              ticket.lastName.toLowerCase().startsWith(search.toLowerCase())
-            )
+            event?.tickets?.filter((ticket) => ticket.lastName.toLowerCase().startsWith(search.toLowerCase())),
           );
         }}
       >
@@ -64,7 +62,7 @@ export default function Scan({ event }) {
         </FormControl>
       </form>
       <Button
-        w={"100%"}
+        w="100%"
         onClick={() => {
           setOpen(true);
         }}
@@ -72,13 +70,13 @@ export default function Scan({ event }) {
         Scan New Ticket
       </Button>
 
-      {tickets &&
-        event &&
-        tickets?.length > 0 &&
-        tickets.map((ticket) => (
-          <Ticket ticket={ticket} eventId={event?.id}></Ticket>
+      {tickets
+        && event
+        && tickets?.length > 0
+        && tickets.map((ticket) => (
+          <Ticket ticket={ticket} eventId={event?.id} />
         ))}
-      {tickets && event && !(tickets?.length > 0) && "Ticket not found"}
+      {tickets && event && tickets?.length <= 0 && 'Ticket not found'}
 
       <Modal
         open={open}
@@ -87,8 +85,8 @@ export default function Scan({ event }) {
         styles={{
           modal: {
             background: useColorModeValue(
-              "white",
-              "var(--chakra-colors-gray-1100)"
+              'white',
+              'var(--chakra-colors-gray-1100)',
             ),
           },
         }}
@@ -98,7 +96,7 @@ export default function Scan({ event }) {
             if (result) {
               setTickets([
                 event.tickets.find((ticket) => ticket.id == result.getText()),
-              ].filter(n => n));
+              ].filter((n) => n));
               setOpen(false);
               dismissQrReader();
             }

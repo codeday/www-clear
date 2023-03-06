@@ -1,7 +1,6 @@
-import React from 'react'
-import {Box} from '@codeday/topo/Atom';
-import { useColorModeValue } from '@codeday/topo/Theme'
-
+import React from 'react';
+import { Box } from '@codeday/topo/Atom';
+import { useColorModeValue } from '@codeday/topo/Theme';
 
 // I was too lazy to update topo and export this so just made one myself
 export default function Kbd({ children, ...props }) {
@@ -21,5 +20,5 @@ export default function Kbd({ children, ...props }) {
     >
       {children}
     </Box>
-  )
+  );
 }

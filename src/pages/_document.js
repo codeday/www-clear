@@ -1,5 +1,7 @@
 import React from 'react';
-import Document, {Head, Html, Main, NextScript,} from 'next/document';
+import Document, {
+  Head, Html, Main, NextScript,
+} from 'next/document';
 import { ColorModeScript } from '@codeday/topo/Theme';
 
 export default class CustomDocument extends Document {
