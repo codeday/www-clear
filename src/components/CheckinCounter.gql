@@ -1,0 +1,39 @@
+query getCheckinCountsQuery($data: ClearEventWhereUniqueInput!) {
+  clear {
+    event(where: $data) {
+      venue { capacity }
+      notCheckedInStudents: tickets(where:{
+        AND: [
+          { type: { equals: STUDENT } },
+          { OR: [ { checkedIn: { equals: null } }, { checkedOut: { not: { equals: null } } } ]}
+        ]
+      }) {
+        id
+      }
+      checkedInStudents: tickets(where: {
+        AND: [
+          { type: { equals: STUDENT } },
+          { AND: [ { checkedIn: { not: { equals: null } } }, { checkedOut: { equals: null } } ]}
+        ]
+      }) {
+        id
+      }
+      notCheckedInStaff: tickets(where: {
+        AND: [
+          { type: { not: { equals: STUDENT } } },
+          { OR: [ { checkedIn: { equals: null } }, { checkedOut: { not: { equals: null } } } ]}
+        ]
+      }) {
+        id
+      }
+      checkedInStaff: tickets(where: {
+        AND: [
+          { type: { not: { equals: STUDENT } } },
+          { AND: [ { checkedIn: { not: { equals: null } } }, { checkedOut: { equals: null } } ]}
+        ]
+      }) {
+        id
+      }
+    }
+  }
+}

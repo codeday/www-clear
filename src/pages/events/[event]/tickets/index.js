@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { getSession } from "next-auth/react";
 import {
   Box,
@@ -13,13 +13,16 @@ import {
   Select,
   HStack,
   Switch,
+  Spinner,
 } from "@codeday/topo/Atom";
-import { getEventWithTickets, getWaiverBook } from "./index.gql";
+import useSwr from 'swr';
+import { getEvent, getTickets, getWaiverBook } from "./index.gql";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Ticket from "../../../../components/Ticket";
 import Page from "../../../../components/Page";
 import { getFetcher, useFetcher } from "../../../../fetch";
 import { CreateTicketModal } from "../../../../components/forms/Ticket";
+import CheckinCounter from '../../../../components/CheckinCounter';
 import { CSVLink } from "react-csv";
 import { UiDownload, Camera } from "@codeday/topocons/Icon";
 import { useColorModeValue } from "@codeday/topo/Theme";
@@ -50,9 +53,9 @@ function sortFn(sort, tickets) {
 }
 
 export default function Tickets({ event }) {
-  if (!event) return <Page />;
   const router = useRouter();
   const fetcher = useFetcher();
+  const { data, isValidating } = useSwr([getTickets, { data: { id: event.id } }], fetcher, { revalidateOnFocus: true, refreshInterval: 60*1000 });
   const [waiversLoading, setWaiversLoading] = useState(false);
   const [waiverBookUrl, setWaiverBookUrl] = useState(null);
   const headers = [
@@ -72,7 +75,7 @@ export default function Tickets({ event }) {
     "waiverUrl",
     "organization"
   ];
-  const csv = event.tickets
+  const csv = (data?.clear?.event?.tickets || [])
     .map((t) =>
       [
         t.firstName,
@@ -94,12 +97,13 @@ export default function Tickets({ event }) {
     )
     .join(`\n`);
   const [tickets, setTickets] = useState(
-    [...event.tickets].sort((a, b) => a.lastName.localeCompare(b.lastName))
+    (data?.clear?.event?.tickets || []).sort((a, b) => a.lastName.localeCompare(b.lastName))
   );
+  if (!event) return <Page />;
   return (
     <Page title={event.name}>
       <Breadcrumbs event={event} />
-      <Heading>{event.name} Tickets</Heading>
+      <Heading>{event.name} Tickets {isValidating && <Spinner />}</Heading>
       <CreateTicketModal event={event} display="inline" pr={4} />
       <CSVExport
         display="inline"
@@ -132,34 +136,35 @@ export default function Tickets({ event }) {
       >
         <Icon mr={2} as={Camera} />Scan Tickets
       </Button>
+      <CheckinCounter event={event} borderWidth={1} mt={4} p={4} />
       <SortAndFilter
-        tickets={tickets}
+        tickets={data?.clear?.event?.tickets || []}
         setTickets={setTickets}
         event={event}
       ></SortAndFilter>
+
       <HStack spacing={4}>
         <Text>
           Avg Student Age:&nbsp;
           {Math.round(
-            (event.tickets
+            (tickets
               .filter((ticket) => ticket.type == "STUDENT")
               .reduce((partialSum, ticket) => partialSum + ticket.age, 0) /
-              event.tickets.filter((ticket) => ticket.type == "STUDENT")
+              (data?.clear?.event?.tickets.filter((ticket) => ticket.type == "STUDENT") || [])
                 .length) *
               10
           ) / 10}
         </Text>
-        <Text>Total Tickets:&nbsp;{event.tickets.length}</Text>
+        <Text>Total Tickets:&nbsp;{tickets.length}</Text>
         <Text>
           Students:&nbsp;
-          {event.tickets.filter((ticket) => ticket.type == "STUDENT").length}
+          {tickets.filter((ticket) => ticket.type == "STUDENT").length}
         </Text>
         <Text>
           Staff:&nbsp;
-          {event.tickets.filter((ticket) => ticket.type != "STUDENT").length}
+          {tickets.filter((ticket) => ticket.type != "STUDENT").length}
         </Text>
       </HStack>
-
       <Grid
         templateColumns={{
           base: "1fr",
@@ -168,7 +173,7 @@ export default function Tickets({ event }) {
         }}
       >
         {tickets.map((ticket) => (
-          <Ticket ticket={ticket} />
+          <Ticket id={ticket.id} ticket={ticket} />
         ))}
       </Grid>
     </Page>
@@ -183,7 +188,7 @@ export async function getServerSideProps({
   const session = await getSession({ req });
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
-  const eventResult = await fetch(getEventWithTickets, {
+  const eventResult = await fetch(getEvent, {
     data: { id: eventId },
   });
   return {
@@ -193,11 +198,73 @@ export async function getServerSideProps({
   };
 }
 
-function SortAndFilter({ tickets, setTickets, event }) {
+function SortAndFilter({ tickets, setTickets }) {
   const [waiver, setWaiver] = useState(true);
   const [checkedIn, setCheckedIn] = useState(true);
   const [filter, setFilter] = useState("");
   const [sort, setSort] = useState("alphabetical-last");
+
+  useEffect(() => {
+    let newTickets = tickets;
+    if (waiver) {
+      newTickets = sortFn(
+        sort,
+        tickets.filter((t) => t.waiverSigned === waiver) || []
+      );
+    }
+
+    if (checkedIn) {
+      newTickets = sortFn(
+        sort,
+        tickets.filter((t) =>
+          checkedIn
+            ? (t.checkedIn && t.checkedOut) ||
+              (!t.checkedIn && !t.checkedOut)
+            : t.checkedIn && !t.checkedOut
+        )
+      );
+    }
+
+    switch (filter) {
+      case "student":
+        newTickets = sortFn(
+          sort,
+          tickets.filter((t) => t.type === "STUDENT") || []
+        );
+        break;
+      case "staff":
+        newTickets = sortFn(
+          sort,
+          tickets.filter((t) => t.type !== "STUDENT") || []
+        );
+        break;
+      case "waiver":
+        newTickets = sortFn(
+          sort,
+          tickets.filter((t) => t.waiverSigned !== waiver) || []
+        );
+        break;
+
+      case "checked-in":
+        newTickets = sortFn(
+          sort,
+          tickets.filter((t) =>
+            checkedIn
+              ? t.checkedIn && !t.checkedOut
+              : (t.checkedIn && t.checkedOut) ||
+                (!t.checkedIn && !t.checkedOut)
+          )
+        );
+        break;
+      case "all":
+      default:
+        newTickets = sortFn(sort, tickets);
+        break;
+    }
+
+    setTickets(sortFn(sort, newTickets));
+  }, [sort, filter, waiver, checkedIn, tickets]);
+  console.log(`rerender with ${tickets.length} tickets`)
   return (
     <HStack mt={4} w="100%" spacing={5}>
       <HStack>
@@ -207,7 +274,6 @@ function SortAndFilter({ tickets, setTickets, event }) {
           value={sort}
           onChange={(e) => {
             setSort(e.target.value);
-            setTickets(sortFn(e.target.value, tickets));
           }}
         >
           <option value={"alphabetical-last"}>alphabetical, last name</option>
@@ -225,49 +291,6 @@ function SortAndFilter({ tickets, setTickets, event }) {
           value={filter}
           onChange={(e) => {
             setFilter(e.target.value);
-            switch (e.target.value) {
-              case "all":
-                setTickets(sortFn(sort, event.tickets));
-                break;
-              case "student":
-                setTickets(
-                  sortFn(
-                    sort,
-                    event.tickets.filter((t) => t.type === "STUDENT")
-                  )
-                );
-                break;
-              case "staff":
-                setTickets(
-                  sortFn(
-                    sort,
-                    event.tickets.filter((t) => t.type !== "STUDENT")
-                  )
-                );
-                break;
-              case "waiver":
-                setTickets(
-                  sortFn(
-                    sort,
-                    event.tickets.filter((t) => t.waiverSigned !== waiver)
-                  )
-                );
-                break;
-
-              case "checked-in":
-                setTickets(
-                  sortFn(
-                    sort,
-                    event.tickets.filter((t) =>
-                      checkedIn
-                        ? t.checkedIn && !t.checkedOut
-                        : (t.checkedIn && t.checkedOut) ||
-                          (!t.checkedIn && !t.checkedOut)
-                    )
-                  )
-                );
-                break;
-            }
           }}
         >
           <option value={"all"}>all</option>
@@ -283,12 +306,6 @@ function SortAndFilter({ tickets, setTickets, event }) {
               isChecked={waiver}
               onChange={() => {
                 setWaiver(!waiver);
-                setTickets(
-                  sortFn(
-                    sort,
-                    event.tickets.filter((t) => t.waiverSigned === waiver)
-                  )
-                );
               }}
             ></Switch>
           </>
@@ -300,17 +317,6 @@ function SortAndFilter({ tickets, setTickets, event }) {
               isChecked={checkedIn}
               onChange={() => {
                 setCheckedIn(!checkedIn);
-                setTickets(
-                  sortFn(
-                    sort,
-                    event.tickets.filter((t) =>
-                      checkedIn
-                        ? (t.checkedIn && t.checkedOut) ||
-                          (!t.checkedIn && !t.checkedOut)
-                        : t.checkedIn && !t.checkedOut
-                    )
-                  )
-                );
               }}
             ></Switch>
           </>

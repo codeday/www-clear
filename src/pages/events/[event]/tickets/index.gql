@@ -1,11 +1,19 @@
 #import "../../../../components/Ticket.gql"
-query getEventWithTickets($data: ClearEventWhereUniqueInput!) {
+query getEvent($data: ClearEventWhereUniqueInput!) {
     clear {
         event(where: $data) {
             id
             name
-            tickets {
+        }
+    }
+}
+
+query getTickets($data: ClearEventWhereUniqueInput!) {
+    clear {
+        event(where: $data) {
+            tickets(orderBy:[{lastName:asc}]) {
                 ...Ticket
+                id
                 createdAt
                 firstName
                 lastName

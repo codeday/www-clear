@@ -31,13 +31,13 @@ export default function Ticket({ticket, eventId, ...props}) {
                 </Button>
             }
             heading={<>
-                {ticket.lastName}, {ticket.firstName}
+                {ticket.lastName}, {ticket.firstName}{ticket.age && ` (${ticket.age})`}
                 <TicketTypeBadge ticket={ticket}/>
                 </>
                 }
              {...props}
            >
-            <Text mb={0}><Text as="span" bold>Age:</Text> {ticket.age}</Text>
+            <Text mb={0}><Text as="span" bold>Id:</Text> {ticket.id}</Text>
             {ticket.email && <Text mb={0}><Text as="span" bold>Email:</Text> {ticket.email}</Text>}
             {ticket.phone && <Text mb={0}><Text as="span" bold>Phone:</Text> {ticket.phone}</Text>}
             {ticket.whatsApp && <Text mb={0}><Text as="span" bold>WhatsApp:</Text> {ticket.whatsApp}</Text>}
