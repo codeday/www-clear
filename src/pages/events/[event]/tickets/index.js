@@ -55,7 +55,7 @@ function sortFn(sort, tickets) {
 export default function Tickets({ event }) {
   const router = useRouter();
   const fetcher = useFetcher();
-  const { data, isValidating } = useSwr([getTickets, { data: { id: event.id } }], fetcher, { revalidateOnFocus: true, refreshInterval: 60*1000 });
+  const { data, isValidating } = useSwr([getTickets, { data: { id: event.id } }], fetcher, { revalidateOnFocus: true, refreshInterval: 60 * 1000 });
   const [waiversLoading, setWaiversLoading] = useState(false);
   const [waiverBookUrl, setWaiverBookUrl] = useState(null);
   const headers = [
@@ -101,7 +101,7 @@ export default function Tickets({ event }) {
   );
   if (!event) return <Page />;
   return (
-    <Page title={event.name}>
+    <Page title={`${event.name} Tickets`}>
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets {isValidating && <Spinner />}</Heading>
       <CreateTicketModal event={event} display="inline" pr={4} />

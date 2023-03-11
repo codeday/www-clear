@@ -18,17 +18,33 @@ export default function CheckinCounter({ event, ...props }) {
       <Text fontSize="sm" textTransform="uppercase" fontWeight="bold">Here Now</Text>
       <Grid templateColumns="1fr 3em">
         <Box>
-          <Box w="100%" textAlign="center">
-            <Box borderWidth={1} borderColor="green.600" bgColor="green.600" display="inline-block" w={`${(checkedInStudents.length/absoluteTotal)*100}%`}>{checkedInStudents.length}</Box>
-            <Box borderWidth={1} borderColor="green.100" bgColor="green.100" display="inline-block" w={`${(notCheckedInStudents.length/absoluteTotal)*100}%`}>{notCheckedInStudents.length}</Box>
-            <Box borderWidth={1} borderColor="red.600" bgColor="red.600" display="inline-block" w={`${(checkedInStaff.length/absoluteTotal)*100}%`}>{checkedInStaff.length}</Box>
-            <Box borderWidth={1} borderColor="red.100" bgColor="red.100" display="inline-block" w={`${(notCheckedInStaff.length/absoluteTotal)*100}%`}>{notCheckedInStaff.length}</Box>
-            {venue.capacity > total && <Box borderWidth={1} display="inline-block" w={`${(Math.max(0, venue.capacity - total)/venue.capacity) * 100}%`}>{venue.capacity - total}</Box>}
+          <Box w="100%" textAlign="left">
+            {(checkedInStudents.length > 0 || notCheckedInStudents.length > 0) && (
+              <>
+                <Box textAlign="center" borderWidth={1} borderColor="green.600" bgColor="green.600" display="inline-block" w={`${Math.floor((checkedInStudents.length/absoluteTotal)*100)}%`}>{checkedInStudents.length}</Box>
+                <Box textAlign="center" borderWidth={1} borderColor="green.100" bgColor="green.100" display="inline-block" w={`${Math.floor((notCheckedInStudents.length/absoluteTotal)*100)}%`}>{notCheckedInStudents.length}</Box>
+              </>
+            )}
+            {(checkedInStaff.length > 0 || notCheckedInStaff.length > 0) && (
+              <>
+                <Box textAlign="center" borderWidth={1} borderColor="red.600" bgColor="red.600" display="inline-block" w={`${Math.floor((checkedInStaff.length/absoluteTotal)*100)}%`}>{checkedInStaff.length}</Box>
+                <Box textAlign="center" borderWidth={1} borderColor="red.100" bgColor="red.100" display="inline-block" w={`${Math.floor((notCheckedInStaff.length/absoluteTotal)*100)}%`}>{notCheckedInStaff.length}</Box>
+              </>
+            )}
+            {venue.capacity > total && <Box textAlign="center" borderWidth={1} display="inline-block" w={`${(Math.floor((Math.max(0, venue.capacity - total)/venue.capacity) * 100)) - 2}%`}>{venue.capacity - total}</Box>}
           </Box>
           <Box w="100%" textTransform="lowercase" fontSize="sm">
-            <Box color="green.600" display="inline-block" w={`${((checkedInStudents.length + notCheckedInStudents.length)/absoluteTotal)*100}%`}>Students</Box>
-            <Box color="red.600" display="inline-block" w={`${((checkedInStaff.length + notCheckedInStaff.length)/absoluteTotal)*100}%`}>Staff</Box>
-            <Box color="gray.600" display="inline-block">Open</Box>
+            {(checkedInStudents.length > 0 || notCheckedInStudents.length > 0) && (
+              <Box color="green.600" display="inline-block" w={`${((checkedInStudents.length + notCheckedInStudents.length)/absoluteTotal)*100}%`}>
+                Students ({Math.floor(checkedInStudents.length/(checkedInStudents.length + notCheckedInStudents.length) * 100)}% here)
+              </Box>
+            )}
+            {(checkedInStaff.length > 0 || notCheckedInStaff.length > 0) && (
+              <Box color="red.600" display="inline-block" w={`${((checkedInStaff.length + notCheckedInStaff.length)/absoluteTotal)*100}%`}>
+                Staff ({Math.floor(checkedInStaff.length/(checkedInStaff.length + notCheckedInStaff.length) * 100)}% here)
+              </Box>
+            )}
+            {venue.capacity > total && <Box color="gray.600" display="inline-block">Open</Box>}
           </Box>
         </Box>
         <Box>{isValidating && <Spinner />}</Box>
