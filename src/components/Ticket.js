@@ -22,184 +22,175 @@ export default function Ticket({ ticket, eventId, ...props }) {
   const checkAction = checkedIn && !checkedOut ? 'out' : 'in';
 
   return (
-    <a href={(eventId || ticket.event?.id) ? `/events/${eventId || ticket.event.id}/tickets/${ticket.id}` : `tickets/${ticket.id}`}>
+    <a
+      href={
+        eventId || ticket.event?.id
+          ? `/events/${eventId || ticket.event.id}/tickets/${ticket.id}`
+          : `tickets/${ticket.id}`
+      }
+    >
       <InfoBox
         id={ticket.id}
         buttons={(
-          <Button h={6} as="a" href={eventId ? `/events/${eventId}/tickets/${ticket.id}` : `tickets/${ticket.id}`}>
+          <Button
+            h={6}
+            as="a"
+            href={
+              eventId
+                ? `/events/${eventId}/tickets/${ticket.id}`
+                : `tickets/${ticket.id}`
+            }
+          >
             <Eye />
           </Button>
-              )}
+        )}
         heading={(
           <>
             {ticket.lastName}, {ticket.firstName}
+            {ticket.age && ` (${ticket.age})`}
             <TicketTypeBadge ticket={ticket} />
           </>
-)}
+        )}
         {...props}
       >
-        <Text mb={0}><Text as="span" bold>Age:</Text> {ticket.age}</Text>
-        {ticket.email && <Text mb={0}><Text as="span" bold>Email:</Text> {ticket.email}</Text>}
-        {ticket.phone && <Text mb={0}><Text as="span" bold>Phone:</Text> {ticket.phone}</Text>}
-        {ticket.whatsApp && <Text mb={0}><Text as="span" bold>WhatsApp:</Text> {ticket.whatsApp}</Text>}
-        {ticket.promoCode && <Text mb={0}><Text as="span" bold>Promo:</Text> {ticket.promoCode.code}</Text>}
-        {!ticket.waiverSigned && (
-        <Box>
-          <Text as="span" bold>Waiver:</Text>{' '}
-          <Button
-            size="xs"
-            mr={2}
-            isLoading={loading}
-            onClick={async (e) => {
-              e.preventDefault();
-              setLoading(true);
-              try {
-                const res = await fetch(print(sendWaiverReminder), {
-                  where: { id: ticket.id },
-                });
-                success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
-              } catch (ex) {
-                error(ex.toString());
-              }
-              setLoading(false);
-            }}
-          >
-            Remind
-          </Button>
-          <Button
-            size="xs"
-            mr={2}
-            isLoading={loading}
-            onClick={async (e) => {
-              e.preventDefault();
-              setLoading(true);
-              try {
-                const res = await fetch(print(sendWaiverReminder), {
-                  where: { id: ticket.id },
-                  regenerate: true,
-                });
-                success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
-              } catch (ex) {
-                error(ex.toString());
-              }
-              setLoading(false);
-            }}
-          >
-            Fix Link
-          </Button>
-          {ticket.waiverUrl && (
-          <Button size="xs" as="a" href={ticket.waiverUrl} target="_blank">Sign Here</Button>
-          )}
-          <br />
-        </Box>
+        <Text mb={0}>
+          <Text as="span" bold>
+            Id:
+          </Text>{' '}
+          {ticket.id}
+        </Text>
+        {ticket.email && (
+          <Text mb={0}>
+            <Text as="span" bold>
+              Email:
+            </Text>{' '}
+            {ticket.email}
+          </Text>
         )}
-        {session && (
-        <Button
-          isLoading={loading}
-          disabled={loading}
-          size="sm"
-          onClick={async (e) => {
-            e.preventDefault();
-            setLoading(true);
-            try {
-              const res = await fetch(print(checkAction === 'out' ? checkout : checkin), {
-                where: { id: ticket.id },
-              });
-              success(`Checked ${ticket.firstName} ${ticket.lastName} ${checkAction}.`);
-              setCheckedIn(res.clear.checkinout.checkedIn);
-              setCheckedOut(res.clear.checkinout.checkedOut);
-            } catch (ex) {
-              error(ex.toString());
-            }
-            heading={<>
-                {ticket.lastName}, {ticket.firstName}{ticket.age && ` (${ticket.age})`}
-                <TicketTypeBadge ticket={ticket}/>
-                </>
+        {ticket.phone && (
+          <Text mb={0}>
+            <Text as="span" bold>
+              Phone:
+            </Text>{' '}
+            {ticket.phone}
+          </Text>
+        )}
+        {ticket.whatsApp && (
+          <Text mb={0}>
+            <Text as="span" bold>
+              WhatsApp:
+            </Text>{' '}
+            {ticket.whatsApp}
+          </Text>
+        )}
+        {ticket.promoCode && (
+          <Text mb={0}>
+            <Text as="span" bold>
+              Promo:
+            </Text>{' '}
+            {ticket.promoCode.code}
+          </Text>
+        )}
+        {!ticket.waiverSigned && (
+          <Box>
+            <Text as="span" bold>
+              Waiver:
+            </Text>{' '}
+            <Button
+              size="xs"
+              mr={2}
+              isLoading={loading}
+              onClick={async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                try {
+                  const res = await fetch(print(sendWaiverReminder), {
+                    where: { id: ticket.id },
+                  });
+                  success(
+                    `Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`,
+                  );
+                } catch (ex) {
+                  error(ex.toString());
                 }
-             {...props}
-           >
-            <Text mb={0}><Text as="span" bold>Id:</Text> {ticket.id}</Text>
-            {ticket.email && <Text mb={0}><Text as="span" bold>Email:</Text> {ticket.email}</Text>}
-            {ticket.phone && <Text mb={0}><Text as="span" bold>Phone:</Text> {ticket.phone}</Text>}
-            {ticket.whatsApp && <Text mb={0}><Text as="span" bold>WhatsApp:</Text> {ticket.whatsApp}</Text>}
-            {ticket.promoCode && <Text mb={0}><Text as="span" bold>Promo:</Text> {ticket.promoCode.code}</Text>}
-            {!ticket.waiverSigned && (
-                <Box>
-                    <Text as="span" bold>Waiver:</Text>{' '}
-                    <Button
-                        size="xs"
-                        mr={2}
-                        isLoading={loading}
-                        onClick={async (e) => {
-                            e.preventDefault()
-                            setLoading(true);
-                            try {
-                                const res = await fetch(print(sendWaiverReminder), {
-                                  where: { id: ticket.id },
-                                });
-                                success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
-                            } catch (ex) {
-                                error(ex.toString());
-                            }
-                            setLoading(false);
-                        }}
-                    >
-                      Remind
-                    </Button>
-                    <Button
-                        size="xs"
-                        mr={2}
-                        isLoading={loading}
-                        onClick={async (e) => {
-                            e.preventDefault()
-                            setLoading(true);
-                            try {
-                                const res = await fetch(print(sendWaiverReminder), {
-                                  where: { id: ticket.id },
-                                  regenerate: true,
-                                });
-                                success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
-                            } catch (ex) {
-                                error(ex.toString());
-                            }
-                            setLoading(false);
-                        }}
-                    >
-                      Fix Link
-                    </Button>
-                    {ticket.waiverUrl && (
-                      <Button size="xs" as="a" href={ticket.waiverUrl} target="_blank">Sign Here</Button>
-                    )}
-                    <br />
-                </Box>
-            )}
-            {session && (
-              <Button
-                  isLoading={loading}
-                  disabled={loading}
-                  size="sm"
-                  onClick={async (e) => {
-                      e.preventDefault()
-                      setLoading(true);
-                      try {
-                          const res = await fetch(print(checkAction === 'out' ? checkout : checkin), {
-                            where: { id: ticket.id },
-                          });
-                          success(`Checked ${ticket.firstName} ${ticket.lastName} ${checkAction}.`);
-                          setCheckedIn(res.clear.checkinout.checkedIn);
-                          setCheckedOut(res.clear.checkinout.checkedOut);
-                      } catch (ex) {
-                          error(ex.toString());
-                      }
-                      setLoading(false);
-                  }}
-              >
-                Check {checkAction}
+                setLoading(false);
+              }}
+            >
+              Remind
+            </Button>
+            <Button
+              size="xs"
+              mr={2}
+              isLoading={loading}
+              onClick={async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                try {
+                  const res = await fetch(print(sendWaiverReminder), {
+                    where: { id: ticket.id },
+                    regenerate: true,
+                  });
+                  success(
+                    `Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`,
+                  );
+                } catch (ex) {
+                  error(ex.toString());
+                }
+                setLoading(false);
+              }}
+            >
+              Fix Link
+            </Button>
+            {ticket.waiverUrl && (
+              <Button size="xs" as="a" href={ticket.waiverUrl} target="_blank">
+                Sign Here
               </Button>
             )}
-            {ticket.waiverSigned ? <GoodAlert>Waiver</GoodAlert> : <Alert>Waiver</Alert>}
-	    {ticket.vaccineVerified ? <GoodAlert>Vaccine</GoodAlert> : <Alert>Vaccine</Alert>}
-        </InfoBox></a>)
+            <br />
+          </Box>
+        )}
+        {session && (
+          <Button
+            isLoading={loading}
+            disabled={loading}
+            size="sm"
+            onClick={async (e) => {
+              e.preventDefault();
+              setLoading(true);
+              try {
+                const res = await fetch(
+                  print(checkAction === 'out' ? checkout : checkin),
+                  {
+                    where: { id: ticket.id },
+                  },
+                );
+                success(
+                  `Checked ${ticket.firstName} ${ticket.lastName} ${checkAction}.`,
+                );
+                setCheckedIn(res.clear.checkinout.checkedIn);
+                setCheckedOut(res.clear.checkinout.checkedOut);
+              } catch (ex) {
+                error(ex.toString());
+              }
+              setLoading(false);
+            }}
+          >
+            Check {checkAction}
+          </Button>
+        )}
+        {ticket.waiverSigned ? (
+          <GoodAlert>Waiver</GoodAlert>
+        ) : (
+          <Alert>Waiver</Alert>
+        )}
+        {ticket.vaccineVerified ? (
+          <GoodAlert>Vaccine</GoodAlert>
+        ) : (
+          <Alert>Vaccine</Alert>
+        )}
+      </InfoBox>
+    </a>
+  );
 }
 
 export function TicketTypeBadge({ ticket, ...props }) {
@@ -223,8 +214,14 @@ export function TicketTypeBadge({ ticket, ...props }) {
   };
   return (
     <Badge
-      bg={useColorModeValue(ticketTypeStyles[ticket.type]?.bg || 'gray.200', ticketTypeStyles[ticket.type]?.color || 'gray.800')}
-      color={useColorModeValue(ticketTypeStyles[ticket.type]?.color || 'gray.800', ticketTypeStyles[ticket.type]?.bg || 'gray.200')}
+      bg={useColorModeValue(
+        ticketTypeStyles[ticket.type]?.bg || 'gray.200',
+        ticketTypeStyles[ticket.type]?.color || 'gray.800',
+      )}
+      color={useColorModeValue(
+        ticketTypeStyles[ticket.type]?.color || 'gray.800',
+        ticketTypeStyles[ticket.type]?.bg || 'gray.200',
+      )}
       textTransform="lowercase"
       fontSize="xs"
       p={0}
