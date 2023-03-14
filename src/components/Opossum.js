@@ -1,7 +1,7 @@
-import * as THREE from "three";
-import {useEffect} from "react";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from 'three';
+import { useEffect } from 'react';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 function Opossum({ height, width }) {
   // const [renderer, setRenderer] = useState();
@@ -13,11 +13,11 @@ function Opossum({ height, width }) {
       75,
       window.innerWidth / (window.innerHeight / 2),
       0.1,
-      1000
+      1000,
     );
 
     const renderer = new THREE.WebGL1Renderer({
-      canvas: document.querySelector("#bg"),
+      canvas: document.querySelector('#bg'),
       alpha: true,
     });
 
@@ -50,7 +50,7 @@ function Opossum({ height, width }) {
 
     let opossumObj;
 
-    loader.load("/Low_poly_opossum.glb", function (gltf) {
+    loader.load('/Low_poly_opossum.glb', (gltf) => {
       gltf.scene.traverse((node) => {
         if (!node.isMesh) return;
         node.material.wireframe = true;
@@ -69,7 +69,7 @@ function Opossum({ height, width }) {
       renderer.render(scene, camera);
     };
 
-    window.addEventListener("resize", resizeWindow);
+    window.addEventListener('resize', resizeWindow);
 
     function animate() {
       requestAnimationFrame(animate);
@@ -88,7 +88,7 @@ function Opossum({ height, width }) {
     animate();
   }, []);
 
-  return <canvas id="bg"></canvas>;
+  return <canvas id="bg" />;
 }
 
 export default Opossum;

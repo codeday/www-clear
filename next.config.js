@@ -1,5 +1,5 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
 });
 
 module.exports = withBundleAnalyzer({
@@ -12,7 +12,7 @@ module.exports = withBundleAnalyzer({
       clientId: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
       domain: process.env.AUTH0_DOMAIN,
-      issuer: `https://` + process.env.AUTH0_DOMAIN,
+      issuer: `https://${process.env.AUTH0_DOMAIN}`,
       roles: {
         employee: process.env.AUTH0_EMPLOYEE_ROLE,
         admin: process.env.AUTH0_ADMIN_ROLE,
@@ -28,11 +28,13 @@ module.exports = withBundleAnalyzer({
     },
     appUrl: process.env.APP_URL,
   },
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config, {
+    buildId, dev, isServer, defaultLoaders, webpack,
+  }) => {
     config?.module?.rules.push({
       test: /\.(graphql|gql)$/,
       exclude: /node_modules/,
-      loader: "graphql-tag/loader",
+      loader: 'graphql-tag/loader',
     });
     return config;
   },

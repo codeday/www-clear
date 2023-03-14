@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, HStack } from '@codeday/topo/Atom';
-import {useColorModeValue} from "@codeday/topo/Theme";
-import { FileDoc } from '@codeday/topocons/Icon'
+import { useColorModeValue } from '@codeday/topo/Theme';
+import { FileDoc } from '@codeday/topocons';
 
-export default function DocsCallout({children, ...props}) {
+export default function DocsCallout({ children, ...props }) {
   return (
     <Box
       display="inline-flex"
@@ -12,7 +12,7 @@ export default function DocsCallout({children, ...props}) {
       px={2}
       m={1}
       borderWidth={2}
-      borderColor={useColorModeValue("red.200", "red.800")}
+      borderColor={useColorModeValue('red.200', 'red.800')}
       borderStyle="dashed"
       rounded={10}
       {...props}

@@ -31,23 +31,21 @@ import { Icon } from "@chakra-ui/react";
 
 function sortFn(sort, tickets) {
   switch (sort) {
-    case "alphabetical-last":
+    case 'alphabetical-last':
       return [...tickets].sort((a, b) => a.lastName.localeCompare(b.lastName));
-    case "alphabetical-first":
-      return [...tickets].sort((a, b) =>
-        a.firstName.localeCompare(b.firstName)
-      );
-    case "age-dec":
+    case 'alphabetical-first':
+      return [...tickets].sort((a, b) => a.firstName.localeCompare(b.firstName));
+    case 'age-dec':
       return [...tickets].sort((a, b) => b.age - a.age);
-    case "age-asc":
+    case 'age-asc':
       return [...tickets].sort((a, b) => a.age - b.age);
-    case "date-dec":
+    case 'date-dec':
       return [...tickets].sort(
-        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
+        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
       );
-    case "date-asc":
+    case 'date-asc':
       return [...tickets].sort(
-        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
+        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
       );
   }
 }
@@ -59,21 +57,21 @@ export default function Tickets({ event }) {
   const [waiversLoading, setWaiversLoading] = useState(false);
   const [waiverBookUrl, setWaiverBookUrl] = useState(null);
   const headers = [
-    "firstName",
-    "lastName",
-    "age",
-    "email",
-    "phone",
-    "whatsApp",
-    "type",
-    "guardianFirstName",
-    "guardianLastName",
-    "guardianEmail",
-    "guardianPhone",
-    "guardianWhatsApp",
-    "waiverSigned",
-    "waiverUrl",
-    "organization"
+    'firstName',
+    'lastName',
+    'age',
+    'email',
+    'phone',
+    'whatsApp',
+    'type',
+    'guardianFirstName',
+    'guardianLastName',
+    'guardianEmail',
+    'guardianPhone',
+    'guardianWhatsApp',
+    'waiverSigned',
+    'waiverUrl',
+    'organization',
   ];
   const csv = (data?.clear?.event?.tickets || [])
     .map((t) =>
@@ -132,7 +130,7 @@ export default function Tickets({ event }) {
       </Button>
       <Button
         mr={4}
-        onClick={() => router.push({ pathname: "tickets/scan/", query: { event: event?.id } })}
+        onClick={() => router.push({ pathname: 'tickets/scan/', query: { event: event?.id } })}
       >
         <Icon mr={2} as={Camera} />Scan Tickets
       </Button>
@@ -167,9 +165,9 @@ export default function Tickets({ event }) {
       </HStack>
       <Grid
         templateColumns={{
-          base: "1fr",
-          md: "repeat(2, 1fr)",
-          lg: "repeat(3, 1fr)",
+          base: '1fr',
+          md: 'repeat(2, 1fr)',
+          lg: 'repeat(3, 1fr)',
         }}
       >
         {tickets.map((ticket) => (
@@ -268,7 +266,7 @@ function SortAndFilter({ tickets, setTickets }) {
   return (
     <HStack mt={4} w="100%" spacing={5}>
       <HStack>
-        <Text w="fit-content">{"Sort By: "}</Text>
+        <Text w="fit-content">{'Sort By: '}</Text>
         <Select
           width="fit-content"
           value={sort}
@@ -276,16 +274,16 @@ function SortAndFilter({ tickets, setTickets }) {
             setSort(e.target.value);
           }}
         >
-          <option value={"alphabetical-last"}>alphabetical, last name</option>
-          <option value={"alphabetical-first"}>alphabetical, first name</option>
-          <option value={"age-dec"}>age high-low</option>
-          <option value={"age-asc"}>age low-high</option>
-          <option value={"date-dec"}>signup date newest-oldest</option>
-          <option value={"date-asc"}>signup date oldest-newest</option>
+          <option value="alphabetical-last">alphabetical, last name</option>
+          <option value="alphabetical-first">alphabetical, first name</option>
+          <option value="age-dec">age high-low</option>
+          <option value="age-asc">age low-high</option>
+          <option value="date-dec">signup date newest-oldest</option>
+          <option value="date-asc">signup date oldest-newest</option>
         </Select>
       </HStack>
       <HStack>
-        <Text w="fit-content">{"Filter By: "}</Text>
+        <Text w="fit-content">{'Filter By: '}</Text>
         <Select
           width="fit-content"
           value={filter}
@@ -293,13 +291,13 @@ function SortAndFilter({ tickets, setTickets }) {
             setFilter(e.target.value);
           }}
         >
-          <option value={"all"}>all</option>
-          <option value={"student"}>student</option>
-          <option value={"staff"}>staff</option>
-          <option value={"waiver"}>waiver</option>
-          <option value={"checked-in"}>checked in</option>
+          <option value="all">all</option>
+          <option value="student">student</option>
+          <option value="staff">staff</option>
+          <option value="waiver">waiver</option>
+          <option value="checked-in">checked in</option>
         </Select>
-        {filter == "waiver" && (
+        {filter == 'waiver' && (
           <>
             <Text>Missing Waiver? </Text>
             <Switch
@@ -307,10 +305,10 @@ function SortAndFilter({ tickets, setTickets }) {
               onChange={() => {
                 setWaiver(!waiver);
               }}
-            ></Switch>
+            />
           </>
         )}
-        {filter == "checked-in" && (
+        {filter == 'checked-in' && (
           <>
             <Text>Checked In? </Text>
             <Switch
@@ -318,7 +316,7 @@ function SortAndFilter({ tickets, setTickets }) {
               onChange={() => {
                 setCheckedIn(!checkedIn);
               }}
-            ></Switch>
+            />
           </>
         )}
       </HStack>
@@ -329,7 +327,7 @@ function SortAndFilter({ tickets, setTickets }) {
 export const CSVExport = ({
   data,
   headers,
-  filename = "data.csv",
+  filename = 'data.csv',
   ...props
 }) => {
   const ref = useRef(null);
@@ -341,7 +339,7 @@ export const CSVExport = ({
       {...props}
     >
       <CSVLink
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         data={data}
         headers={headers}
         filename={filename}
