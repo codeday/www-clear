@@ -7,7 +7,14 @@ import Link from 'next/link';
 const LinkWrapper = ({ href, children }) => (href ? <Link href={href} passHref>{children}</Link> : <>{children}</>);
 
 export default function InfoBox({
-  children, heading, subHeading, headingSize, buttons, nested, href, ...props
+  children=undefined,
+  heading=undefined,
+  subHeading=undefined,
+  headingSize=undefined,
+  buttons=undefined,
+  nested=false,
+  href=undefined,
+  ...props
 }) {
   return (
     <LinkWrapper href={href}>
