@@ -12,6 +12,7 @@ import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { CreateScheduleItemMutation, DeleteScheduleItemMutation, UpdateScheduleItemMutation } from './ScheduleItem.gql';
 import { useFetcher } from '../../fetch';
 
@@ -117,6 +118,7 @@ export function CreateScheduleItemModal({
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Heading>Create Schedule Item</Heading>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -194,6 +196,7 @@ export function UpdateScheduleItemModal({ scheduleitem, children, ...props }) {
       <Button display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

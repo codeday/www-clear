@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Text, Link } from '@codeday/topo/Atom';
+import { Heading, Text, NextLink } from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
 import DocsCallout from './DocsCallout';
 
@@ -18,7 +18,7 @@ export default function SponsorOverview({
         ? (
           <DocsCallout>
             Looking for help finding sponsors? Check out&nbsp;
-            <Link color="brand" href="https://codeday.notion.site/searchSponsors-db-templates-perks-25c7ccf4f10d418da725b12433e4dd83">this page</Link>
+            <NextLink color="brand" href="https://codeday.notion.site/searchSponsors-db-templates-perks-25c7ccf4f10d418da725b12433e4dd83">this page</NextLink>
           &nbsp;in the CodeDay Organizer Guide!
           </DocsCallout>
         )

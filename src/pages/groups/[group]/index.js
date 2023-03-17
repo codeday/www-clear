@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Grid, Heading } from '@codeday/topo/Atom';
 import { useRouter } from 'next/router';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import { getEventGroup } from './index.gql';
 import { getFetcher } from '../../../fetch';
 import Page from '../../../components/Page';
@@ -11,10 +12,10 @@ import { CreateEventModal } from '../../../components/forms/Event';
 import { DeleteEventGroupModal, UpdateEventGroupModal } from '../../../components/forms/EventGroup';
 
 export default function Group({ group }) {
-  if (!group) return <Page />;
+  if (!group) return <></>;
   const { query } = useRouter();
   return (
-    <Page title={group.name}>
+    <>
       <Breadcrumbs group={group} />
       <Heading>{group.name} <UpdateEventGroupModal eventgroup={group} /> <DeleteEventGroupModal eventgroup={group} /></Heading>
       <Box display="inline-flex">
@@ -31,18 +32,19 @@ export default function Group({ group }) {
       {/*        as="a" */}
       {/*        href={`${query.group}/schedule/createScheduleItem`}>Create Schedule Item</Button> */}
       {/* <Calendar schedule={group.schedule} /> */}
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, params: { group: groupId } }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const groupResp = await fetch(getEventGroup, { data: { id: groupId } });
   return {
     props: {
       group: groupResp.clear.eventGroup,
+      title: groupResp?.clear?.eventGroup?.name || 'Event Group',
     },
   };
 }

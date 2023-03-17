@@ -12,6 +12,7 @@ import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { CreatePersonMutation, DeletePersonMutation, UpdatePersonMutation } from './Person.gql';
 import { useFetcher } from '../../fetch';
 
@@ -62,6 +63,7 @@ export function CreatePersonModal({ children, ...props }) {
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Heading>Create Person</Heading>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -118,6 +120,7 @@ export function UpdatePersonModal({ person, children, ...props }) {
       <Button display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

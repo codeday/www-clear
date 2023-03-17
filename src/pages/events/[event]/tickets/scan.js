@@ -10,8 +10,9 @@ import {
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useColorModeValue } from '@codeday/topo/Theme';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { UiSearch } from '@codeday/topocons';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import Ticket from '../../../../components/Ticket';
 import { getEventWithTickets } from './scan.gql';
 import { getFetcher } from '../../../../fetch';
@@ -36,7 +37,7 @@ export default function Scan({ event }) {
   };
 
   return (
-    <Page>
+    <>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -104,7 +105,7 @@ export default function Scan({ event }) {
           stopStream={stopStream}
         />
       </Modal>
-    </Page>
+    </>
   );
 }
 
@@ -113,7 +114,7 @@ export async function getServerSideProps({
   res,
   query: { event: eventId },
 }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResult = await fetch(getEventWithTickets, {

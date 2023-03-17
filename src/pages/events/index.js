@@ -6,10 +6,10 @@ import {
 import { useColorModeValue } from '@codeday/topo/Theme';
 import { Select } from 'chakra-react-select';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import Page from '../../components/Page';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import { getFetcher } from '../../fetch';
 import Event from '../../components/Event';
 import { getEvents } from './index.gql';
@@ -24,8 +24,14 @@ export default function Events({ eventGroups, isAdmin }) {
   useHotkeys('ctrl+k', () => searchBar.current.focus(), { preventDefault: true });
   useHotkeys('esc', () => searchBar.current.blur(), { enableOnFormTags: true });
 
-  if (!eventGroups) return <Page />;
-  if (isLoading) return <Page><Spinner /></Page>;
+  if (!eventGroups) return <></>;
+  if (isLoading) {
+    return (
+      <Box textAlign="center">
+        <Spinner />
+      </Box>
+    );
+  }
   const now = DateTime.now().minus({ days: 1 });
   const events = [];
   eventGroups.forEach((eg) => {
@@ -38,7 +44,7 @@ export default function Events({ eventGroups, isAdmin }) {
   });
 
   return (
-    <Page title="Events">
+    <>
       <Box rounded="md" boxShadow="base" mb={4}>
         <Select
           useBasicStyles
@@ -113,12 +119,12 @@ export default function Events({ eventGroups, isAdmin }) {
           </Box>
         );
       })}
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, query }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResults = await fetch(
@@ -127,6 +133,7 @@ export async function getServerSideProps({ req, res, query }) {
   );
   return {
     props: {
+      title: 'Events',
       eventGroups: eventResults.clear.eventGroups,
       isAdmin: session.isAdmin,
     },

@@ -1,8 +1,9 @@
 import React from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { Heading, Link } from '@codeday/topo/Atom';
+import { Heading, NextLink } from '@codeday/topo/Atom';
 import { Email, IdCard } from '@codeday/topocons';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import { getFetcher } from '../../../../fetch';
 import { GetScheduleItemQuery } from './scheduleitem.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
@@ -14,9 +15,9 @@ import { SetScheduleItemNotesMutation } from '../../../../components/forms/Notes
 import Notes from '../../../../components/forms/Notes';
 
 export default function ScheduleItem({ scheduleitem }) {
-  if (!scheduleitem) return <Page />;
+  if (!scheduleitem) return <></>;
   return (
-    <Page title={scheduleitem.name}>
+    <>
       <Breadcrumbs event={scheduleitem.event} scheduleitem={scheduleitem} />
       <Heading>
         {scheduleitem.type ? `${scheduleitem.type}: ` : null} {scheduleitem.name}
@@ -26,7 +27,7 @@ export default function ScheduleItem({ scheduleitem }) {
       <Heading size="md">
         {scheduleitem.displayTimeWithDate}
       </Heading>
-      <Link>{scheduleitem.link}</Link>
+      <NextLink>{scheduleitem.link}</NextLink>
       <ResponsiveMasonry>
         <Masonry>
           <InfoBox heading="Description">
@@ -51,17 +52,18 @@ export default function ScheduleItem({ scheduleitem }) {
           </InfoBox>
         </Masonry>
       </ResponsiveMasonry>
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, query: { scheduleitem: itemId } }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const scheduleitemResults = await fetch(GetScheduleItemQuery, { data: { id: itemId } });
   return {
     props: {
+      title: scheduleitemResults?.clear?.scheduleItem?.name || 'Schedule Item',
       scheduleitem: scheduleitemResults.clear.scheduleItem,
     },
   };

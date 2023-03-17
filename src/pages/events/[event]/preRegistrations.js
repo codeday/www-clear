@@ -3,7 +3,8 @@ import { useToasts } from '@codeday/topo/utils';
 import {
   Heading, Text, TextInput, Textarea, Button,
 } from '@codeday/topo/Atom';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Page from '../../../components/Page';
 import { getEventPreRegistrationsQuery, SendEventPreRegsitrationsEmail } from './preRegistrations.gql';
@@ -16,9 +17,9 @@ export default function PreRegistrations({ event }) {
   const [isLoading, setIsLoading] = useState(false);
   const { success, error } = useToasts();
 
-  if (!event) return <Page />;
+  if (!event) return <></>;
   return (
-    <Page title={event.name}>
+    <>
       <Breadcrumbs event={event} />
       <Heading>{event.name} ~ Pre Registrations</Heading>
       <Text>Email body uses markdown.</Text>
@@ -57,12 +58,12 @@ export default function PreRegistrations({ event }) {
       >
         Send
       </Button>
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, query: { event: eventId } }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResults = await fetch(getEventPreRegistrationsQuery, { data: { id: eventId } });
@@ -78,6 +79,7 @@ export async function getServerSideProps({ req, res, query: { event: eventId } }
   return {
     props: {
       event,
+      title: event?.name,
     },
   };
 }

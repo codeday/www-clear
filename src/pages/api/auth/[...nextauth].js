@@ -5,7 +5,7 @@ import { generateToken } from '../../../token';
 
 const { serverRuntimeConfig } = getConfig();
 
-const options = {
+export const nextAuthOptions = {
   secret: serverRuntimeConfig.appSecret,
   providers: [
     Auth0Provider(serverRuntimeConfig.auth0),
@@ -26,4 +26,4 @@ const options = {
   },
 };
 
-export default (req, res) => NextAuth(req, res, options);
+export default (req, res) => NextAuth(req, res, nextAuthOptions);

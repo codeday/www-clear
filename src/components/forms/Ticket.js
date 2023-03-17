@@ -11,6 +11,7 @@ import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { CreateTicketMutation, DeleteTicketMutation, UpdateTicketMutation } from './Ticket.gql';
 import { useFetcher } from '../../fetch';
 
@@ -111,6 +112,7 @@ export function CreateTicketModal({ event, children, ...props }) {
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Heading>Create Ticket</Heading>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -173,6 +175,7 @@ export function UpdateTicketModal({ ticket, children, ...props }) {
       <Button display="inline" onClick={onOpenModal}>{children || <Icons.UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

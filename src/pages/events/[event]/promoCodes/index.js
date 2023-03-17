@@ -1,7 +1,8 @@
 import React from 'react';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { Heading } from '@codeday/topo/Atom';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import { getFetcher } from '../../../../fetch';
 import { getEventWithPromoCodesQuery } from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
@@ -11,7 +12,7 @@ import { CreatePromoCodeModal, CreateScholarshipCodeButton } from '../../../../c
 
 export default function PromoCodes({ event }) {
   return (
-    <Page title="Promo Codes">
+    <>
       <Breadcrumbs event={event} />
       <Heading>{event.name} ~ Promo Codes <CreatePromoCodeModal display="inline" event={event} /> <CreateScholarshipCodeButton event={event} /></Heading>
       <ResponsiveMasonry>
@@ -19,12 +20,12 @@ export default function PromoCodes({ event }) {
           {event.promoCodes.map((promoCode) => <PromoCodeBox promoCode={promoCode} as="a" href={`promoCodes/${promoCode.id}`} />)}
         </Masonry>
       </ResponsiveMasonry>
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, query: { event: eventId } }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResults = await fetch(getEventWithPromoCodesQuery, { data: { id: eventId } });
@@ -39,6 +40,7 @@ export async function getServerSideProps({ req, res, query: { event: eventId } }
   }
   return {
     props: {
+      title: 'Promo Codes',
       event,
     },
   };

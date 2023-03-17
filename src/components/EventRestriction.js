@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
-  Box, Button, Image, Link, Text,
+  Box, Button, Image, NextLink, Text,
 } from '@codeday/topo/Atom';
 import { marked } from 'marked';
 import DOMPurify from 'isomorphic-dompurify';
@@ -32,7 +32,7 @@ function transform(node) {
     if (node.children[0].data.startsWith('btn ')) {
       return <Button as="a" href={node.attribs.href}>{node.children[0].data.slice(3)}</Button>;
     }
-    return <Link to={node.attribs.href}>{node.children[0].data}</Link>;
+    return <NextLink to={node.attribs.href}>{node.children[0].data}</NextLink>;
   }
 }
 

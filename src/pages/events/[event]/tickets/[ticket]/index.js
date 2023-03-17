@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Heading, Text } from '@codeday/topo/Atom';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import {
   DevicePhone,
@@ -10,6 +10,7 @@ import {
   UiAdd,
 } from '@codeday/topocons';
 import moment from 'moment';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import Page from '../../../../../components/Page';
 import { getFetcher } from '../../../../../fetch';
 import { getTicket } from './ticket.gql';
@@ -32,9 +33,9 @@ import { SetTicketNotesMutation } from '../../../../../components/forms/Notes.gq
 import Notes from '../../../../../components/forms/Notes';
 
 export default function TicketPage({ ticket }) {
-  if (!ticket) return <Page />;
+  if (!ticket) return <></>;
   return (
-    <Page>
+    <>
       <Breadcrumbs event={ticket.event} ticket={ticket} />
       <Confidential />
       <Heading display="inline">
@@ -132,15 +133,16 @@ export default function TicketPage({ ticket }) {
           />
         </Masonry>
       </ResponsiveMasonry>
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({
   req,
+  res,
   query: { event: eventId, ticket: ticketId },
 }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const ticketResult = await fetch(getTicket, { data: { id: ticketId } });

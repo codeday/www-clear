@@ -12,6 +12,7 @@ import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import {
   CreatePromoCodeMutation, DeletePromoCodeMutation, UpdatePromoCodeMutation, SetPromoCodeMetatataMutation,
 } from './PromoCode.gql';
@@ -90,6 +91,7 @@ export function CreatePromoCodeModal({ event, children, ...props }) {
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Heading>Create Promo Code</Heading>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -156,6 +158,7 @@ export function UpdatePromoCodeModal({ promocode, children, ...props }) {
       <Button display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

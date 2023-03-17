@@ -14,7 +14,7 @@ export default function CheckinCounter({ event, ...props }) {
     notCheckedInStudents, checkedInStudents, notCheckedInStaff, checkedInStaff, venue,
   } = data.clear.event;
   const total = notCheckedInStudents.length + checkedInStudents.length + notCheckedInStaff.length + checkedInStaff.length;
-  const absoluteTotal = Math.max(total, venue.capacity);
+  const absoluteTotal = Math.max(total, venue?.capacity);
   if (!venue?.capacity || total < 5 || checkedInStudents === 0 || checkedInStaff === 0) return <></>;
 
   return (

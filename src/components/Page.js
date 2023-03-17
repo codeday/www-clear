@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable react/jsx-curly-brace-presence */
+import React, { } from 'react';
 import {
-  Box, Button, Clear, Heading, Skelly, Spinner, Link,
+  Box, Button, Clear, Heading, Skelly, Spinner, NextLink,
 } from '@codeday/topo/Atom';
 import { Content } from '@codeday/topo/Molecule';
 import {
@@ -18,16 +19,20 @@ export default function Page({
 
   if (!session) {
     return (
-      <Box position="relative">
+      <Box position="relative" paddingLeft="calc(100vw - 100%)">
         <Header underscore position="relative">
           <SiteLogo>
-            <a href="/">
+            <NextLink href={'/'}>
               <Clear withText />
-            </a>
+            </NextLink>
           </SiteLogo>
         </Header>
         <Content>
-          {loading ? <Spinner /> : (
+          {loading ? (
+            <Box textAlign="center">
+              <Spinner />
+            </Box>
+          ) : (
             <>
               <Heading>Log in with your CodeDay Account to continue</Heading>
               <Button size="lg" m={10} onClick={() => signIn('auth0')}>Log In</Button>
@@ -39,7 +44,9 @@ export default function Page({
   }
   const menuItems = (
     <Menu>
-      <Button variant="ghost" key="events" as="a" href="/events">My Events</Button>
+      <NextLink href="/events">
+        <Button variant="ghost" key="events">My Events</Button>
+      </NextLink>
       <Button
         variant="ghost"
         onClick={() => {
@@ -55,12 +62,13 @@ export default function Page({
         title={`${title ? `${title} ~ ` : ''}Clear`}
         canonical={`https://clear.codeday.org${slug}`}
       />
-      <Box position="relative" {...props}>
+      {/* padding on left is to prevent scroll bar from shifting content */}
+      <Box position="relative" paddingLeft="calc(100vw - 100%)" {...props}>
         <Header underscore position="relative">
           <SiteLogo>
-            <a href={session.isAdmin ? '/' : '/events'}>
+            <NextLink href={session.isAdmin ? '/' : '/events'}>
               <Clear withText />
-            </a>
+            </NextLink>
             <div style={{
               display: 'inline-block', marginLeft: '0.4em', position: 'relative', top: '-0.15em',
             }}
@@ -77,8 +85,8 @@ export default function Page({
         </Content>
         <Footer repository="www-clear" branch="master" mt={16}>
           <CustomLinks>
-            <Link href="/events" display="block">Events</Link>
-            <Link href="/token" display="block">API Token</Link>
+            <NextLink href="/events" display="block">Events</NextLink>
+            <NextLink href="/token" display="block">API Token</NextLink>
           </CustomLinks>
         </Footer>
       </Box>

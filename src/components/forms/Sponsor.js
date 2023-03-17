@@ -12,6 +12,7 @@ import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { CreateSponsorMutation, DeleteSponsorMutation, UpdateSponsorMutation } from './Sponsor.gql';
 import { useFetcher } from '../../fetch';
 
@@ -88,6 +89,7 @@ export function CreateSponsorModal({ event, children, ...props }) {
           schema={schema}
           formData={formData}
           onChange={(data) => setFormData(data.formData)}
+          validator={validator}
         >
           <Button
             isLoading={loading}
@@ -155,6 +157,7 @@ export function UpdateSponsorModal(
           schema={schema}
           formData={formData}
           onChange={(data) => setFormData(data.formData)}
+          validator={validator}
         >
           <Button
             isLoading={loading}

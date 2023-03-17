@@ -12,6 +12,7 @@ import { useSession } from 'next-auth/react';
 import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { ticketTypeEnum } from './Ticket';
 import {
   CreateEmailTemplateMutation,
@@ -178,6 +179,7 @@ export function CreateEmailTemplateModal({ children, ...props }) {
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Heading>Create EmailTemplate</Heading>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -234,6 +236,7 @@ export function UpdateEmailTemplateModal({ emailtemplate, children, ...props }) 
       <Button display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

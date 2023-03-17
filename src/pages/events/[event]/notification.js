@@ -3,7 +3,8 @@ import { useToasts } from '@codeday/topo/utils';
 import {
   Heading, Text, TextInput, Textarea, Checkbox, Button,
 } from '@codeday/topo/Atom';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import Page from '../../../components/Page';
 import { SendNotification, getEventQuery } from './notification.gql';
@@ -19,7 +20,7 @@ export default function Notification({ event }) {
   const { success, error } = useToasts();
 
   return (
-    <Page title={event.name}>
+    <>
       <Breadcrumbs event={event} />
       <Heading>{event.name} ~ Send Notification</Heading>
       <Text>
@@ -67,12 +68,12 @@ export default function Notification({ event }) {
         Send
       </Button>
       <Checkbox ml={2} mt={2} checked={guardian} onChange={(e) => setGuardian(e.target.checked)}>Send to guardian instead.</Checkbox>
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, query: { event: eventId } }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResults = await fetch(getEventQuery, { data: { id: eventId } });
@@ -88,6 +89,7 @@ export async function getServerSideProps({ req, res, query: { event: eventId } }
   return {
     props: {
       event,
+      title: event.name,
     },
   };
 }

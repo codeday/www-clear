@@ -1,7 +1,8 @@
 import React from 'react';
 import { Heading, Text } from '@codeday/topo/Atom';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import { UiInfo } from '@codeday/topocons';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import Page from '../../../components/Page';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { getFetcher } from '../../../fetch';
@@ -10,9 +11,9 @@ import { SetEventMetadataMutation } from '../../../components/forms/EditSpecific
 import { getEventAdvancedConfigQuery } from './advancedConfig.gql';
 
 export default function AdvancedConfig({ event }) {
-  if (!event) return <Page />;
+  if (!event) return <></>;
   return (
-    <Page title={`Advanced Config - ${event.name}`}>
+    <>
       <Breadcrumbs event={event} />
       <Heading>{event.name} ~ Advanced Config</Heading>
       <Text mb={4}>
@@ -79,12 +80,12 @@ export default function AdvancedConfig({ event }) {
         setMutation={SetEventMetadataMutation}
         updateId={event.id}
       />
-    </Page>
+    </>
   );
 }
 
 export async function getServerSideProps({ req, res, query: { event: eventId } }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResults = await fetch(getEventAdvancedConfigQuery, { data: { id: eventId } });
@@ -99,6 +100,7 @@ export async function getServerSideProps({ req, res, query: { event: eventId } }
   }
   return {
     props: {
+      title: `Advanced Config - ${event?.name}`,
       event,
     },
   };

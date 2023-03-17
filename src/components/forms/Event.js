@@ -14,6 +14,7 @@ import { useToasts, useTheme } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import moment from 'moment-timezone';
 import { useSession } from 'next-auth/react';
+import validator from '@rjsf/validator-ajv6';
 import { CreateEventMutation, DeleteEventMutation, UpdateEventMutation } from './Event.gql';
 import { useFetcher } from '../../fetch';
 import { InfoAlert } from '../Alert';
@@ -145,6 +146,7 @@ export function CreateEventModal({ group, children, ...props }) {
         <Heading>Create Event</Heading>
         <InfoAlert>Default values have been autofilled from the Event Group</InfoAlert>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -213,6 +215,7 @@ export function UpdateEventModal({ event, children, ...props }) {
       <Button display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

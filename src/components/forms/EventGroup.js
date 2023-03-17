@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import moment from 'moment-timezone';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { CreateEventGroupMutation, DeleteEventGroupMutation, UpdateEventGroupMutation } from './EventGroup.gql';
 import { useFetcher } from '../../fetch';
 
@@ -90,6 +91,7 @@ export function CreateEventGroupModal({ children, ...props }) {
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Heading>Create Event Group</Heading>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}
@@ -154,6 +156,7 @@ export function UpdateEventGroupModal({ eventgroup, children, ...props }) {
       <Button display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           uiSchema={uiSchema}
           schema={schema}
           formData={formData}

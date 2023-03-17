@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth/next';
 import {
   Box,
   Button,
@@ -21,6 +21,7 @@ import { UiDownload, Camera } from '@codeday/topocons';
 import { useColorModeValue } from '@codeday/topo/Theme';
 import { useRouter } from 'next/router';
 import { Icon } from '@chakra-ui/react';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
 import { getEvent, getTickets, getWaiverBook } from './index.gql';
 import Breadcrumbs from '../../../../components/Breadcrumbs';
 import Ticket from '../../../../components/Ticket';
@@ -95,9 +96,9 @@ export default function Tickets({ event }) {
   const [tickets, setTickets] = useState(
     (data?.clear?.event?.tickets || []).sort((a, b) => a.lastName.localeCompare(b.lastName)),
   );
-  if (!event) return <Page />;
+  if (!event) return <></>;
   return (
-    <Page title={`${event.name} Tickets`}>
+    <>
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets {isValidating && <Spinner />}</Heading>
       <CreateTicketModal event={event} display="inline" pr={4} />
@@ -172,7 +173,7 @@ export default function Tickets({ event }) {
           <Ticket id={ticket.id} ticket={ticket} />
         ))}
       </Grid>
-    </Page>
+    </>
   );
 }
 
@@ -181,7 +182,7 @@ export async function getServerSideProps({
   res,
   query: { event: eventId },
 }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResult = await fetch(getEvent, {
@@ -189,6 +190,7 @@ export async function getServerSideProps({
   });
   return {
     props: {
+      title: `${eventResult?.clear?.event?.name} Tickets`,
       event: eventResult.clear.event,
     },
   };

@@ -12,6 +12,7 @@ import { useToasts } from '@codeday/topo/utils';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import validator from '@rjsf/validator-ajv6';
 import { CreateVenueMutation, DeleteVenueMutation, UpdateVenueMutation } from './Venue.gql';
 import { useFetcher } from '../../fetch';
 import { InfoAlert } from '../Alert';
@@ -100,6 +101,7 @@ export function CreateVenueModal({ event, children, ...props }) {
         <Heading>Create Venue</Heading>
         <InfoAlert>You can leave anything you aren't sure of yet blank and edit later!</InfoAlert>
         <Form
+          validator={validator}
           schema={schema}
           formData={formData}
           onChange={(data) => setFormData(data.formData)}
@@ -158,6 +160,7 @@ export function UpdateVenueModal({ venue, children, ...props }) {
       <Button h={6} display="inline" onClick={onOpenModal}>{children || <UiEdit />}</Button>
       <Modal open={open} onClose={onCloseModal} center styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}>
         <Form
+          validator={validator}
           schema={schema}
           formData={formData}
           onChange={(data) => setFormData(data.formData)}

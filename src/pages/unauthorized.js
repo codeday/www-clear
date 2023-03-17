@@ -1,12 +1,12 @@
 import {
-  Box, Heading, Link, Text,
+  Box, Heading, NextLink, Text,
 } from '@codeday/topo/Atom';
+import React from 'react';
 import Opossum from '../components/Opossum';
-import Page from '../components/Page';
 
 export default function Unauthorized() {
   return (
-    <Page title="Unauthorized">
+    <>
       <Box style={{ display: 'flex', justifyContent: 'center' }}>
         <Opossum />
       </Box>
@@ -16,8 +16,12 @@ export default function Unauthorized() {
           <br />
           If you feel this is in error, please ask your CodeDay point of contact.
         </Text>
-        <Link href="/">Go home</Link>
+        <NextLink href="/">Go home</NextLink>
       </Box>
-    </Page>
+    </>
   );
+}
+
+export function getStaticProps() {
+  return { props: { slug: '', title: 'Unauthorized' } };
 }

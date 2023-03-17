@@ -1,8 +1,10 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+const moment = require('moment-timezone');
+const shouldAnalyzeBundles = process.env.ANALYZE === 'true';
 
-module.exports = withBundleAnalyzer({
+moment.tz.setDefault('Etc/UTC');
+
+let nextConfig = {
+  experimental: { newNextLinkBehavior: false },
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
@@ -38,4 +40,11 @@ module.exports = withBundleAnalyzer({
     });
     return config;
   },
-});
+};
+
+if (shouldAnalyzeBundles) {
+  const withNextBundleAnalyzer = require('next-bundle-analyzer')();
+  nextConfig = withNextBundleAnalyzer(nextConfig);
+}
+
+module.exports = nextConfig;

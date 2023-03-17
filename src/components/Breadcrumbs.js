@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export default function Breadcrumbs({
-  group, event, ticket, scheduleitem, code,
+  group,
+  event,
+  ticket,
+  scheduleitem,
+  code,
 }) {
   const router = useRouter();
   const [breadcrumbs, setBreadcrumbs] = useState(null);
@@ -45,9 +50,11 @@ export default function Breadcrumbs({
       {/* </BreadcrumbItem> */}
       {breadcrumbs.map((breadcrumb, i) => (
         <BreadcrumbItem key={i}>
-          <BreadcrumbLink href={breadcrumb.href}>
-            {convertBreadcrumb(breadcrumb.breadcrumb)}
-          </BreadcrumbLink>
+          <Link href={breadcrumb.href} passHref>
+            <BreadcrumbLink>
+              {convertBreadcrumb(breadcrumb.breadcrumb)}
+            </BreadcrumbLink>
+          </Link>
         </BreadcrumbItem>
       ))}
     </Breadcrumb>
