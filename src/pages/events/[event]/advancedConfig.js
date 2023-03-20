@@ -71,6 +71,22 @@ export default function AdvancedConfig({event}) {
                 updateId={event.id}
             />
             <EditSpecificMetadata
+                displayKeyAs="External Registration Name"
+                description="If External Registration URL is also set, sets the display name of where to register."
+                metadataKey="registration.external.name"
+                value={event.registrationExternalName}
+                setMutation={SetEventMetadataMutation}
+                updateId={event.id}
+            />
+            <EditSpecificMetadata
+                displayKeyAs="External Registration URL"
+                description="Redirects registration to use a third-party page."
+                metadataKey="registration.external.url"
+                value={event.registrationExternalUrl}
+                setMutation={SetEventMetadataMutation}
+                updateId={event.id}
+            />
+            <EditSpecificMetadata
                 displayKeyAs="Legal text"
                 description="Sponsor trademark notice or other required legal text."
                 metadataKey="legal"
