@@ -14,7 +14,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.5.1",
-    "@codeday/topo": "^9.2.3",
+    "@codeday/topo": "^9.2.4",
     "@codeday/topocons": "^2.0.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
