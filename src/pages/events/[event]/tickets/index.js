@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { getSession } from "next-auth/react";
+import React, { useState, useRef, useEffect } from 'react';
+import { getServerSession } from 'next-auth/next';
 import {
   Box,
   Button,
@@ -14,40 +14,39 @@ import {
   HStack,
   Switch,
   Spinner,
-} from "@codeday/topo/Atom";
+} from '@codeday/topo/Atom';
 import useSwr from 'swr';
-import { getEvent, getTickets, getWaiverBook } from "./index.gql";
-import Breadcrumbs from "../../../../components/Breadcrumbs";
-import Ticket from "../../../../components/Ticket";
-import Page from "../../../../components/Page";
-import { getFetcher, useFetcher } from "../../../../fetch";
-import { CreateTicketModal } from "../../../../components/forms/Ticket";
+import { CSVLink } from 'react-csv';
+import { UiDownload, Camera } from '@codeday/topocons';
+import { useColorModeValue } from '@codeday/topo/Theme';
+import { useRouter } from 'next/router';
+import { Icon } from '@chakra-ui/react';
+import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
+import { getEvent, getTickets, getWaiverBook } from './index.gql';
+import Breadcrumbs from '../../../../components/Breadcrumbs';
+import Ticket from '../../../../components/Ticket';
+import Page from '../../../../components/Page';
+import { getFetcher, useFetcher } from '../../../../fetch';
+import { CreateTicketModal } from '../../../../components/forms/Ticket';
 import CheckinCounter from '../../../../components/CheckinCounter';
-import { CSVLink } from "react-csv";
-import { UiDownload, Camera } from "@codeday/topocons/Icon";
-import { useColorModeValue } from "@codeday/topo/Theme";
-import { useRouter } from "next/router";
-import { Icon } from "@chakra-ui/react";
 
 function sortFn(sort, tickets) {
   switch (sort) {
-    case "alphabetical-last":
+    case 'alphabetical-last':
       return [...tickets].sort((a, b) => a.lastName.localeCompare(b.lastName));
-    case "alphabetical-first":
-      return [...tickets].sort((a, b) =>
-        a.firstName.localeCompare(b.firstName)
-      );
-    case "age-dec":
+    case 'alphabetical-first':
+      return [...tickets].sort((a, b) => a.firstName.localeCompare(b.firstName));
+    case 'age-dec':
       return [...tickets].sort((a, b) => b.age - a.age);
-    case "age-asc":
+    case 'age-asc':
       return [...tickets].sort((a, b) => a.age - b.age);
-    case "date-dec":
+    case 'date-dec':
       return [...tickets].sort(
-        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
+        (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
       );
-    case "date-asc":
+    case 'date-asc':
       return [...tickets].sort(
-        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
+        (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
       );
   }
 }
@@ -59,49 +58,47 @@ export default function Tickets({ event }) {
   const [waiversLoading, setWaiversLoading] = useState(false);
   const [waiverBookUrl, setWaiverBookUrl] = useState(null);
   const headers = [
-    "firstName",
-    "lastName",
-    "age",
-    "email",
-    "phone",
-    "whatsApp",
-    "type",
-    "guardianFirstName",
-    "guardianLastName",
-    "guardianEmail",
-    "guardianPhone",
-    "guardianWhatsApp",
-    "waiverSigned",
-    "waiverUrl",
-    "organization"
+    'firstName',
+    'lastName',
+    'age',
+    'email',
+    'phone',
+    'whatsApp',
+    'type',
+    'guardianFirstName',
+    'guardianLastName',
+    'guardianEmail',
+    'guardianPhone',
+    'guardianWhatsApp',
+    'waiverSigned',
+    'waiverUrl',
+    'organization',
   ];
   const csv = (data?.clear?.event?.tickets || [])
-    .map((t) =>
-      [
-        t.firstName,
-        t.lastName,
-        t.age,
-        t.email,
-        t.phone,
-        t.whatsApp,
-        t.type,
-        t.guardian?.firstName || "",
-        t.guardian?.lastName || "",
-        t.guardian?.email || "",
-        t.guardian?.phone || "",
-        t.guardian?.whatsApp || "",
-        t.waiverSigned ? 'signed' : 'not signed',
-        t.waiverUrl,
-        t.organization || "",
-      ].join(",")
-    )
+    .map((t) => [
+      t.firstName,
+      t.lastName,
+      t.age,
+      t.email,
+      t.phone,
+      t.whatsApp,
+      t.type,
+      t.guardian?.firstName || '',
+      t.guardian?.lastName || '',
+      t.guardian?.email || '',
+      t.guardian?.phone || '',
+      t.guardian?.whatsApp || '',
+      t.waiverSigned ? 'signed' : 'not signed',
+      t.waiverUrl,
+      t.organization || '',
+    ].join(','))
     .join(`\n`);
   const [tickets, setTickets] = useState(
-    (data?.clear?.event?.tickets || []).sort((a, b) => a.lastName.localeCompare(b.lastName))
+    (data?.clear?.event?.tickets || []).sort((a, b) => a.lastName.localeCompare(b.lastName)),
   );
-  if (!event) return <Page />;
+  if (!event) return <></>;
   return (
-    <Page title={`${event.name} Tickets`}>
+    <>
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets {isValidating && <Spinner />}</Heading>
       <CreateTicketModal event={event} display="inline" pr={4} />
@@ -132,7 +129,7 @@ export default function Tickets({ event }) {
       </Button>
       <Button
         mr={4}
-        onClick={() => router.push({ pathname: "tickets/scan/", query: { event: event?.id } })}
+        onClick={() => router.push({ pathname: 'tickets/scan/', query: { event: event?.id } })}
       >
         <Icon mr={2} as={Camera} />Scan Tickets
       </Button>
@@ -141,42 +138,42 @@ export default function Tickets({ event }) {
         tickets={data?.clear?.event?.tickets || []}
         setTickets={setTickets}
         event={event}
-      ></SortAndFilter>
+      />
 
       <HStack spacing={4}>
         <Text>
           Avg Student Age:&nbsp;
           {Math.round(
             (tickets
-              .filter((ticket) => ticket.type == "STUDENT")
-              .reduce((partialSum, ticket) => partialSum + ticket.age, 0) /
-              (data?.clear?.event?.tickets.filter((ticket) => ticket.type == "STUDENT") || [])
-                .length) *
-              10
+              .filter((ticket) => ticket.type == 'STUDENT')
+              .reduce((partialSum, ticket) => partialSum + ticket.age, 0)
+              / (data?.clear?.event?.tickets.filter((ticket) => ticket.type == 'STUDENT') || [])
+                .length)
+              * 10,
           ) / 10}
         </Text>
         <Text>Total Tickets:&nbsp;{tickets.length}</Text>
         <Text>
           Students:&nbsp;
-          {tickets.filter((ticket) => ticket.type == "STUDENT").length}
+          {tickets.filter((ticket) => ticket.type == 'STUDENT').length}
         </Text>
         <Text>
           Staff:&nbsp;
-          {tickets.filter((ticket) => ticket.type != "STUDENT").length}
+          {tickets.filter((ticket) => ticket.type != 'STUDENT').length}
         </Text>
       </HStack>
       <Grid
         templateColumns={{
-          base: "1fr",
-          md: "repeat(2, 1fr)",
-          lg: "repeat(3, 1fr)",
+          base: '1fr',
+          md: 'repeat(2, 1fr)',
+          lg: 'repeat(3, 1fr)',
         }}
       >
         {tickets.map((ticket) => (
           <Ticket id={ticket.id} ticket={ticket} />
         ))}
       </Grid>
-    </Page>
+    </>
   );
 }
 
@@ -185,7 +182,7 @@ export async function getServerSideProps({
   res,
   query: { event: eventId },
 }) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, nextAuthOptions);
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
   const eventResult = await fetch(getEvent, {
@@ -193,6 +190,7 @@ export async function getServerSideProps({
   });
   return {
     props: {
+      title: `${eventResult?.clear?.event?.name} Tickets`,
       event: eventResult.clear.event,
     },
   };
@@ -201,62 +199,58 @@ export async function getServerSideProps({
 function SortAndFilter({ tickets, setTickets }) {
   const [waiver, setWaiver] = useState(true);
   const [checkedIn, setCheckedIn] = useState(true);
-  const [filter, setFilter] = useState("");
-  const [sort, setSort] = useState("alphabetical-last");
+  const [filter, setFilter] = useState('');
+  const [sort, setSort] = useState('alphabetical-last');
 
   useEffect(() => {
     let newTickets = tickets;
     if (waiver) {
       newTickets = sortFn(
         sort,
-        tickets.filter((t) => t.waiverSigned === waiver) || []
+        tickets.filter((t) => t.waiverSigned === waiver) || [],
       );
     }
 
     if (checkedIn) {
       newTickets = sortFn(
         sort,
-        tickets.filter((t) =>
-          checkedIn
-            ? (t.checkedIn && t.checkedOut) ||
-              (!t.checkedIn && !t.checkedOut)
-            : t.checkedIn && !t.checkedOut
-        )
+        tickets.filter((t) => (checkedIn
+          ? (t.checkedIn && t.checkedOut)
+              || (!t.checkedIn && !t.checkedOut)
+          : t.checkedIn && !t.checkedOut)),
       );
     }
 
     switch (filter) {
-      case "student":
+      case 'student':
         newTickets = sortFn(
           sort,
-          tickets.filter((t) => t.type === "STUDENT") || []
+          tickets.filter((t) => t.type === 'STUDENT') || [],
         );
         break;
-      case "staff":
+      case 'staff':
         newTickets = sortFn(
           sort,
-          tickets.filter((t) => t.type !== "STUDENT") || []
+          tickets.filter((t) => t.type !== 'STUDENT') || [],
         );
         break;
-      case "waiver":
+      case 'waiver':
         newTickets = sortFn(
           sort,
-          tickets.filter((t) => t.waiverSigned !== waiver) || []
+          tickets.filter((t) => t.waiverSigned !== waiver) || [],
         );
         break;
 
-      case "checked-in":
+      case 'checked-in':
         newTickets = sortFn(
           sort,
-          tickets.filter((t) =>
-            checkedIn
-              ? t.checkedIn && !t.checkedOut
-              : (t.checkedIn && t.checkedOut) ||
-                (!t.checkedIn && !t.checkedOut)
-          )
+          tickets.filter((t) => (checkedIn
+            ? t.checkedIn && !t.checkedOut
+            : (t.checkedIn && t.checkedOut)
+                || (!t.checkedIn && !t.checkedOut))),
         );
         break;
-      case "all":
+      case 'all':
       default:
         newTickets = sortFn(sort, tickets);
         break;
@@ -264,11 +258,11 @@ function SortAndFilter({ tickets, setTickets }) {
 
     setTickets(sortFn(sort, newTickets));
   }, [sort, filter, waiver, checkedIn, tickets]);
-  console.log(`rerender with ${tickets.length} tickets`)
+  console.log(`rerender with ${tickets.length} tickets`);
   return (
     <HStack mt={4} w="100%" spacing={5}>
       <HStack>
-        <Text w="fit-content">{"Sort By: "}</Text>
+        <Text w="fit-content">{'Sort By: '}</Text>
         <Select
           width="fit-content"
           value={sort}
@@ -276,16 +270,16 @@ function SortAndFilter({ tickets, setTickets }) {
             setSort(e.target.value);
           }}
         >
-          <option value={"alphabetical-last"}>alphabetical, last name</option>
-          <option value={"alphabetical-first"}>alphabetical, first name</option>
-          <option value={"age-dec"}>age high-low</option>
-          <option value={"age-asc"}>age low-high</option>
-          <option value={"date-dec"}>signup date newest-oldest</option>
-          <option value={"date-asc"}>signup date oldest-newest</option>
+          <option value="alphabetical-last">alphabetical, last name</option>
+          <option value="alphabetical-first">alphabetical, first name</option>
+          <option value="age-dec">age high-low</option>
+          <option value="age-asc">age low-high</option>
+          <option value="date-dec">signup date newest-oldest</option>
+          <option value="date-asc">signup date oldest-newest</option>
         </Select>
       </HStack>
       <HStack>
-        <Text w="fit-content">{"Filter By: "}</Text>
+        <Text w="fit-content">{'Filter By: '}</Text>
         <Select
           width="fit-content"
           value={filter}
@@ -293,13 +287,13 @@ function SortAndFilter({ tickets, setTickets }) {
             setFilter(e.target.value);
           }}
         >
-          <option value={"all"}>all</option>
-          <option value={"student"}>student</option>
-          <option value={"staff"}>staff</option>
-          <option value={"waiver"}>waiver</option>
-          <option value={"checked-in"}>checked in</option>
+          <option value="all">all</option>
+          <option value="student">student</option>
+          <option value="staff">staff</option>
+          <option value="waiver">waiver</option>
+          <option value="checked-in">checked in</option>
         </Select>
-        {filter == "waiver" && (
+        {filter == 'waiver' && (
           <>
             <Text>Missing Waiver? </Text>
             <Switch
@@ -307,10 +301,10 @@ function SortAndFilter({ tickets, setTickets }) {
               onChange={() => {
                 setWaiver(!waiver);
               }}
-            ></Switch>
+            />
           </>
         )}
-        {filter == "checked-in" && (
+        {filter == 'checked-in' && (
           <>
             <Text>Checked In? </Text>
             <Switch
@@ -318,7 +312,7 @@ function SortAndFilter({ tickets, setTickets }) {
               onChange={() => {
                 setCheckedIn(!checkedIn);
               }}
-            ></Switch>
+            />
           </>
         )}
       </HStack>
@@ -329,7 +323,7 @@ function SortAndFilter({ tickets, setTickets }) {
 export const CSVExport = ({
   data,
   headers,
-  filename = "data.csv",
+  filename = 'data.csv',
   ...props
 }) => {
   const ref = useRef(null);
@@ -341,7 +335,7 @@ export const CSVExport = ({
       {...props}
     >
       <CSVLink
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         data={data}
         headers={headers}
         filename={filename}

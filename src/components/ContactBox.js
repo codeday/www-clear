@@ -1,16 +1,17 @@
 import React from 'react';
-import * as Icon from '@codeday/topocons/Icon';
+import { DevicePhone, Email, IdCard } from '@codeday/topocons';
 import InfoBox from './InfoBox';
 
 export default function ContactBox({
-                                       name, email, phone, children, ...props
-                                   }) {
-    return (
-        <InfoBox heading="Contact" {...props}>
-            <Icon.IdCard/> {name}<br/>
-            <Icon.Email/> {email}<br/>
-            <Icon.DevicePhone/> {phone}{children ? <br/> : null}
-            {children}
-        </InfoBox>
-    );
+  name, email, phone, children, ...props
+}) {
+  return (
+    <InfoBox heading="Contact" {...props}>
+      <IdCard /> {name} <br />
+      <Email /> {email} <br />
+      <DevicePhone /> {phone}
+      {children ? <br /> : null}
+      {children}
+    </InfoBox>
+  );
 }

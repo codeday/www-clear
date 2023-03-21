@@ -1,120 +1,119 @@
-import React, {useState} from "react";
-import {Box, Switch, Text, Checkbox, Stack, Tooltip, Divider} from "@codeday/topo/Atom"
-import { UiInfo } from "@codeday/topocons/Icon"
-import Alert, {WarningAlert} from "./Alert"
-import InfoBox from "./InfoBox"
-import {useFetcher} from "../fetch";
-import {useToasts} from "@codeday/topo/utils"
-import {RegistrationsToggleMutation} from "./RegistrationsToggleWithChecklist.gql"
-import {useRouter} from "next/router";
-import {useSession} from "next-auth/react";
+import React, { useState } from 'react';
+import {
+  Box, Switch, Text, Checkbox, Stack, Tooltip, Divider,
+} from '@codeday/topo/Atom';
+import { UiInfo } from '@codeday/topocons';
+import { useToasts } from '@codeday/topo/utils';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
+import Alert, { WarningAlert } from './Alert';
+import InfoBox from './InfoBox';
+import { useFetcher } from '../fetch';
+import { RegistrationsToggleMutation } from './RegistrationsToggleWithChecklist.gql';
 
-function CheckListItem({item, nested=false}) {
-  if(item.hide) return <></>
-  if (!item.checklist || !item.check || !item.checklist.map(c => c.check).includes(false)) {
+function CheckListItem({ item, nested = false }) {
+  if (item.hide) return <></>;
+  if (!item.checklist || !item.check || !item.checklist.map((c) => c.check).includes(false)) {
     return (
       <Checkbox
         colorScheme="red"
-        size={nested? "md" : "lg"}
+        size={nested ? 'md' : 'lg'}
         isFocusable={false}
-        isReadOnly={true}
+        isReadOnly
         isChecked={item.check}
       >
-        <Tooltip label={item.description} ><Box>{item.name} { item.description ? <UiInfo /> : null }</Box></Tooltip>
-      </Checkbox>)
+        <Tooltip label={item.description}><Box>{item.name} { item.description ? <UiInfo /> : null }</Box></Tooltip>
+      </Checkbox>
+    );
   }
   return (
     <>
       <Checkbox
         colorScheme="red"
-        size={ nested? "md" : "lg"}
+        size={nested ? 'md' : 'lg'}
         isFocusable={false}
-        isReadOnly={true}
-        isIndeterminate={true}
+        isReadOnly
+        isIndeterminate
       >
         {item.name}
       </Checkbox>
       <Stack pl={6} spacing={0}>
-        {item.checklist.map(i => <CheckListItem item={i} nested={true} />)}
+        {item.checklist.map((i) => <CheckListItem item={i} nested />)}
       </Stack>
     </>
-  )
+  );
 }
 
-
-
-export default function RegistrationsToggleWithChecklist({event, children, ...props}) {
+export default function RegistrationsToggleWithChecklist({ event, children, ...props }) {
   const checklist = [
     {
-      name: "Find a venue",
+      name: 'Find a venue',
       check: Boolean(event.venue),
       requiredToOpen: true,
       checklist: [
         {
-          name: "Enter Address",
-          check: Boolean(event.venue?.address)
+          name: 'Enter Address',
+          check: Boolean(event.venue?.address),
         },
         {
-          name: "Enter Capacity",
-          check: Boolean(event.venue?.capacity > 0)
+          name: 'Enter Capacity',
+          check: Boolean(event.venue?.capacity > 0),
         },
         {
-          name: "Enter Contact Details",
-          check: Boolean(event.venue?.contactName &&
-            (event.venue?.contactEmail ||
-              event.venue?.contactPhone))
+          name: 'Enter Contact Details',
+          check: Boolean(event.venue?.contactName
+            && (event.venue?.contactEmail
+              || event.venue?.contactPhone)),
         },
         {
-          name: "Enter Map Link",
-          check: Boolean(event.venue?.mapLink)
-        }
-      ]
+          name: 'Enter Map Link',
+          check: Boolean(event.venue?.mapLink),
+        },
+      ],
     },
     {
-      name: "Configure event restrictions",
+      name: 'Configure event restrictions',
       hide: Boolean(!event.venue),
-      check: Boolean(event.eventRestrictions?.length > 0)
+      check: Boolean(event.eventRestrictions?.length > 0),
     },
     {
-      name: "Create initial schedule",
+      name: 'Create initial schedule',
       hide: Boolean(!event.venue),
-      description: "This does not have to be the entire final schedule for your event! However, at a minimum, publish events for the start, end, and meals.",
-      check: Boolean(event.schedule.filter((item) => {
-        return item.finalized
-      }).length > 0)
+      description: 'This does not have to be the entire final schedule for your event! However, at a minimum, publish events for the start, end, and meals.',
+      check: Boolean(event.schedule.filter((item) => item.finalized).length > 0),
     },
     {
-      name: "Open Registrations",
-      check: Boolean(event.registrationsOpen)
+      name: 'Open Registrations',
+      check: Boolean(event.registrationsOpen),
     },
     {
-      name: "Promote Event",
+      name: 'Promote Event',
       check: Boolean(event.registrationsOpen),
       checklist: [
         {
-          name: "Create a promo code",
-          description: "Very few CodeDay attendees end up paying full price, and this is 100% intended! We recommend creating different promo codes for different schools/groups/etc you reach out to, this helps them feel special, as well as helps you track the most effective outreach methods!",
-          check: Boolean(event.promoCodes.length > 0)
+          name: 'Create a promo code',
+          description: 'Very few CodeDay attendees end up paying full price, and this is 100% intended! We recommend creating different promo codes for different schools/groups/etc you reach out to, this helps them feel special, as well as helps you track the most effective outreach methods!',
+          check: Boolean(event.promoCodes.length > 0),
         },
         {
-          name: "Your first registration!",
-          check: Boolean(event.studentRegistrations.length > 0)
+          name: 'Your first registration!',
+          check: Boolean(event.studentRegistrations.length > 0),
         },
         {
-          name: "50% of capacity sold out!",
-          check: Boolean(event.studentRegistrations.length > (event.venue?.capacity / 2))
+          name: '50% of capacity sold out!',
+          check: Boolean(event.studentRegistrations.length > (event.venue?.capacity / 2)),
         },
         {
-          name: "100% of capacity sold out - wow!",
-          check: Boolean(event.allRegistrations.length >= event.venue?.capacity )
-        }
+          name: '100% of capacity sold out - wow!',
+          check: Boolean(event.allRegistrations.length >= event.venue?.capacity),
+        },
 
-      ]
-    }
-  ]
-  const disabled = Boolean(checklist.filter(c => c.requiredToOpen).map(c => c.check).includes(false))
+      ],
+    },
+  ];
+  const disabled = Boolean(checklist.filter((c) => c.requiredToOpen).map((c) => c.check).includes(false));
   const [loading, setLoading] = useState(false);
-  const {success, error} = useToasts();
+  const { success, error } = useToasts();
   const { data: session } = useSession();
   const fetch = useFetcher(session);
   const router = useRouter();
@@ -125,9 +124,9 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
         {event.tickets.length >= event.venue?.capacity ? (
           <Text as="span" color="red.500">sold out.</Text>
         ) : (
-          event.registrationsOpen ?
-            <Text as="span" color="green">open.</Text> :
-            <Text as="span" color="gray.500">closed.</Text>
+          event.registrationsOpen
+            ? <Text as="span" color="green">open.</Text>
+            : <Text as="span" color="gray.500">closed.</Text>
         )}
       </Box>
       <Switch
@@ -137,18 +136,18 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
         size="lg"
         colorScheme="green"
         onChange={async (e) => {
-          setLoading(true)
+          setLoading(true);
           try {
             await fetch(RegistrationsToggleMutation, {
-              eventWhere: {id: event.id},
-              data: e.target.checked
-            })
+              eventWhere: { id: event.id },
+              data: e.target.checked,
+            });
             await router.replace(router.asPath); // kind of clunky solution to refresh serverSideProps after update; https://www.joshwcomeau.com/nextjs/refreshing-server-side-props/
-            success(`Registrations ${e.target.checked ? "opened" : "closed"}`)
+            success(`Registrations ${e.target.checked ? 'opened' : 'closed'}`);
           } catch (ex) {
-            error(ex.toString())
+            error(ex.toString());
           }
-          setLoading(false)
+          setLoading(false);
         }}
       />
       {event.registrationsOpen && (
@@ -158,9 +157,9 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
         </Text>
       )}
       <Divider my={3} />
-        {
-          checklist.map(item => <CheckListItem item={item} />)
+      {
+          checklist.map((item) => <CheckListItem item={item} />)
         }
     </InfoBox>
-  )
+  );
 }

@@ -1,20 +1,27 @@
-import Opossum from "../components/Opossum";
-import {Box, Heading, Link, Text} from "@codeday/topo/Atom";
-import Page from "../components/Page"
+import {
+  Box, Heading, Link, Text,
+} from '@codeday/topo/Atom';
+import React from 'react';
+import Opossum from '../components/Opossum';
 
 export default function Unauthorized() {
-    return (
-        <Page title='Unauthorized'>
-            <Box style={{ display: "flex", justifyContent: "center" }}>
-                <Opossum />
-            </Box>
-            <Box style={{ textAlign: "center" }}>
-                <Heading>Unauthorized</Heading>
-                <Text>I'm sorry, but I'm not allowed to let you in here.
-                <br/>
-                If you feel this is in error, please ask your CodeDay point of contact.</Text>
-                <Link href="/">Go home</Link>
-            </Box>
-        </Page>
-    );
+  return (
+    <>
+      <Box style={{ display: 'flex', justifyContent: 'center' }}>
+        <Opossum />
+      </Box>
+      <Box style={{ textAlign: 'center' }}>
+        <Heading>Unauthorized</Heading>
+        <Text>I'm sorry, but I'm not allowed to let you in here.
+          <br />
+          If you feel this is in error, please ask your CodeDay point of contact.
+        </Text>
+        <Link href="/">Go home</Link>
+      </Box>
+    </>
+  );
+}
+
+export function getStaticProps() {
+  return { props: { slug: '', title: 'Unauthorized' } };
 }

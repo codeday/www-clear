@@ -1,23 +1,23 @@
 import React from 'react';
-import {Box, Heading} from "@codeday/topo/Atom";
+import { Box, Heading } from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
 
-export default function ({schedule, children, ...props}) {
-    const finalizedExternalEvents = schedule.filter((val) => val.finalized && !val.internal);
-    const nonfinalizedExternalEvents = schedule.filter((val) => !val.finalized && !val.internal);
-    const internalEvents = schedule.filter((val) => val.internal);
-    return (
-        <InfoBox heading="Schedule" headingSize="xl" {...props}>
-            <Box>
-                <Heading display="inline" color="green">{finalizedExternalEvents.length}</Heading> Published Events
-            </Box>
-            <Box>
-                <Heading display="inline" color="orange">{nonfinalizedExternalEvents.length}</Heading> Unpublished Events
-            </Box>
-            <Box>
-                <Heading display="inline" color="purple">{internalEvents.length}</Heading> Internal Events
-            </Box>
-            {children}
-        </InfoBox>
-    );
+export default function ({ schedule, children, ...props }) {
+  const finalizedExternalEvents = schedule.filter((val) => val.finalized && !val.internal);
+  const nonfinalizedExternalEvents = schedule.filter((val) => !val.finalized && !val.internal);
+  const internalEvents = schedule.filter((val) => val.internal);
+  return (
+    <InfoBox heading="Schedule" headingSize="xl" {...props}>
+      <Box>
+        <Heading display="inline" color="green">{finalizedExternalEvents.length}</Heading> Published Events
+      </Box>
+      <Box>
+        <Heading display="inline" color="orange">{nonfinalizedExternalEvents.length}</Heading> Unpublished Events
+      </Box>
+      <Box>
+        <Heading display="inline" color="purple">{internalEvents.length}</Heading> Internal Events
+      </Box>
+      {children}
+    </InfoBox>
+  );
 }
