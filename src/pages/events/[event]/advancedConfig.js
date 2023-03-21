@@ -1,6 +1,8 @@
 import React from 'react';
 import { Heading, Text } from '@codeday/topo/Atom';
 import { UiInfo } from '@codeday/topocons';
+import { getServerSession } from 'next-auth';
+import { nextAuthOptions } from '../../api/auth/[...nextauth]';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { getFetcher } from '../../../fetch';
 import EditSpecificMetadata from '../../../components/forms/EditSpecificMetadata';
