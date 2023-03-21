@@ -6,6 +6,8 @@ query getEventAdvancedConfigQuery($data: ClearEventWhereUniqueInput!) {
             registrationCustomForm: getMetadata(key: "registration.custom-form")
             registrationCollectOrg: getMetadata(key: "registration.collect-org")
             registrationContactAnd: getMetadata(key: "registration.contact-and")
+            registrationExternalName: getMetadata(key: "registration.external.name")
+            registrationExternalUrl: getMetadata(key: "registration.external.url")
             dateDisplay: getMetadata(key: "date.display")
             sponsorsHideGlobal: getMetadata(key: "sponsors.hide-global")
             covidHide: getMetadata(key: "covid.hide")

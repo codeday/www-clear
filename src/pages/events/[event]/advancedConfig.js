@@ -1,9 +1,6 @@
 import React from 'react';
 import { Heading, Text } from '@codeday/topo/Atom';
-import { getServerSession } from 'next-auth/next';
 import { UiInfo } from '@codeday/topocons';
-import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
-import Page from '../../../components/Page';
 import Breadcrumbs from '../../../components/Breadcrumbs';
 import { getFetcher } from '../../../fetch';
 import EditSpecificMetadata from '../../../components/forms/EditSpecificMetadata';
@@ -69,6 +66,22 @@ export default function AdvancedConfig({ event }) {
         description="By default events require either a phone OR an email. Set this to 1 if you want your event to require both."
         metadataKey="registration.contact-and"
         value={event.registrationContactAnd}
+        setMutation={SetEventMetadataMutation}
+        updateId={event.id}
+      />
+      <EditSpecificMetadata
+        displayKeyAs="External Registration Name"
+        description="If External Registration URL is also set, sets the display name of where to register."
+        metadataKey="registration.external.name"
+        value={event.registrationExternalName}
+        setMutation={SetEventMetadataMutation}
+        updateId={event.id}
+      />
+      <EditSpecificMetadata
+        displayKeyAs="External Registration URL"
+        description="Redirects registration to use a third-party page."
+        metadataKey="registration.external.url"
+        value={event.registrationExternalUrl}
         setMutation={SetEventMetadataMutation}
         updateId={event.id}
       />
