@@ -1,5 +1,5 @@
 import {
-  Box, Heading, NextLink, Text,
+  Box, Heading, Link, Text,
 } from '@codeday/topo/Atom';
 import Opossum from '../components/Opossum';
 
@@ -12,7 +12,7 @@ export default function ServerError() {
       <Box style={{ textAlign: 'center' }}>
         <Heading>Oh no! Error 500</Heading>
         <Text>There seems to have been an error on our part. </Text>
-        <NextLink href="/">Go home</NextLink>
+        <Link href="/">Go home</Link>
       </Box>
     </>
   );

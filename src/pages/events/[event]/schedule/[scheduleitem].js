@@ -1,6 +1,6 @@
 import React from 'react';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { Heading, NextLink } from '@codeday/topo/Atom';
+import { Heading, Link } from '@codeday/topo/Atom';
 import { Email, IdCard } from '@codeday/topocons';
 import { getServerSession } from 'next-auth/next';
 import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
@@ -27,7 +27,7 @@ export default function ScheduleItem({ scheduleitem }) {
       <Heading size="md">
         {scheduleitem.displayTimeWithDate}
       </Heading>
-      <NextLink>{scheduleitem.link}</NextLink>
+      <Link>{scheduleitem.link}</Link>
       <ResponsiveMasonry>
         <Masonry>
           <InfoBox heading="Description">

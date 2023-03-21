@@ -1,5 +1,5 @@
 import {
-  Box, Heading, NextLink, Text,
+  Box, Heading, Link, Text,
 } from '@codeday/topo/Atom';
 import { NextSeo } from 'next-seo';
 import React from 'react';
@@ -18,7 +18,7 @@ export default function NotFound() {
       <Box style={{ textAlign: 'center' }}>
         <Heading>Oh no! Error 404</Heading>
         <Text>There seems to be nothing here. </Text>
-        <NextLink href="/">Go home</NextLink>
+        <Link href="/">Go home</Link>
       </Box>
     </>
   );

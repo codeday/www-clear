@@ -1,11 +1,11 @@
-import { NextLink } from '@codeday/topo/Atom';
+import { Link } from '@codeday/topo/Atom';
 import Page from '../../components/Page';
 
 export default function Index() {
   return (
     <ul>
       <li>
-        <NextLink href="admin/emailTemplates">Email templates</NextLink>
+        <Link href="admin/emailTemplates">Email templates</Link>
       </li>
     </ul>
   );

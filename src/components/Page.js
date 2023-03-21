@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-curly-brace-presence */
 import React, { } from 'react';
 import {
-  Box, Button, Clear, Heading, Skelly, Spinner, NextLink,
+  Box, Button, Clear, Heading, Skelly, Spinner, Link,
 } from '@codeday/topo/Atom';
 import { Content } from '@codeday/topo/Molecule';
 import {
@@ -22,9 +22,9 @@ export default function Page({
       <Box position="relative" paddingLeft="calc(100vw - 100%)">
         <Header underscore position="relative">
           <SiteLogo>
-            <NextLink href={'/'}>
+            <Link href={'/'}>
               <Clear withText />
-            </NextLink>
+            </Link>
           </SiteLogo>
         </Header>
         <Content>
@@ -44,9 +44,9 @@ export default function Page({
   }
   const menuItems = (
     <Menu>
-      <NextLink href="/events">
+      <Link href="/events">
         <Button variant="ghost" key="events">My Events</Button>
-      </NextLink>
+      </Link>
       <Button
         variant="ghost"
         onClick={() => {
@@ -66,9 +66,9 @@ export default function Page({
       <Box position="relative" paddingLeft="calc(100vw - 100%)" {...props}>
         <Header underscore position="relative">
           <SiteLogo>
-            <NextLink href={session.isAdmin ? '/' : '/events'}>
+            <Link href={session.isAdmin ? '/' : '/events'}>
               <Clear withText />
-            </NextLink>
+            </Link>
             <div style={{
               display: 'inline-block', marginLeft: '0.4em', position: 'relative', top: '-0.15em',
             }}
@@ -85,8 +85,8 @@ export default function Page({
         </Content>
         <Footer repository="www-clear" branch="master" mt={16}>
           <CustomLinks>
-            <NextLink href="/events" display="block">Events</NextLink>
-            <NextLink href="/token" display="block">API Token</NextLink>
+            <Link href="/events" display="block">Events</Link>
+            <Link href="/token" display="block">API Token</Link>
           </CustomLinks>
         </Footer>
       </Box>

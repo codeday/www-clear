@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, NextLink, Text } from '@codeday/topo/Atom';
+import { Heading, Link, Text } from '@codeday/topo/Atom';
 import { FileDoc } from '@codeday/topocons';
 import InfoBox from './InfoBox';
 import { DeleteVenueModal, UpdateVenueModal } from './forms/Venue';
@@ -14,9 +14,9 @@ export default function VenueInfo({
       <InfoBox heading="Venue" buttons={buttons} {...props}>
         No venue... yet! <br />
         <DocsCallout>
-          <NextLink color="brand" href="https://codeday.notion.site/searchVenue-db-templates-criteria-bd376b4bd5324bf68614f3089069ca98">
+          <Link color="brand" href="https://codeday.notion.site/searchVenue-db-templates-criteria-bd376b4bd5324bf68614f3089069ca98">
             Click here
-          </NextLink>
+          </Link>
           &nbsp;to read tips on finding a venue in the CodeDay Organizer Guide!
         </DocsCallout>
         {children}
@@ -44,7 +44,7 @@ export default function VenueInfo({
     >
       <Heading size="md">{venue.name}</Heading>
       <Text mb={0}>
-        <NextLink href={venue.mapLink}>{venue.address}</NextLink>
+        <Link href={venue.mapLink}>{venue.address}</Link>
       </Text>
       <Text mb={0}>Capacity: {venue.capacity}</Text>
       <ContactBox nested name={venue.contactName} email={venue.contactEmail} phone={venue.contactPhone} />

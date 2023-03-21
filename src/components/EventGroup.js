@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Text } from '@codeday/topo/Atom';
 import moment from 'moment';
-import Link from 'next/link';
 import InfoBox from './InfoBox';
 
 export default function EventGroup({ group, ...props }) {

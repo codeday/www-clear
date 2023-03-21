@@ -50,7 +50,7 @@ export default function Breadcrumbs({
       {/* </BreadcrumbItem> */}
       {breadcrumbs.map((breadcrumb, i) => (
         <BreadcrumbItem key={i}>
-          <Link href={breadcrumb.href} passHref>
+          <Link href={breadcrumb.href} passHref legacyBehavior>
             <BreadcrumbLink>
               {convertBreadcrumb(breadcrumb.breadcrumb)}
             </BreadcrumbLink>

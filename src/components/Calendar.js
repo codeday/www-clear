@@ -3,7 +3,6 @@ import { Box, Divider, Text } from '@codeday/topo/Atom';
 import moment from 'moment-timezone';
 import seed from 'random-seed';
 import { useTheme } from '@codeday/topo/utils';
-import Link from 'next/link';
 import { GoodAlert, InfoAlert, WarningAlert } from './Alert';
 
 export const eventColors = {
@@ -64,61 +63,60 @@ export default function Calendar({
                         )
                       ];
                   return (
-                    <Link href={`schedule/${e.id}`} passHref>
+                    <Box
+                      href={`schedule/${e.id}`}
+                      as="a"
+                      display="block"
+                      m={1}
+                      ml={10}
+                      borderWidth={1}
+                      borderRadius="sm"
+                      borderColor={`${baseColor}.200`}
+                      backgroundColor={`${baseColor}.50`}
+                    >
                       <Box
-                        as="a"
-                        display="block"
-                        m={1}
-                        ml={10}
-                        borderWidth={1}
-                        borderRadius="sm"
-                        borderColor={`${baseColor}.200`}
-                        backgroundColor={`${baseColor}.50`}
-                      >
-                        <Box
-                          display="inline-block"
-                          p={2}
-                          pb={1}
-                          color={`${baseColor}.800`}
-                          fontSize="sm"
-                          fontWeight="bold"
-                          backgroundColor={`${baseColor}.200`}
+                        display="inline-block"
+                        p={2}
+                        pb={1}
+                        color={`${baseColor}.800`}
+                        fontSize="sm"
+                        fontWeight="bold"
+                        backgroundColor={`${baseColor}.200`}
                             // marginBottom={2}
-                          borderBottomWidth={1}
-                        >
-                          {e.type || 'Event'}
-                        </Box>
-                        <Box
-                          display="inline-block"
-                          pl={2}
-                          pr={2}
-                          pb={1}
-                          fontSize="md"
-                          fontWeight="bold"
-                          color={`${baseColor}.900`}
-                          textDecoration="underline"
-                        >
-                          {e.name || 'TBA'}
-                        </Box>
-                        <Text display="inline" m={2} color="black">
-                          {e.displayTime}
-                        </Text>
-                        <Box m={4}>
-                          <Box color="black">
-                            <b>{e.hostName}</b>
-                            {e.hostPronoun ? `(${e.hostPronoun})` : null}
-                          </Box>
-                          {e.internal ? (
-                            <InfoAlert>Internal</InfoAlert>
-                          ) : e.finalized ? (
-                            <GoodAlert>Finalized</GoodAlert>
-                          ) : (
-                            <WarningAlert>Not Finalized</WarningAlert>
-                          )}
-                          <Box color="black">{e.description}</Box>
-                        </Box>
+                        borderBottomWidth={1}
+                      >
+                        {e.type || 'Event'}
                       </Box>
-                    </Link>
+                      <Box
+                        display="inline-block"
+                        pl={2}
+                        pr={2}
+                        pb={1}
+                        fontSize="md"
+                        fontWeight="bold"
+                        color={`${baseColor}.900`}
+                        textDecoration="underline"
+                      >
+                        {e.name || 'TBA'}
+                      </Box>
+                      <Text display="inline" m={2} color="black">
+                        {e.displayTime}
+                      </Text>
+                      <Box m={4}>
+                        <Box color="black">
+                          <b>{e.hostName}</b>
+                          {e.hostPronoun ? `(${e.hostPronoun})` : null}
+                        </Box>
+                        {e.internal ? (
+                          <InfoAlert>Internal</InfoAlert>
+                        ) : e.finalized ? (
+                          <GoodAlert>Finalized</GoodAlert>
+                        ) : (
+                          <WarningAlert>Not Finalized</WarningAlert>
+                        )}
+                        <Box color="black">{e.description}</Box>
+                      </Box>
+                    </Box>
                   );
                 })
               : null}

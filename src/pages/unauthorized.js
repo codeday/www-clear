@@ -1,5 +1,5 @@
 import {
-  Box, Heading, NextLink, Text,
+  Box, Heading, Link, Text,
 } from '@codeday/topo/Atom';
 import React from 'react';
 import Opossum from '../components/Opossum';
@@ -16,7 +16,7 @@ export default function Unauthorized() {
           <br />
           If you feel this is in error, please ask your CodeDay point of contact.
         </Text>
-        <NextLink href="/">Go home</NextLink>
+        <Link href="/">Go home</Link>
       </Box>
     </>
   );

@@ -1,13 +1,11 @@
 import React from 'react';
 import {
-  Button, Heading, Text, NextLink,
+  Button, Heading, Text, Link,
 } from '@codeday/topo/Atom';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { Eye, UiAdd } from '@codeday/topocons';
 import { getServerSession } from 'next-auth/next';
 import { nextAuthOptions } from 'src/pages/api/auth/[...nextauth]';
-import Link from 'next/link';
-import Page from '../../../components/Page';
 import { getEventQuery } from './index.gql';
 import { getFetcher } from '../../../fetch';
 import Breadcrumbs from '../../../components/Breadcrumbs';
@@ -54,7 +52,7 @@ export default function Event({ event }) {
             currencySymbol={event.region?.currencySymbol}
             buttons={(
               <>
-                <ButtonLink h={6} as="a" href={`${event.id}/sponsors`}><Eye /></ButtonLink>
+                <Button h={6} as="a" href={`${event.id}/sponsors`}><Eye /></Button>
                             &nbsp;
                 <CreateSponsorModal event={event}><UiAdd /></CreateSponsorModal>
               </>
@@ -63,14 +61,14 @@ export default function Event({ event }) {
           <RegistrationGraph
             event={event}
             buttons={
-              <ButtonLink h={6} as="a" href={`${event.id}/tickets`}><Eye /></ButtonLink>
+              <Button h={6} as="a" href={`${event.id}/tickets`}><Eye /></Button>
                         }
           />
           <ScheduleBox
             schedule={event.schedule}
             buttons={(
               <>
-                <ButtonLink h={6} as="a" href={`${event.id}/schedule`}><Eye /></ButtonLink>
+                <Button h={6} as="a" href={`${event.id}/schedule`}><Eye /></Button>
                                 &nbsp;
                 <CreateScheduleItemModal event={event}><UiAdd /></CreateScheduleItemModal>
               </>
@@ -85,7 +83,7 @@ export default function Event({ event }) {
           <TicketBox
             event={event}
             buttons={
-              <ButtonLink h={6} as="a" href={`${event.id}/promoCodes`}>PROMOS</ButtonLink>
+              <Button h={6} as="a" href={`${event.id}/promoCodes`}>PROMOS</Button>
                       }
           />
           <EventRestrictionBox
@@ -94,34 +92,26 @@ export default function Event({ event }) {
               ...event.cmsEventRestrictions,
             ]}
             buttons={(
-              <ButtonLink h={6} as="a" href={`${event.id}/eventRestrictions`}>
+              <Button h={6} as="a" href={`${event.id}/eventRestrictions`}>
                 <Eye />
-              </ButtonLink>
+              </Button>
                           )}
           />
           <InfoBox heading="Actions">
-            <ButtonLink w="100%" mb={2} as="a" href={`${event.id}/tickets/scan`}>Check-In/Out</ButtonLink>
-            <ButtonLink w="100%" mb={2} as="a" href={`${event.id}/notification`}>Send Notification</ButtonLink>
-            <ButtonLink w="100%" mb={2} as="a" href={`${event.id}/advancedConfig`}>Edit Advanced Config</ButtonLink>
+            <Button w="100%" mb={2} as="a" href={`${event.id}/tickets/scan`}>Check-In/Out</Button>
+            <Button w="100%" mb={2} as="a" href={`${event.id}/notification`}>Send Notification</Button>
+            <Button w="100%" mb={2} as="a" href={`${event.id}/advancedConfig`}>Edit Advanced Config</Button>
             <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/projects/all/event=${event.id}`}>View Projects</Button>
             <Button w="100%" mb={2} as="a" target="_blank" href="https://showcase.codeday.org/upload-photos">Upload Photos</Button>
           </InfoBox>
           <MetadataBox metadata={event.metadata}>
-            <NextLink href={`${event.id}/advancedConfig`}>Set metadata (advanced)</NextLink>
+            <Link href={`${event.id}/advancedConfig`}>Set metadata (advanced)</Link>
           </MetadataBox>
         </Masonry>
       </ResponsiveMasonry>
     </>
   );
 }
-
-const ButtonLink = ({ href, children, ...props }) => (
-  <Link href={href} passHref>
-    <Button {...props}>
-      {children}
-    </Button>
-  </Link>
-);
 
 export async function getServerSideProps({ req, res, query: { event: eventId } }) {
   const session = await getServerSession(req, res, nextAuthOptions);

@@ -436,13 +436,6 @@
     aria-hidden "^1.2.2"
     react-remove-scroll "^2.5.5"
 
-"@chakra-ui/next-js@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@chakra-ui/next-js/-/next-js-2.0.1.tgz#604db641fb6d0fa58cdf43913b77fa157621b2f4"
-  integrity sha512-LuVLb94chGB4fCszfmkh7ZYv3BsID7w5/Unr3HDe85cN4F+1AMkkhbBaZQiyIoqjCMD5hYj6R31DD4nDu+RI/Q==
-  dependencies:
-    "@emotion/cache" "^11.10.5"
-
 "@chakra-ui/number-input@2.0.18":
   version "2.0.18"
   resolved "https://registry.yarnpkg.com/@chakra-ui/number-input/-/number-input-2.0.18.tgz#072a00ef869ebafa4960cfdee8caae8208864289"
@@ -961,13 +954,12 @@
     eslint-plugin-react-hooks "^2.3.0"
     eslint-plugin-sonarjs "^0.5.0"
 
-"@codeday/topo@^9.2.2":
-  version "9.2.2"
-  resolved "https://registry.yarnpkg.com/@codeday/topo/-/topo-9.2.2.tgz#f8c5544e1b69d3ee8084e5623e5c6171f8c13d6c"
-  integrity sha512-CGRmkE5MIG5kwWW6UL5+0wY5cyFHNbB+46fPt+4NQIcwyiXtxXrlhRIz8TtotjtkeEzuc8d43MwLXhO02B5W2w==
+"@codeday/topo@^9.2.3":
+  version "9.2.3"
+  resolved "https://registry.yarnpkg.com/@codeday/topo/-/topo-9.2.3.tgz#38e3611e43710a77d21a705ed7f4cc7e7195be04"
+  integrity sha512-gjY/Le3DQWOKgq0acxJfaGO8x4RteEv8wS2JVCkOcQwsFrWwzEJX0pJLrBgT52yjolSoz7EXEqrt/T1zbWm7xw==
   dependencies:
     "@accessible/use-id" "^1.1.2"
-    "@chakra-ui/next-js" "^2.0.1"
     "@chakra-ui/react" "^2.5.1"
     "@chakra-ui/styled-system" "^2.6.1"
     "@codeday/topocons" "^2.0.2"
@@ -979,8 +971,6 @@
     graphql "^16.0.1"
     graphql-request "^3.6.1"
     lodash.get "^4.4.2"
-    react "^18.0.0"
-    react-dom "^18.0.0"
     react-load-script "^0.0.6"
     recompose "^0.30.0"
     stylis "~4.0.10"
@@ -5289,7 +5279,7 @@ react-datetime@^3.0.4:
   dependencies:
     prop-types "^15.5.7"
 
-react-dom@^18.0.0, react-dom@^18.2.0:
+react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -5505,7 +5495,7 @@ react@^16.9.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react@^18.0.0, react@^18.2.0:
+react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==

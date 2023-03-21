@@ -4,9 +4,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { TransportBusSchool, UiFolder, ToTheMoon } from '@codeday/topocons';
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { NextSeo } from 'next-seo';
 
 export default function Index() {
   const session = useSession();
@@ -17,30 +15,24 @@ export default function Index() {
   }
   return (
     <Grid templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }} gap={4}>
-      <Link href="/events" passHref>
-        <Button as="a" fontSize="lg" h={24} textAlign="center" lineHeight={0.7}>
-          <Box>
-            <Box fontSize="4xl" mb={0}><TransportBusSchool /></Box><br />
-            Events
-          </Box>
-        </Button>
-      </Link>
-      <Link href="/groups" passHref>
-        <Button as="a" fontSize="lg" h={24} textAlign="center" lineHeight={0.7}>
-          <Box>
-            <Box fontSize="4xl" mb={0}><UiFolder /></Box><br />
-            Groups
-          </Box>
-        </Button>
-      </Link>
-      <Link href="/admin" passHref>
-        <Button as="a" fontSize="lg" h={24} textAlign="center" lineHeight={0.7}>
-          <Box>
-            <Box fontSize="4xl" mb={0}><ToTheMoon /></Box><br />
-            Admin
-          </Box>
-        </Button>
-      </Link>
+      <Button href="/events" as="a" fontSize="lg" h={24} textAlign="center" lineHeight={0.7}>
+        <Box>
+          <Box fontSize="4xl" mb={0}><TransportBusSchool /></Box><br />
+          Events
+        </Box>
+      </Button>
+      <Button href="/groups" as="a" fontSize="lg" h={24} textAlign="center" lineHeight={0.7}>
+        <Box>
+          <Box fontSize="4xl" mb={0}><UiFolder /></Box><br />
+          Groups
+        </Box>
+      </Button>
+      <Button href="/admin" as="a" fontSize="lg" h={24} textAlign="center" lineHeight={0.7}>
+        <Box>
+          <Box fontSize="4xl" mb={0}><ToTheMoon /></Box><br />
+          Admin
+        </Box>
+      </Button>
     </Grid>
   );
 }

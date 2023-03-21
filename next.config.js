@@ -1,10 +1,15 @@
 const moment = require('moment-timezone');
+
 const shouldAnalyzeBundles = process.env.ANALYZE === 'true';
 
 moment.tz.setDefault('Etc/UTC');
 
-let nextConfig = {
-  experimental: { newNextLinkBehavior: false },
+const { withTopo } = require('@codeday/topo/Next');
+
+/**
+ * @type {import('next').NextConfig}
+ */
+let nextConfig = withTopo({
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
@@ -30,9 +35,7 @@ let nextConfig = {
     },
     appUrl: process.env.APP_URL,
   },
-  webpack: (config, {
-    buildId, dev, isServer, defaultLoaders, webpack,
-  }) => {
+  webpack: (config) => {
     config?.module?.rules.push({
       test: /\.(graphql|gql)$/,
       exclude: /node_modules/,
@@ -40,7 +43,7 @@ let nextConfig = {
     });
     return config;
   },
-};
+});
 
 if (shouldAnalyzeBundles) {
   const withNextBundleAnalyzer = require('next-bundle-analyzer')();

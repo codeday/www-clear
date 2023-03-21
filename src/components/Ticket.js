@@ -5,7 +5,6 @@ import { Box, Button, Text } from '@codeday/topo/Atom';
 import { useToasts } from '@codeday/topo/utils';
 import { Eye } from '@codeday/topocons';
 import { useColorModeValue } from '@codeday/topo/Theme';
-import Link from 'next/link';
 import { checkin, checkout, sendWaiverReminder } from './Ticket.gql';
 import Badge from './Badge';
 import Alert, { GoodAlert } from './Alert';
@@ -134,9 +133,7 @@ export default function Ticket({ ticket, eventId, ...props }) {
           Fix Link
         </Button>
         {ticket.waiverUrl && (
-          <Link href={ticket.waiverUrl} passHref>
-            <Button target="_blank" size="xs" as="a" onClick={(e) => e.stopPropagation()}>Sign Here</Button>
-          </Link>
+          <Button href={ticket.waiverUrl} target="_blank" size="xs" as="a" onClick={(e) => e.stopPropagation()}>Sign Here</Button>
         )}
         <br />
       </Box>
