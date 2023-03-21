@@ -3,13 +3,12 @@ import { Box, Flex, Text } from '@codeday/topo/Atom';
 import { useColorModeValue } from '@codeday/topo/Theme';
 
 export default function InfoBox({
-  children=undefined,
-  heading=undefined,
-  subHeading=undefined,
-  headingSize=undefined,
-  buttons=undefined,
-  nested=false,
-  href=undefined,
+  children = undefined,
+  heading = undefined,
+  subHeading = undefined,
+  headingSize = undefined,
+  buttons = undefined,
+  nested = false,
   ...props
 }) {
   return (
