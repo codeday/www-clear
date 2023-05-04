@@ -25,7 +25,6 @@ import { CreateTicketModal } from "../../../../components/forms/Ticket";
 import CheckinCounter from '../../../../components/CheckinCounter';
 import { CSVLink } from "react-csv";
 import { UiDownload, Camera } from "@codeday/topocons/Icon";
-import { useColorModeValue } from "@codeday/topo/Theme";
 import { useRouter } from "next/router";
 import { Icon } from "@chakra-ui/react";
 
@@ -58,6 +57,13 @@ export default function Tickets({ event }) {
   const { data, isValidating } = useSwr([getTickets, { data: { id: event.id } }], fetcher, { revalidateOnFocus: true, refreshInterval: 60 * 1000 });
   const [waiversLoading, setWaiversLoading] = useState(false);
   const [waiverBookUrl, setWaiverBookUrl] = useState(null);
+  const surveyHeaders = Array.from(
+    new Set(
+      (data?.clear?.event?.tickets || [])
+        .flatMap((t) => Object.keys(t.surveyResponses || {}))
+        .filter((t) => !t.startsWith('study.'))
+    )
+  );
   const headers = [
     "firstName",
     "lastName",
@@ -73,7 +79,8 @@ export default function Tickets({ event }) {
     "guardianWhatsApp",
     "waiverSigned",
     "waiverUrl",
-    "organization"
+    "organization",
+    ...surveyHeaders,
   ];
   const csv = (data?.clear?.event?.tickets || [])
     .map((t) =>
@@ -93,6 +100,7 @@ export default function Tickets({ event }) {
         t.waiverSigned ? 'signed' : 'not signed',
         t.waiverUrl,
         t.organization || "",
+        ...surveyHeaders.map((h) => t.surveyResponses?.[h] || '').map((s) => s.replace(/,/g, ';')),
       ].join(",")
     )
     .join(`\n`);

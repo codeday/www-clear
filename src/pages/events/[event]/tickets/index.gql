@@ -28,6 +28,7 @@ query getTickets($data: ClearEventWhereUniqueInput!) {
                     phone
                 }
                 organization: getMetadata(key: "organization")
+                surveyResponses
             }
         }
     }
