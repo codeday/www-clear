@@ -7,6 +7,7 @@ query getTicket($data: ClearTicketWhereUniqueInput!) {
         ticket(where: $data) {
             id
             metadata
+            surveyResponses
             createdAt
             waiverPdfUrl
             payment {

@@ -63,6 +63,17 @@ export default function TicketPage({ticket}) {
                         Promo Code used: {ticket.promoCode?.code || 'N/A'} <br/>
                         Payment intent ID: {ticket.payment?.stripePaymentIntentId || 'N/A'}
                     </InfoBox>
+                    <MetadataBox
+                        title="Survey Responses"
+                        hideChangeNote
+                        metadata={
+                            Object.fromEntries(
+                                Object.entries(ticket.surveyResponses || {})
+                                    .filter(([k, v]) => !k.startsWith('study.')
+                                )
+                            )
+                        }
+                    />
                     <MetadataBox metadata={ticket.metadata} />
                     <Notes
                         notes={ticket.notes}

@@ -21,13 +21,13 @@ function MetadataItem({ mKey, value, ...props }) {
   );
 }
 
-export default function MetadataBox({ metadata, children, ...props }) {
+export default function MetadataBox({ metadata, title, hideChangeNote, children, ...props }) {
     return (
-        <InfoBox heading="Metadata">
+        <InfoBox heading={title || 'Metadata'}>
             <List p={1}>
                 <MetadataItem fontSize="xs" value={metadata} />
             </List>
-            {children ? children : (
+            {children && !hideChangeNote ? children : (
               <Box mt={4} p={1} fontSize="sm" fontStyle="italic">
                 Reach out to your CodeDay staff contact if you need to make changes to metadata.
               </Box>
