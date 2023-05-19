@@ -22,7 +22,7 @@ export default function Notification({event}) {
             <Heading>{event.name} ~ Send Notification</Heading>
             <Text>
               To send only an email or SMS, leave the other options blank. Email body uses Markdown.
-              You can use {'{{'}ticket.id{'}}'} and {'{{'}to.name{'}}'} style templates.
+              You can use {'{{'}ticket.id{'}}'} and {'{{'}to.firstName{'}}'} style templates.
             </Text>
             <TextInput
               placeholder="Email Subject"
