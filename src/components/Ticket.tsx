@@ -3,21 +3,31 @@ import {print} from 'graphql';
 import {useSession} from 'next-auth/react';
 import {Box, Button, Text} from "@codeday/topo/Atom";
 import {useToasts} from '@codeday/topo/utils';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './Ticket.gql' or its correspon... Remove this comment to see the full error message
 import {checkin, checkout, sendWaiverReminder} from './Ticket.gql';
 import Badge from "./Badge";
 import Alert, {GoodAlert} from "./Alert";
 import {useFetcher} from '../fetch';
 import InfoBox from "./InfoBox";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from "@codeday/topocons/Icon";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function Ticket({ticket, eventId, ...props}) {
+export default function Ticket({
+    ticket,
+    eventId,
+    ...props
+}: any) {
     const { data: session } = useSession();
 
     const [loading, setLoading] = useState(false);
     const [checkedIn, setCheckedIn] = useState(ticket.checkedIn);
     const [checkedOut, setCheckedOut] = useState(ticket.checkedOut);
     const {success, error} = useToasts();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const checkAction = checkedIn && !checkedOut ? 'out' : 'in';
 
@@ -53,11 +63,15 @@ export default function Ticket({ticket, eventId, ...props}) {
                             e.preventDefault()
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 const res = await fetch(print(sendWaiverReminder), {
                                   where: { id: ticket.id },
                                 });
                                 success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -73,12 +87,16 @@ export default function Ticket({ticket, eventId, ...props}) {
                             e.preventDefault()
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 const res = await fetch(print(sendWaiverReminder), {
                                   where: { id: ticket.id },
                                   regenerate: true,
                                 });
                                 success(`Sent waiver reminder to ${ticket.firstName} ${ticket.lastName} (or parent).`);
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -101,6 +119,8 @@ export default function Ticket({ticket, eventId, ...props}) {
                       e.preventDefault()
                       setLoading(true);
                       try {
+
+                          // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                           const res = await fetch(print(checkAction === 'out' ? checkout : checkin), {
                             where: { id: ticket.id },
                           });
@@ -108,6 +128,8 @@ export default function Ticket({ticket, eventId, ...props}) {
                           setCheckedIn(res.clear.checkinout.checkedIn);
                           setCheckedOut(res.clear.checkinout.checkedOut);
                       } catch (ex) {
+
+                          // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                           error(ex.toString());
                       }
                       setLoading(false);
@@ -121,6 +143,8 @@ export default function Ticket({ticket, eventId, ...props}) {
         </InfoBox></a>)
 }
 
+
+// @ts-expect-error TS(7031) FIXME: Binding element 'ticket' implicitly has an 'any' t... Remove this comment to see the full error message
 export function TicketTypeBadge({ticket, ...props}) {
     const ticketTypeStyles = {
         STAFF: {
@@ -142,7 +166,11 @@ export function TicketTypeBadge({ticket, ...props}) {
     }
     return (
         <Badge
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             bg={useColorModeValue(ticketTypeStyles[ticket.type]?.bg || "gray.200", ticketTypeStyles[ticket.type]?.color || "gray.800")}
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             color={useColorModeValue(ticketTypeStyles[ticket.type]?.color || "gray.800", ticketTypeStyles[ticket.type]?.bg || "gray.200")}
             textTransform="lowercase"
             fontSize="xs"

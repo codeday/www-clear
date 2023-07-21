@@ -3,8 +3,12 @@ import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from "@codeday/topocons/Icon";
 import {useFetcher} from "../../fetch";
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './PromoCode.gql' or its corres... Remove this comment to see the full error message
 import {CreatePromoCodeMutation, DeletePromoCodeMutation, UpdatePromoCodeMutation, SetPromoCodeMetatataMutation} from "./PromoCode.gql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
@@ -12,7 +16,7 @@ import {useSession} from "next-auth/react";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
 const characters = "ABCDEFGHKPQRSTUVWXYZ";
-function generatePromoCode(length) {
+function generatePromoCode(length: any) {
     let result = '';
     for ( let i = 0; i < length; i++ ) {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -67,10 +71,16 @@ const uiSchema = {
     },
 }
 
-export function CreatePromoCodeModal({event, children, ...props}) {
+export function CreatePromoCodeModal({
+    event,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -85,6 +95,8 @@ export function CreatePromoCodeModal({event, children, ...props}) {
                 <Heading>Create Promo Code</Heading>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { code: { type: ... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -95,7 +107,11 @@ export function CreatePromoCodeModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2339) FIXME: Property 'enablesUber' does not exist on type 'und... Remove this comment to see the full error message
                                 const { enablesUber, enablesLaptops, ...baseData } = formData;
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(CreatePromoCodeMutation, {
                                     data: {
                                         ...baseData,
@@ -114,6 +130,8 @@ export function CreatePromoCodeModal({event, children, ...props}) {
                                 success('Promo Code Created')
                                 onCloseModal()
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString())
                             }
                             setLoading(false)
@@ -124,10 +142,16 @@ export function CreatePromoCodeModal({event, children, ...props}) {
     )
 }
 
-export function UpdatePromoCodeModal({promocode, children, ...props}) {
+export function UpdatePromoCodeModal({
+    promocode,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(promocode);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -135,9 +159,11 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
 
-    function formDataToUpdateInput(formData) {
+    function formDataToUpdateInput(formData: any) {
         const ret = {}
         Object.keys(schema.properties).map((key) => {
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (formData[key] !== promocode[key]) ret[key] = {set: formData[key]}
         })
         return ret
@@ -149,6 +175,8 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { code: { type: ... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -158,13 +186,19 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
                         disabled={loading}
                         onClick={async () => {
                             setLoading(true);
+
+                            // @ts-expect-error TS(2339) FIXME: Property 'enablesUber' does not exist on type '{}'... Remove this comment to see the full error message
                             const { enablesUber, enablesLaptops, ...baseData } = formDataToUpdateInput(formData);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(UpdatePromoCodeMutation, {
                                     where: {id: promocode.id},
                                     data: baseData,
                                 });
                                 if (typeof enablesUber !== 'undefined') {
+
+                                  // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                   await fetch(SetPromoCodeMetatataMutation, {
                                     id: promocode.id,
                                     key: "uber",
@@ -172,6 +206,8 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
                                   });
                                 }
                                 if (typeof enablesLaptops !== 'undefined') {
+
+                                  // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                   await fetch(SetPromoCodeMetatataMutation, {
                                     id: promocode.id,
                                     key: "laptop",
@@ -183,6 +219,8 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
                                 onCloseModal()
                             } catch (ex) {
                                 console.error(ex);
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString())
                             }
                             setLoading(false)
@@ -193,9 +231,15 @@ export function UpdatePromoCodeModal({promocode, children, ...props}) {
     )
 }
 
-export function DeletePromoCodeModal({promocode, children, ...props}) {
+export function DeletePromoCodeModal({
+    promocode,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -218,11 +262,15 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             await fetch(DeletePromoCodeMutation, {where: {id: promocode.id}})
                             await router.replace(router.asPath)
                             success('Promo Code Deleted')
                             onCloseModal()
                         } catch (ex) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(ex.toString())
                         }
                         setLoading(false);
@@ -234,8 +282,14 @@ export function DeletePromoCodeModal({promocode, children, ...props}) {
     )
 }
 
-export function CreateScholarshipCodeButton({event, children, ...props}) {
+export function CreateScholarshipCodeButton({
+    event,
+    children,
+    ...props
+}: any) {
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -249,6 +303,8 @@ export function CreateScholarshipCodeButton({event, children, ...props}) {
             onClick={async () => {
                 setLoading(true)
                 try {
+
+                    // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                     const result = await fetch(CreatePromoCodeMutation, {
                         data: {
                             code: generatePromoCode(6),
@@ -265,6 +321,8 @@ export function CreateScholarshipCodeButton({event, children, ...props}) {
                     await router.push(`/events/${event.id}/promoCodes/${result.clear.createPromoCode.id}`);
                     success('Promo Code Created')
                 } catch (ex) {
+
+                    // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                     error(ex.toString())
                 }
                 setLoading(false)

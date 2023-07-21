@@ -3,6 +3,8 @@ import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from "@codeday/topocons/Icon";
 import {useFetcher} from "../../fetch";
 import {useSession} from 'next-auth/react';
@@ -10,6 +12,7 @@ import {
     CreateEventRestrictionMutation,
     DeleteEventRestrictionMutation,
     UpdateEventRestrictionMutation
+// @ts-expect-error TS(2307) FIXME: Cannot find module './EventRestriction.gql' or its... Remove this comment to see the full error message
 } from "./EventRestriction.gql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
@@ -39,10 +42,15 @@ const uiSchema = {
     }
 }
 
-export function CreateEventRestrictionModal({children, ...props}) {
+export function CreateEventRestrictionModal({
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -57,6 +65,8 @@ export function CreateEventRestrictionModal({children, ...props}) {
                 <Heading>Create Event Restriction</Heading>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -67,6 +77,8 @@ export function CreateEventRestrictionModal({children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(CreateEventRestrictionMutation, {
                                     data: formData
                                     /* need to connect the new object
@@ -76,6 +88,8 @@ export function CreateEventRestrictionModal({children, ...props}) {
                                 success('EventRestriction Created')
                                 onCloseModal()
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString())
                             }
                             setLoading(false)
@@ -86,10 +100,16 @@ export function CreateEventRestrictionModal({children, ...props}) {
     )
 }
 
-export function UpdateEventRestrictionModal({eventrestriction, children, ...props}) {
+export function UpdateEventRestrictionModal({
+    eventrestriction,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(eventrestriction);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -97,9 +117,11 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
 
-    function formDataToUpdateInput(formData) {
+    function formDataToUpdateInput(formData: any) {
         const ret = {}
         Object.keys(schema.properties).map((key) => {
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (formData[key] !== eventrestriction[key]) ret[key] = {set: formData[key]}
         })
         return ret
@@ -111,6 +133,8 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -121,6 +145,8 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(UpdateEventRestrictionMutation, {
                                     where: {id: eventrestriction.id},
                                     data: formDataToUpdateInput(formData)
@@ -129,6 +155,8 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
                                 success('Event Restriction Updated')
                                 onCloseModal()
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString())
                             }
                             setLoading(false)
@@ -139,9 +167,15 @@ export function UpdateEventRestrictionModal({eventrestriction, children, ...prop
     )
 }
 
-export function DeleteEventRestrictionModal({eventrestriction, children, ...props}) {
+export function DeleteEventRestrictionModal({
+    eventrestriction,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -164,11 +198,15 @@ export function DeleteEventRestrictionModal({eventrestriction, children, ...prop
                     onClick={async () => {
                         setLoading(true);
                         try {
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             await fetch(DeleteEventRestrictionMutation, {where: {id: eventrestriction.id}})
                             await router.replace(router.asPath)
                             success('EventRestriction Deleted')
                             onCloseModal()
                         } catch (ex) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(ex.toString())
                         }
                         setLoading(false);

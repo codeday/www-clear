@@ -4,11 +4,19 @@ import Breadcrumbs from "../../../components/Breadcrumbs";
 import {Heading, Text} from "@codeday/topo/Atom"
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../fetch";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import {UiInfo} from "@codeday/topocons/Icon"
 import EditSpecificMetadata from "../../../components/forms/EditSpecificMetadata";
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module '../../../components/forms/Edit... Remove this comment to see the full error message
 import { SetEventMetadataMutation } from "../../../components/forms/EditSpecificMetadata.gql"
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './advancedConfig.gql' or its c... Remove this comment to see the full error message
 import { getEventAdvancedConfigQuery } from "./advancedConfig.gql"
-export default function AdvancedConfig({event}) {
+export default function AdvancedConfig({
+    event
+}: any) {
     if (!event) return <Page />
     return (
         <Page title={`Advanced Config - ${event.name}`}>
@@ -98,10 +106,18 @@ export default function AdvancedConfig({event}) {
     )
 }
 
-export async function getServerSideProps({req, res, query: {event: eventId}}) {
+export async function getServerSideProps({
+    req,
+    res,
+    query: {event: eventId}
+}: any) {
     const session = await getSession({req})
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = getFetcher(session);
     if (!session) return {props: {}};
+
+    // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
     const eventResults = await fetch(getEventAdvancedConfigQuery, {data: {id: eventId}});
     const event = eventResults?.clear?.event
     if (!event) return {

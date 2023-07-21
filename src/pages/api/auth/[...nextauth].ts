@@ -11,19 +11,28 @@ const options = {
         Auth0Provider(serverRuntimeConfig.auth0),
     ],
     callbacks: {
-        jwt: async ({ token, user, profile }) => {
+        jwt: async ({
+            token,
+            user,
+            profile
+        }: any) => {
             if (user) {
                 // This is bad but NextAuth requires it
                 token.user = profile;
             }
             return Promise.resolve(token);
         },
-        session: async ({ session, token }) => Promise.resolve({
+        session: async ({
+            session,
+            token
+        }: any) => Promise.resolve({
             ...session,
-            ...await generateToken(token.user.nickname),
+
+            // @ts-expect-error TS(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
+            ...(await generateToken(token.user.nickname)),
             user: token.user,
         }),
     },
 };
 
-export default (req, res) => NextAuth(req, res, options);
+export default (req: any, res: any) => NextAuth(req, res, options);

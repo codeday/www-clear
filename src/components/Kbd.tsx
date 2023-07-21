@@ -4,7 +4,10 @@ import { useColorModeValue } from '@codeday/topo/Theme'
 
 
 // I was too lazy to update topo and export this so just made one myself
-export default function Kbd({ children, ...props }) {
+export default function Kbd({
+  children,
+  ...props
+}: any) {
   return (
     <Box
       borderRadius="md"

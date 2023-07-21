@@ -3,6 +3,8 @@ import Form from "@rjsf/chakra-ui";
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from "react-responsive-modal";
 import 'react-responsive-modal/styles.css';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from "@codeday/topocons/Icon";
 import {useFetcher} from "../../fetch";
 import {useSession} from 'next-auth/react';
@@ -10,6 +12,7 @@ import {
     CreateEmailTemplateMutation,
     DeleteEmailTemplateMutation,
     UpdateEmailTemplateMutation
+// @ts-expect-error TS(2307) FIXME: Cannot find module './EmailTemplate.gql' or its co... Remove this comment to see the full error message
 } from "./EmailTemplate.gql";
 import {useToasts} from "@codeday/topo/utils";
 import {useRouter} from "next/router";
@@ -157,10 +160,15 @@ const uiSchema = {
     }
 }
 
-export function CreateEmailTemplateModal({children, ...props}) {
+export function CreateEmailTemplateModal({
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -175,6 +183,8 @@ export function CreateEmailTemplateModal({children, ...props}) {
                 <Heading>Create EmailTemplate</Heading>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -185,6 +195,8 @@ export function CreateEmailTemplateModal({children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(CreateEmailTemplateMutation, {
                                     data: formData
                                     /* need to connect the new object
@@ -194,6 +206,8 @@ export function CreateEmailTemplateModal({children, ...props}) {
                                 success('EmailTemplate Created')
                                 onCloseModal()
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString())
                             }
                             setLoading(false)
@@ -204,10 +218,16 @@ export function CreateEmailTemplateModal({children, ...props}) {
     )
 }
 
-export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
+export function UpdateEmailTemplateModal({
+    emailtemplate,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(emailtemplate);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -215,9 +235,11 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
 
-    function formDataToUpdateInput(formData) {
+    function formDataToUpdateInput(formData: any) {
         const ret = {}
         Object.keys(schema.properties).map((key) => {
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (formData[key] !== emailtemplate[key]) ret[key] = {set: formData[key]}
         })
         return ret
@@ -229,6 +251,8 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -239,6 +263,8 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(UpdateEmailTemplateMutation, {
                                     where: {id: emailtemplate.id},
                                     data: formDataToUpdateInput(formData)
@@ -247,6 +273,8 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
                                 success('EmailTemplate Updated')
                                 onCloseModal()
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString())
                             }
                             setLoading(false)
@@ -257,9 +285,15 @@ export function UpdateEmailTemplateModal({emailtemplate, children, ...props}) {
     )
 }
 
-export function DeleteEmailTemplateModal({emailtemplate, children, ...props}) {
+export function DeleteEmailTemplateModal({
+    emailtemplate,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false)
     const {success, error} = useToasts();
@@ -282,11 +316,15 @@ export function DeleteEmailTemplateModal({emailtemplate, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             await fetch(DeleteEmailTemplateMutation, {where: {id: emailtemplate.id}})
                             await router.replace(router.asPath)
                             success('EmailTemplate Deleted')
                             onCloseModal()
                         } catch (ex) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(ex.toString())
                         }
                         setLoading(false);

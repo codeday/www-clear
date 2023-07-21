@@ -1,9 +1,18 @@
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'thre... Remove this comment to see the full error message
 import * as THREE from "three";
 import {useEffect} from "react";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'thre... Remove this comment to see the full error message
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'thre... Remove this comment to see the full error message
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
-function Opossum({ height, width }) {
+function Opossum({
+  height,
+  width
+}: any) {
   // const [renderer, setRenderer] = useState();
   // const [camera, setCamera] = useState();
 
@@ -50,8 +59,8 @@ function Opossum({ height, width }) {
 
     let opossumObj;
 
-    loader.load("/Low_poly_opossum.glb", function (gltf) {
-      gltf.scene.traverse((node) => {
+    loader.load("/Low_poly_opossum.glb", function (gltf: any) {
+      gltf.scene.traverse((node: any) => {
         if (!node.isMesh) return;
         node.material.wireframe = true;
         node.material.color.set(0xff686b);

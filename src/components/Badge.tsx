@@ -2,7 +2,10 @@ import React from 'react';
 import {Box} from "@codeday/topo/Atom";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function Badge({children, ...props}) {
+export default function Badge({
+    children,
+    ...props
+}: any) {
     return (
         <Box
             display="inline-flex"

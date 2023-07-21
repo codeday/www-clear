@@ -4,11 +4,16 @@ import {Content} from '@codeday/topo/Molecule';
 import {Header, Menu, SiteLogo, Footer, CustomLinks} from '@codeday/topo/Organism';
 import {DefaultSeo} from 'next-seo';
 import {signIn, signOut, useSession} from 'next-auth/react';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@hea... Remove this comment to see the full error message
 import HeadwayWidget from '@headwayapp/react-widget';
 
 export default function Page({
-                                 children, title, slug, ...props
-                             }) {
+    children,
+    title,
+    slug,
+    ...props
+}: any) {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
 

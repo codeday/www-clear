@@ -2,27 +2,38 @@ import React from 'react';
 import moment from 'moment';
 import {Button, Box, Heading, Text} from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import {Eye} from '@codeday/topocons/Icon';
 import { AspectRatio } from '@chakra-ui/react';
 import { SizeMe } from 'react-sizeme';
 import { Area, AreaChart, XAxis, YAxis, ReferenceLine } from 'recharts';
 
-export default function RegistrationGraph({ event, children, ...props }) {
+export default function RegistrationGraph({
+  event,
+  children,
+  ...props
+}: any) {
     const now = moment.min(moment(), moment(event.endDate));
     const DAYS = 30;
     const graphStart = now.clone().subtract(DAYS, 'days');
-    const data = [];
-    const ticketsWithDate = event.tickets.map((e) => ({ ...e, createdAt: moment(e.createdAt) }));
+    const data: any = [];
+    const ticketsWithDate = event.tickets.map((e: any) => ({
+      ...e,
+      createdAt: moment(e.createdAt)
+    }));
 
     for (let current = graphStart.clone(); current < now; current = current.add({ day: 1 })) {
       data.push({
         x: -1 * Math.floor(now.diff(current, 'days')),
-        y: ticketsWithDate.filter(t => t.createdAt < current).length,
+        y: ticketsWithDate.filter((t: any) => t.createdAt < current).length,
       });
     }
     return (
         <InfoBox heading="Registrations" headingSize="xl" {...props}>
             <Heading>{event.tickets.length} Registrations</Heading>
+            // @ts-expect-error TS(2322): Type '{ children: any[]; m: number; ml: number; si... Remove this comment to see the full error message
+            // @ts-expect-error TS(2322) FIXME: Type '{ children: any[]; m: number; ml: number; si... Remove this comment to see the full error message
             <Text m={0} ml={.5} size="sm">{event.soldTickets} students; {event.tickets.length - event.soldTickets} staff</Text>
             {children}
             {event.soldTickets > 0 && (

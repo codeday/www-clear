@@ -3,7 +3,11 @@ import InfoBox from "./InfoBox";
 import {GoodAlert, InfoAlert} from "./Alert";
 import {Text} from "@codeday/topo/Atom";
 
-export default function EmailTemplate({template, children, ...props}) {
+export default function EmailTemplate({
+    template,
+    children,
+    ...props
+}: any) {
     return (
         <InfoBox heading={template.name} {...props}>
             <Text>

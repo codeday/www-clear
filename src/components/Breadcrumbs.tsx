@@ -3,11 +3,15 @@ import {useRouter} from 'next/router';
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink,} from '@chakra-ui/react';
 
 export default function Breadcrumbs({
-                                        group, event, ticket, scheduleitem, code,
-                                    }) {
+    group,
+    event,
+    ticket,
+    scheduleitem,
+    code
+}: any) {
     const router = useRouter();
     const [breadcrumbs, setBreadcrumbs] = useState(null);
-    const convertBreadcrumb = (string) => {
+    const convertBreadcrumb = (string: any) => {
         if (group && string === group.id) return group.name;
         if (event && string === event.id) return event.name;
         if (ticket && string === ticket.id) return `${ticket.firstName} ${ticket.lastName}`;
@@ -16,7 +20,7 @@ export default function Breadcrumbs({
         // https://stackoverflow.com/a/4149393
         return string
             .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, (str) => str.toUpperCase());
+            .replace(/^./, (str: any) => str.toUpperCase());
     };
 
     useEffect(() => {
@@ -28,6 +32,8 @@ export default function Breadcrumbs({
                 href: `/${linkPath.slice(0, i + 1).join('/')}`
             }));
 
+
+            // @ts-expect-error TS(2345) FIXME: Argument of type '{ breadcrumb: string; href: stri... Remove this comment to see the full error message
             setBreadcrumbs(pathArray);
         }
     }, [router]);
@@ -43,7 +49,9 @@ export default function Breadcrumbs({
             {/*        CLEAR */}
             {/*    </BreadcrumbLink> */}
             {/* </BreadcrumbItem> */}
-            {breadcrumbs.map((breadcrumb, i) => (
+            // @ts-expect-error TS(2339): Property 'map' does not exist on type 'never'.
+            // @ts-expect-error TS(2339) FIXME: Property 'map' does not exist on type 'never'.
+            {breadcrumbs.map((breadcrumb: any, i: any) => (
                 <BreadcrumbItem key={i}>
                     <BreadcrumbLink href={breadcrumb.href}>
                         {convertBreadcrumb(breadcrumb.breadcrumb)}

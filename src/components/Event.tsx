@@ -1,10 +1,15 @@
 import React from 'react'
 import {Box, Flex, Text} from "@codeday/topo/Atom";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'luxo... Remove this comment to see the full error message
 import { DateTime } from 'luxon';
 import InfoBox from "./InfoBox";
 import {Image} from '@chakra-ui/react';
 
-export default function Event({event, ...props}) {
+export default function Event({
+  event,
+  ...props
+}: any) {
     const now = DateTime.now();
     return (
         <InfoBox

@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {Box, Divider, Text} from "@codeday/topo/Atom";
 import moment from 'moment-timezone';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'rand... Remove this comment to see the full error message
 import seed from 'random-seed';
 import {useTheme} from '@codeday/topo/utils';
 import {GoodAlert, InfoAlert, WarningAlert} from './Alert';
@@ -16,9 +18,12 @@ export const eventColors = {
 };
 
 export default function Calendar({
-                                     event, border, children, ...props
-                                 }) {
-    const schedule = event.schedule.sort((a, b) => (moment(a.start).isAfter(moment(b.start)) ? 1 : -1));
+    event,
+    border,
+    children,
+    ...props
+}: any) {
+    const schedule = event.schedule.sort((a: any, b: any) => (moment(a.start).isAfter(moment(b.start)) ? 1 : -1));
     if (schedule.length === 0) return <></>;
     const displayStarts = moment(schedule[0].start);
     const displayEnds = moment(schedule[schedule.length - 1].start);
@@ -28,9 +33,13 @@ export default function Calendar({
         }
     }, [typeof window]);
     const eventsByDay = {};
-    schedule.forEach((e) => {
+    schedule.forEach((e: any) => {
         const day = moment(e.start).startOf('day').format('YYYY-MM-DD');
+
+        // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (!(day in eventsByDay)) eventsByDay[day] = [];
+
+        // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         eventsByDay[day].push(e);
     });
 
@@ -52,9 +61,13 @@ export default function Calendar({
                           textAlign="left">{date.format('dddd, MMM Do')}</Text>
                     <Box>
                         {(date.format('YYYY-MM-DD') in eventsByDay)
-                            ? eventsByDay[date.format('YYYY-MM-DD')].sort((a, b) => (moment(a.start).isAfter(moment(b.start)) ? 1 : -1)).map((e) => {
+
+                            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+                            ? eventsByDay[date.format('YYYY-MM-DD')].sort((a: any, b: any) => (moment(a.start).isAfter(moment(b.start)) ? 1 : -1)).map((e: any) => {
                                 const {colors} = useTheme();
                                 const colorHues = Object.keys(colors);
+
+                                // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                                 const baseColor = eventColors[e.type || 'Event'] || colorHues[seed(e.type.toLowerCase()).intBetween(0, colorHues.length)];
                                 return (
                                     <Box

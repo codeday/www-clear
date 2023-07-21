@@ -1,11 +1,17 @@
 import {Box, Grid, Button, Spinner} from '@codeday/topo/Atom';
 import { useSession } from 'next-auth/react';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import { TransportBusSchool, UiFolder, ToTheMoon } from '@codeday/topocons/Icon';
 import Page from '../components/Page';
 
 export default function Index() {
     const session = useSession();
+
+    // @ts-expect-error TS(2322) FIXME: Type 'string' is not assignable to type '(string |... Remove this comment to see the full error message
     if (session?.data && !session?.data?.isAdmin && typeof window !== 'undefined') window.location = '/events';
+
+    // @ts-expect-error TS(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
     if (!session?.data || session.status === "loading" || !session.data.isAdmin) {
       return (<Page slug="/"><Box textAlign="center"><Spinner /></Box></Page>);
     }

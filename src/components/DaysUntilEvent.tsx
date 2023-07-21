@@ -3,7 +3,12 @@ import {Text} from "@codeday/topo/Atom";
 import moment from 'moment-timezone';
 import InfoBox from './InfoBox';
 
-function DayDisplay({ text, redText, children, ...props }) {
+function DayDisplay({
+    text,
+    redText,
+    children,
+    ...props
+}: any) {
     return (
         <InfoBox {...props}>
             <Text mb={0} fontSize="3xl" fontWeight="bold">{text}{text && redText && <>&nbsp;</>}
@@ -18,7 +23,10 @@ function DayDisplay({ text, redText, children, ...props }) {
     );
 }
 
-export default function DaysUntilEvent({event, ...props}) {
+export default function DaysUntilEvent({
+    event,
+    ...props
+}: any) {
     const now = moment().utc(false);
     const eventStart = moment(event.startDate).utc();
     const daysUntil = Math.ceil(moment.duration(eventStart.diff(now)).as('days'));

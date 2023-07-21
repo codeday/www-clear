@@ -1,9 +1,15 @@
 import React from 'react';
 import {Button, Heading, Text, Link} from "@codeday/topo/Atom";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from '@codeday/topocons/Icon';
 import {getSession} from 'next-auth/react';
 import Page from '../../../components/Page';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './index.gql' or its correspond... Remove this comment to see the full error message
 import {getEventQuery} from './index.gql';
 import {getFetcher} from '../../../fetch';
 import Breadcrumbs from '../../../components/Breadcrumbs';
@@ -15,6 +21,8 @@ import RegistrationsToggleWithChecklist from '../../../components/RegistrationsT
 import SponsorOverview from '../../../components/SponsorOverview';
 import RegistrationGraph from '../../../components/RegistrationGraph';
 import {DeleteEventModal, UpdateEventModal} from '../../../components/forms/Event';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module '../../../components/forms/Note... Remove this comment to see the full error message
 import {SetEventNotesMutation} from '../../../components/forms/Notes.gql';
 import DaysUntilEvent from '../../../components/DaysUntilEvent';
 import {CreateSponsorModal} from '../../../components/forms/Sponsor';
@@ -26,7 +34,9 @@ import InfoBox from "../../../components/InfoBox";
 import MetadataBox from '../../../components/MetadataBox';
 
 
-export default function Event({event}) {
+export default function Event({
+    event
+}: any) {
     if (!event) return <Page/>;
     return (
         <Page title={event.name}>
@@ -106,6 +116,8 @@ export default function Event({event}) {
                       <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/projects/all/event=${event.id}`}>View Projects</Button>
                       <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/upload-photos`}>Upload Photos</Button>
                     </InfoBox>
+                    // @ts-expect-error TS(2786): 'MetadataBox' cannot be used as a JSX component.
+                    // @ts-expect-error TS(2786) FIXME: 'MetadataBox' cannot be used as a JSX component.
                     <MetadataBox metadata={event.metadata}>
                       <Link href={`${event.id}/advancedConfig`}>Set metadata (advanced)</Link>
                     </MetadataBox>
@@ -115,10 +127,18 @@ export default function Event({event}) {
     );
 }
 
-export async function getServerSideProps({req, res, query: {event: eventId}}) {
+export async function getServerSideProps({
+    req,
+    res,
+    query: {event: eventId}
+}: any) {
     const session = await getSession({req});
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = getFetcher(session);
     if (!session) return {props: {}};
+
+    // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
     const eventResults = await fetch(getEventQuery, {data: {id: eventId}});
     const event = eventResults?.clear?.event
     if (!event) return {

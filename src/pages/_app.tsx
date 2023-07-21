@@ -4,7 +4,11 @@ import moment from 'moment-timezone';
 import {getSession, SessionProvider} from "next-auth/react"
 import {QueryProvider} from '../providers/query';
 
-export default function CustomApp({ Component, pageProps: {query, cookies, ...pageProps}, session }) {
+export default function CustomApp({
+    Component,
+    pageProps: {query, cookies, ...pageProps},
+    session
+}: any) {
     moment.tz.setDefault('Etc/UTC');
 
     return (
@@ -24,7 +28,9 @@ CustomApp.propTypes = {
 CustomApp.defaultProps = {
     pageProps: {},
 };
-CustomApp.getInitialProps = async ({ ctx }) => {
+CustomApp.getInitialProps = async ({
+    ctx
+}: any) => {
 	return {
     session: await getSession(ctx),
     ...getServerSideProps({ req: ctx.req }).props,

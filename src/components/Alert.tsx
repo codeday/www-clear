@@ -1,9 +1,14 @@
 import React from 'react';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from '@codeday/topocons/Icon';
 import Badge from './Badge';
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function Alert({children, ...props}) {
+export default function Alert({
+    children,
+    ...props
+}: any) {
     return (
         <Badge
             bg={useColorModeValue("red.200", "darkred")}
@@ -17,6 +22,8 @@ export default function Alert({children, ...props}) {
     );
 }
 
+
+// @ts-expect-error TS(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
 export function InfoAlert({children, ...props}) {
     return (
         <Badge
@@ -32,6 +39,8 @@ export function InfoAlert({children, ...props}) {
     );
 }
 
+
+// @ts-expect-error TS(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
 export function WarningAlert({children, ...props}) {
     return (
         <Badge
@@ -46,6 +55,8 @@ export function WarningAlert({children, ...props}) {
     );
 }
 
+
+// @ts-expect-error TS(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
 export function GoodAlert({children, ...props}) {
     return (
         <Badge

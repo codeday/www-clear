@@ -16,6 +16,8 @@ import {
   Spinner,
 } from "@codeday/topo/Atom";
 import useSwr from 'swr';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './index.gql' or its correspond... Remove this comment to see the full error message
 import { getEvent, getTickets, getWaiverBook } from "./index.gql";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
 import Ticket from "../../../../components/Ticket";
@@ -23,12 +25,16 @@ import Page from "../../../../components/Page";
 import { getFetcher, useFetcher } from "../../../../fetch";
 import { CreateTicketModal } from "../../../../components/forms/Ticket";
 import CheckinCounter from '../../../../components/CheckinCounter';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { CSVLink } from "react-csv";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import { UiDownload, Camera } from "@codeday/topocons/Icon";
 import { useRouter } from "next/router";
 import { Icon } from "@chakra-ui/react";
 
-function sortFn(sort, tickets) {
+function sortFn(sort: any, tickets: any) {
   switch (sort) {
     case "alphabetical-last":
       return [...tickets].sort((a, b) => a.lastName.localeCompare(b.lastName));
@@ -51,8 +57,12 @@ function sortFn(sort, tickets) {
   }
 }
 
-export default function Tickets({ event }) {
+export default function Tickets({
+  event
+}: any) {
   const router = useRouter();
+
+  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 0.
   const fetcher = useFetcher();
   const { data, isValidating } = useSwr([getTickets, { data: { id: event.id } }], fetcher, { revalidateOnFocus: true, refreshInterval: 60 * 1000 });
   const [waiversLoading, setWaiversLoading] = useState(false);
@@ -60,8 +70,8 @@ export default function Tickets({ event }) {
   const surveyHeaders = Array.from(
     new Set(
       (data?.clear?.event?.tickets || [])
-        .flatMap((t) => Object.keys(t.surveyResponses || {}))
-        .filter((t) => !t.startsWith('study.'))
+        .flatMap((t: any) => Object.keys(t.surveyResponses || {}))
+        .filter((t: any) => !t.startsWith('study.'))
     )
   );
   const headers = [
@@ -83,29 +93,30 @@ export default function Tickets({ event }) {
     ...surveyHeaders,
   ];
   const csv = (data?.clear?.event?.tickets || [])
-    .map((t) =>
-      [
-        t.firstName,
-        t.lastName,
-        t.age,
-        t.email,
-        t.phone,
-        t.whatsApp,
-        t.type,
-        t.guardian?.firstName || "",
-        t.guardian?.lastName || "",
-        t.guardian?.email || "",
-        t.guardian?.phone || "",
-        t.guardian?.whatsApp || "",
-        t.waiverSigned ? 'signed' : 'not signed',
-        t.waiverUrl,
-        t.organization || "",
-        ...surveyHeaders.map((h) => t.surveyResponses?.[h] || '').map((s) => s.replace(/,/g, ';')),
-      ].join(",")
+    .map((t: any) => [
+    t.firstName,
+    t.lastName,
+    t.age,
+    t.email,
+    t.phone,
+    t.whatsApp,
+    t.type,
+    t.guardian?.firstName || "",
+    t.guardian?.lastName || "",
+    t.guardian?.email || "",
+    t.guardian?.phone || "",
+    t.guardian?.whatsApp || "",
+    t.waiverSigned ? 'signed' : 'not signed',
+    t.waiverUrl,
+    t.organization || "",
+
+    // @ts-expect-error TS(2538) FIXME: Type 'unknown' cannot be used as an index type.
+    ...surveyHeaders.map((h) => t.surveyResponses?.[h] || '').map((s) => s.replace(/,/g, ';')),
+  ].join(",")
     )
     .join(`\n`);
   const [tickets, setTickets] = useState(
-    (data?.clear?.event?.tickets || []).sort((a, b) => a.lastName.localeCompare(b.lastName))
+    (data?.clear?.event?.tickets || []).sort((a: any, b: any) => a.lastName.localeCompare(b.lastName))
   );
   if (!event) return <Page />;
   return (
@@ -129,6 +140,8 @@ export default function Tickets({ event }) {
             return;
           }
           setWaiversLoading(true);
+
+          // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
           const resp = await fetcher(getWaiverBook, { data: { id: event.id } });
           setWaiverBookUrl(resp.clear.event.waiverBook);
           window.open(resp.clear.event.waiverBook);
@@ -156,9 +169,9 @@ export default function Tickets({ event }) {
           Avg Student Age:&nbsp;
           {Math.round(
             (tickets
-              .filter((ticket) => ticket.type == "STUDENT")
-              .reduce((partialSum, ticket) => partialSum + ticket.age, 0) /
-              (data?.clear?.event?.tickets.filter((ticket) => ticket.type == "STUDENT") || [])
+              .filter((ticket: any) => ticket.type == "STUDENT")
+              .reduce((partialSum: any, ticket: any) => partialSum + ticket.age, 0) /
+              (data?.clear?.event?.tickets.filter((ticket: any) => ticket.type == "STUDENT") || [])
                 .length) *
               10
           ) / 10}
@@ -166,11 +179,11 @@ export default function Tickets({ event }) {
         <Text>Total Tickets:&nbsp;{tickets.length}</Text>
         <Text>
           Students:&nbsp;
-          {tickets.filter((ticket) => ticket.type == "STUDENT").length}
+          {tickets.filter((ticket: any) => ticket.type == "STUDENT").length}
         </Text>
         <Text>
           Staff:&nbsp;
-          {tickets.filter((ticket) => ticket.type != "STUDENT").length}
+          {tickets.filter((ticket: any) => ticket.type != "STUDENT").length}
         </Text>
       </HStack>
       <Grid
@@ -180,9 +193,7 @@ export default function Tickets({ event }) {
           lg: "repeat(3, 1fr)",
         }}
       >
-        {tickets.map((ticket) => (
-          <Ticket id={ticket.id} ticket={ticket} />
-        ))}
+        {tickets.map((ticket: any) => <Ticket id={ticket.id} ticket={ticket} />)}
       </Grid>
     </Page>
   );
@@ -191,11 +202,15 @@ export default function Tickets({ event }) {
 export async function getServerSideProps({
   req,
   res,
-  query: { event: eventId },
-}) {
+  query: { event: eventId }
+}: any) {
   const session = await getSession({ req });
+
+  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
   const fetch = getFetcher(session);
   if (!session) return { props: {} };
+
+  // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
   const eventResult = await fetch(getEvent, {
     data: { id: eventId },
   });
@@ -206,7 +221,10 @@ export async function getServerSideProps({
   };
 }
 
-function SortAndFilter({ tickets, setTickets }) {
+function SortAndFilter({
+  tickets,
+  setTickets
+}: any) {
   const [waiver, setWaiver] = useState(true);
   const [checkedIn, setCheckedIn] = useState(true);
   const [filter, setFilter] = useState("");
@@ -217,18 +235,17 @@ function SortAndFilter({ tickets, setTickets }) {
     if (waiver) {
       newTickets = sortFn(
         sort,
-        tickets.filter((t) => t.waiverSigned === waiver) || []
+        tickets.filter((t: any) => t.waiverSigned === waiver) || []
       );
     }
 
     if (checkedIn) {
       newTickets = sortFn(
         sort,
-        tickets.filter((t) =>
-          checkedIn
-            ? (t.checkedIn && t.checkedOut) ||
-              (!t.checkedIn && !t.checkedOut)
-            : t.checkedIn && !t.checkedOut
+        tickets.filter((t: any) => checkedIn
+          ? (t.checkedIn && t.checkedOut) ||
+            (!t.checkedIn && !t.checkedOut)
+          : t.checkedIn && !t.checkedOut
         )
       );
     }
@@ -237,30 +254,29 @@ function SortAndFilter({ tickets, setTickets }) {
       case "student":
         newTickets = sortFn(
           sort,
-          tickets.filter((t) => t.type === "STUDENT") || []
+          tickets.filter((t: any) => t.type === "STUDENT") || []
         );
         break;
       case "staff":
         newTickets = sortFn(
           sort,
-          tickets.filter((t) => t.type !== "STUDENT") || []
+          tickets.filter((t: any) => t.type !== "STUDENT") || []
         );
         break;
       case "waiver":
         newTickets = sortFn(
           sort,
-          tickets.filter((t) => t.waiverSigned !== waiver) || []
+          tickets.filter((t: any) => t.waiverSigned !== waiver) || []
         );
         break;
 
       case "checked-in":
         newTickets = sortFn(
           sort,
-          tickets.filter((t) =>
-            checkedIn
-              ? t.checkedIn && !t.checkedOut
-              : (t.checkedIn && t.checkedOut) ||
-                (!t.checkedIn && !t.checkedOut)
+          tickets.filter((t: any) => checkedIn
+            ? t.checkedIn && !t.checkedOut
+            : (t.checkedIn && t.checkedOut) ||
+              (!t.checkedIn && !t.checkedOut)
           )
         );
         break;
@@ -339,11 +355,13 @@ export const CSVExport = ({
   headers,
   filename = "data.csv",
   ...props
-}) => {
+}: any) => {
   const ref = useRef(null);
   return (
     <Button
       onClick={() => {
+
+        // @ts-expect-error TS(2339) FIXME: Property 'link' does not exist on type 'never'.
         ref && ref.current && ref.current.link.click();
       }}
       {...props}

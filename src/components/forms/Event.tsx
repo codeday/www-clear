@@ -4,6 +4,8 @@ import Form from '@rjsf/chakra-ui';
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from '@codeday/topocons/Icon';
 import {useColorModeValue} from "@codeday/topo/Theme";
 
@@ -11,6 +13,8 @@ import {useToasts, useTheme} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import moment from 'moment-timezone';
 import {useSession} from 'next-auth/react';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './Event.gql' or its correspond... Remove this comment to see the full error message
 import {CreateEventMutation, DeleteEventMutation, UpdateEventMutation} from './Event.gql';
 import {useFetcher} from '../../fetch';
 import {InfoAlert} from '../Alert';
@@ -116,7 +120,11 @@ const uiSchema = {
     }
 };
 
-export function CreateEventModal({group, children, ...props}) {
+export function CreateEventModal({
+    group,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         startDate: moment(group.startDate).utc().format('YYYY-MM-DD'),
@@ -128,6 +136,8 @@ export function CreateEventModal({group, children, ...props}) {
         registrationCutoff: moment(group.registrationCutoff).utc().format('YYYY-MM-DD'),
     });
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -143,6 +153,8 @@ export function CreateEventModal({group, children, ...props}) {
                 <InfoAlert>Default values have been autofilled from the Event Group</InfoAlert>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -153,10 +165,14 @@ export function CreateEventModal({group, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(CreateEventMutation, {
                                     data: {
                                         ...formData,
                                         managers: {
+
+                                            // @ts-expect-error TS(2339) FIXME: Property 'managers' does not exist on type '{ star... Remove this comment to see the full error message
                                             set: formData.managers || []
                                         },
                                         eventGroup: {
@@ -168,6 +184,8 @@ export function CreateEventModal({group, children, ...props}) {
                                 success('Event Created');
                                 onCloseModal();
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -180,7 +198,11 @@ export function CreateEventModal({group, children, ...props}) {
     );
 }
 
-export function UpdateEventModal({event, children, ...props}) {
+export function UpdateEventModal({
+    event,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         ...event,
@@ -190,6 +212,8 @@ export function UpdateEventModal({event, children, ...props}) {
         registrationCutoff: moment(event.registrationCutoff).utc().format('YYYY-MM-DD'),
     });
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -198,9 +222,11 @@ export function UpdateEventModal({event, children, ...props}) {
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
 
-    function formDataToUpdateInput(formData) {
+    function formDataToUpdateInput(formData: any) {
         const ret = {};
         Object.keys(schema.properties).map((key) => {
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (formData[key] !== event[key]) ret[key] = {set: formData[key]};
         });
         return ret;
@@ -211,6 +237,8 @@ export function UpdateEventModal({event, children, ...props}) {
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -221,6 +249,8 @@ export function UpdateEventModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(UpdateEventMutation, {
                                     where: {id: event.id},
                                     data: formDataToUpdateInput(formData)
@@ -229,6 +259,8 @@ export function UpdateEventModal({event, children, ...props}) {
                                 success('Event Updated');
                                 onCloseModal();
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -241,9 +273,15 @@ export function UpdateEventModal({event, children, ...props}) {
     );
 }
 
-export function DeleteEventModal({event, children, ...props}) {
+export function DeleteEventModal({
+    event,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -267,11 +305,15 @@ export function DeleteEventModal({event, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             await fetch(DeleteEventMutation, {where: {id: event.id}});
                             await router.replace(router.asPath);
                             success('Event Deleted');
                             onCloseModal();
                         } catch (ex) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(ex.toString());
                         }
                         setLoading(false);

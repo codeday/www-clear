@@ -3,10 +3,14 @@ import Form from '@rjsf/chakra-ui';
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from '@codeday/topocons/Icon';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import {useSession} from 'next-auth/react';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './Venue.gql' or its correspond... Remove this comment to see the full error message
 import {CreateVenueMutation, DeleteVenueMutation, UpdateVenueMutation} from './Venue.gql';
 import {useFetcher} from '../../fetch';
 import {InfoAlert} from '../Alert';
@@ -78,10 +82,16 @@ const schema = {
     },
 };
 
-export function CreateVenueModal({event, children, ...props}) {
+export function CreateVenueModal({
+    event,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState();
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -96,6 +106,8 @@ export function CreateVenueModal({event, children, ...props}) {
                 <Heading>Create Venue</Heading>
                 <InfoAlert>You can leave anything you aren't sure of yet blank and edit later!</InfoAlert>
                 <Form
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { type: ... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -106,8 +118,12 @@ export function CreateVenueModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 const venueResp = await fetch(CreateVenueMutation, {
                                     data: {
+
+                                        // @ts-expect-error TS(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
                                         ...formData,
                                         events: {
                                             connect: [{id: event.id}],
@@ -118,6 +134,8 @@ export function CreateVenueModal({event, children, ...props}) {
                                 success('Venue Created');
                                 onCloseModal();
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -130,10 +148,16 @@ export function CreateVenueModal({event, children, ...props}) {
     );
 }
 
-export function UpdateVenueModal({venue, children, ...props}) {
+export function UpdateVenueModal({
+    venue,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(venue);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -141,9 +165,11 @@ export function UpdateVenueModal({venue, children, ...props}) {
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
 
-    function formDataToUpdateInput(formData) {
+    function formDataToUpdateInput(formData: any) {
         const ret = {};
         Object.keys(schema.properties).map((key) => {
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (formData[key] !== venue[key]) ret[key] = {set: formData[key]};
         });
         return ret;
@@ -154,6 +180,8 @@ export function UpdateVenueModal({venue, children, ...props}) {
             <Button h={6} display="inline" onClick={onOpenModal}>{children || <Icon.UiEdit/>}</Button>
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { type: ... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -164,6 +192,8 @@ export function UpdateVenueModal({venue, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 const venueResp = await fetch(UpdateVenueMutation, {
                                     where: {id: venue.id},
                                     data: formDataToUpdateInput(formData)
@@ -172,6 +202,8 @@ export function UpdateVenueModal({venue, children, ...props}) {
                                 success('Venue Updated');
                                 onCloseModal();
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -184,9 +216,15 @@ export function UpdateVenueModal({venue, children, ...props}) {
     );
 }
 
-export function DeleteVenueModal({venue, children, ...props}) {
+export function DeleteVenueModal({
+    venue,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -210,11 +248,15 @@ export function DeleteVenueModal({venue, children, ...props}) {
                     onClick={async () => {
                         setLoading(true);
                         try {
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             await fetch(DeleteVenueMutation, {where: {id: venue.id}});
                             await router.replace(router.asPath);
                             success('Venue Deleted');
                             onCloseModal();
                         } catch (ex) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(ex.toString());
                         }
                         setLoading(false);

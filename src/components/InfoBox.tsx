@@ -2,7 +2,15 @@ import React from 'react';
 import {Box, Flex, Text} from '@codeday/topo/Atom';
 import {useColorModeValue} from "@codeday/topo/Theme";
 
-export default function InfoBox({children, heading, subHeading, headingSize, buttons, nested, ...props}) {
+export default function InfoBox({
+  children,
+  heading,
+  subHeading,
+  headingSize,
+  buttons,
+  nested,
+  ...props
+}: any) {
     return (
       <Box
         display="block"

@@ -2,15 +2,25 @@ import React, {useRef, useState} from 'react';
 import {Box, Button, Image, Link, Text} from "@codeday/topo/Atom";
 import InfoBox from "./InfoBox";
 import {DeleteEventRestrictionModal, UpdateEventRestrictionModal} from "./forms/EventRestriction";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'mark... Remove this comment to see the full error message
 import {marked} from "marked";
 import DOMPurify from 'isomorphic-dompurify';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import ReactHtmlParser from 'react-html-parser';
 import Notes from "./forms/Notes";
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './forms/Notes.gql' or its corr... Remove this comment to see the full error message
 import {SetEventRestrictionNotesMutation} from "./forms/Notes.gql"
 import {useSession} from "next-auth/react";
 import {useFetcher} from "../fetch";
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './forms/EventRestriction.gql' ... Remove this comment to see the full error message
 import {UploadEventRestrictionIconMutation} from "./forms/EventRestriction.gql";
 import Alert from "./Alert";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import {UiUpload} from "@codeday/topocons/Icon";
 import {useToasts} from "@codeday/topo/utils";
 
@@ -18,11 +28,13 @@ const WARN_FILE_SIZE = 1024 * 1024 * 5
 const MAX_FILE_SIZE = 1024 * 1024 * 125
 const MIME_IMAGE = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml']
 
-function Highlight({ children }) {
+function Highlight({
+    children
+}: any) {
     return <Text as="span" bold color="brand.700">{children}</Text>;
 }
 
-function transform(node) {
+function transform(node: any) {
     if(node.type === "tag" && node.name === "strong") {
         return <Highlight>{node.children[0].data}</Highlight>
     }
@@ -34,8 +46,13 @@ function transform(node) {
     }
 }
 
-export default function EventRestriction({eventRestriction, ...props}) {
+export default function EventRestriction({
+    eventRestriction,
+    ...props
+}: any) {
     const session = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const uploaderRef = useRef(null);
     const [logoUrl, setLogoUrl] = useState(eventRestriction.iconUri);
@@ -60,6 +77,8 @@ export default function EventRestriction({eventRestriction, ...props}) {
                     mr="auto"
                     mb={5}
                     onClick={
+
+                        // @ts-expect-error TS(2531) FIXME: Object is possibly 'null'.
                         () => uploaderRef.current.click()
                     }/>
                 <input
@@ -68,6 +87,8 @@ export default function EventRestriction({eventRestriction, ...props}) {
                     accept="image/*"
                     style={{display: 'none'}}
                     onChange={async (e) => {
+
+                        // @ts-expect-error TS(2531) FIXME: Object is possibly 'null'.
                         const file = e.target.files[0];
                         if (!file) return;
 
@@ -84,6 +105,8 @@ export default function EventRestriction({eventRestriction, ...props}) {
 
                         var reader = new FileReader();
                         reader.onload = function(el) {
+
+                            // @ts-expect-error TS(2531) FIXME: Object is possibly 'null'.
                             setLogoUrl(el.target.result.iconUri)
                         }
                         reader.readAsDataURL(file);
@@ -95,10 +118,14 @@ export default function EventRestriction({eventRestriction, ...props}) {
                         }
                         try {
                             setUploading(true);
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             const result = await fetch(UploadEventRestrictionIconMutation, { where: {id: eventRestriction.id}, file })
                             success('Icon Uploaded!')
                             setLogoUrl(result.iconUri);
                         } catch (e) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(e.toString())
                         }
                         setUploading(false)
@@ -106,6 +133,8 @@ export default function EventRestriction({eventRestriction, ...props}) {
                 />
                 {!eventRestriction.iconUri? <>
                     <Alert>No Icon </Alert>
+                    // @ts-expect-error TS(2531): Object is possibly 'null'.
+                    // @ts-expect-error TS(2531) FIXME: Object is possibly 'null'.
                     <Button onClick={() => uploaderRef.current.click()}>
                         <UiUpload/> Upload Icon
                     </Button>
@@ -128,7 +157,10 @@ export default function EventRestriction({eventRestriction, ...props}) {
     );
 }
 
-export function EventRestrictionPreview({eventRestriction, ...props}) {
+export function EventRestrictionPreview({
+    eventRestriction,
+    ...props
+}: any) {
     return (
             <Box>
                 <Image

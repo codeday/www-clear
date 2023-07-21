@@ -3,10 +3,14 @@ import Form from '@rjsf/chakra-ui';
 import {Box, Button, Heading, Text} from "@codeday/topo/Atom";
 import {Modal} from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import * as Icon from '@codeday/topocons/Icon';
 import {useToasts} from '@codeday/topo/utils';
 import {useRouter} from 'next/router';
 import {useSession} from 'next-auth/react';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './Sponsor.gql' or its correspo... Remove this comment to see the full error message
 import {CreateSponsorMutation, DeleteSponsorMutation, UpdateSponsorMutation} from './Sponsor.gql';
 import {useFetcher} from '../../fetch';
 import {useColorModeValue} from "@codeday/topo/Theme";
@@ -63,10 +67,16 @@ const uiSchema = {
     /* optional ui schema */
 };
 
-export function CreateSponsorModal({event, children, ...props}) {
+export function CreateSponsorModal({
+    event,
+    children,
+    ...props
+}: any) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState();
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -81,6 +91,8 @@ export function CreateSponsorModal({event, children, ...props}) {
                 <Heading>Create Sponsor</Heading>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -91,8 +103,12 @@ export function CreateSponsorModal({event, children, ...props}) {
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(CreateSponsorMutation, {
                                     data: {
+
+                                        // @ts-expect-error TS(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
                                         ...formData,
                                         event: {
                                             connect: {
@@ -106,6 +122,8 @@ export function CreateSponsorModal({event, children, ...props}) {
                                 onCloseModal();
                             } catch
                                 (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -121,12 +139,16 @@ export function CreateSponsorModal({event, children, ...props}) {
 
 export function UpdateSponsorModal(
     {
-        sponsor, children, ...props
-    },
+        sponsor,
+        children,
+        ...props
+    }: any,
 ) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState(sponsor);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -134,9 +156,11 @@ export function UpdateSponsorModal(
     const onCloseModal = () => setOpen(false);
     const router = useRouter();
 
-    function formDataToUpdateInput(formData) {
+    function formDataToUpdateInput(formData: any) {
         const ret = {};
         Object.keys(schema.properties).map((key) => {
+
+            // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (formData[key] !== sponsor[key]) ret[key] = {set: formData[key]};
         });
         return ret;
@@ -148,6 +172,8 @@ export function UpdateSponsorModal(
             <Modal open={open} onClose={onCloseModal} center styles={{modal: {background: useColorModeValue("white", "var(--chakra-colors-gray-1100)")}}}>
                 <Form
                     uiSchema={uiSchema}
+
+                    // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
                     schema={schema}
                     formData={formData}
                     onChange={(data) => setFormData(data.formData)}
@@ -158,6 +184,8 @@ export function UpdateSponsorModal(
                         onClick={async () => {
                             setLoading(true);
                             try {
+
+                                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                                 await fetch(UpdateSponsorMutation, {
                                     where: {id: sponsor.id},
                                     data: formDataToUpdateInput(formData),
@@ -166,6 +194,8 @@ export function UpdateSponsorModal(
                                 success('Sponsor Updated');
                                 onCloseModal();
                             } catch (ex) {
+
+                                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                                 error(ex.toString());
                             }
                             setLoading(false);
@@ -180,11 +210,15 @@ export function UpdateSponsorModal(
 
 export function DeleteSponsorModal(
     {
-        sponsor, children, ...props
-    },
+        sponsor,
+        children,
+        ...props
+    }: any,
 ) {
     const [open, setOpen] = useState(false);
     const { data: session } = useSession();
+
+    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
     const fetch = useFetcher(session);
     const [loading, setLoading] = useState(false);
     const {success, error} = useToasts();
@@ -208,11 +242,15 @@ export function DeleteSponsorModal(
                     onClick={async () => {
                         setLoading(true);
                         try {
+
+                            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
                             await fetch(DeleteSponsorMutation, {where: {id: sponsor.id}});
                             await router.replace(router.asPath);
                             success('Sponsor Deleted');
                             onCloseModal();
                         } catch (ex) {
+
+                            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
                             error(ex.toString());
                         }
                         setLoading(false);

@@ -1,17 +1,24 @@
 import React, {useState} from "react";
 import {Box, Switch, Text, Checkbox, Stack, Tooltip, Divider} from "@codeday/topo/Atom"
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import { UiInfo } from "@codeday/topocons/Icon"
 import Alert, {WarningAlert} from "./Alert"
 import InfoBox from "./InfoBox"
 import {useFetcher} from "../fetch";
 import {useToasts} from "@codeday/topo/utils"
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './RegistrationsToggleWithCheck... Remove this comment to see the full error message
 import {RegistrationsToggleMutation} from "./RegistrationsToggleWithChecklist.gql"
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
 
-function CheckListItem({item, nested=false}) {
+function CheckListItem({
+  item,
+  nested=false
+}: any) {
   if(item.hide) return <></>
-  if (!item.checklist || !item.check || !item.checklist.map(c => c.check).includes(false)) {
+  if (!item.checklist || !item.check || !item.checklist.map((c: any) => c.check).includes(false)) {
     return (
       <Checkbox
         colorScheme="red"
@@ -23,27 +30,29 @@ function CheckListItem({item, nested=false}) {
         <Tooltip label={item.description} ><Box>{item.name} { item.description ? <UiInfo /> : null }</Box></Tooltip>
       </Checkbox>)
   }
-  return (
-    <>
-      <Checkbox
-        colorScheme="red"
-        size={ nested? "md" : "lg"}
-        isFocusable={false}
-        isReadOnly={true}
-        isIndeterminate={true}
-      >
-        {item.name}
-      </Checkbox>
-      <Stack pl={6} spacing={0}>
-        {item.checklist.map(i => <CheckListItem item={i} nested={true} />)}
-      </Stack>
-    </>
-  )
+  return <>
+    <Checkbox
+      colorScheme="red"
+      size={ nested? "md" : "lg"}
+      isFocusable={false}
+      isReadOnly={true}
+      isIndeterminate={true}
+    >
+      {item.name}
+    </Checkbox>
+    <Stack pl={6} spacing={0}>
+      {item.checklist.map((i: any) => <CheckListItem item={i} nested={true} />)}
+    </Stack>
+  </>;
 }
 
 
 
-export default function RegistrationsToggleWithChecklist({event, children, ...props}) {
+export default function RegistrationsToggleWithChecklist({
+  event,
+  children,
+  ...props
+}: any) {
   const checklist = [
     {
       name: "Find a venue",
@@ -79,7 +88,7 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
       name: "Create initial schedule",
       hide: Boolean(!event.venue),
       description: "This does not have to be the entire final schedule for your event! However, at a minimum, publish events for the start, end, and meals.",
-      check: Boolean(event.schedule.filter((item) => {
+      check: Boolean(event.schedule.filter((item: any) => {
         return item.finalized
       }).length > 0)
     },
@@ -116,6 +125,8 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
   const [loading, setLoading] = useState(false);
   const {success, error} = useToasts();
   const { data: session } = useSession();
+
+  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
   const fetch = useFetcher(session);
   const router = useRouter();
   return (
@@ -139,6 +150,8 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
         onChange={async (e) => {
           setLoading(true)
           try {
+
+            // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
             await fetch(RegistrationsToggleMutation, {
               eventWhere: {id: event.id},
               data: e.target.checked
@@ -146,6 +159,8 @@ export default function RegistrationsToggleWithChecklist({event, children, ...pr
             await router.replace(router.asPath); // kind of clunky solution to refresh serverSideProps after update; https://www.joshwcomeau.com/nextjs/refreshing-server-side-props/
             success(`Registrations ${e.target.checked ? "opened" : "closed"}`)
           } catch (ex) {
+
+            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
             error(ex.toString())
           }
           setLoading(false)

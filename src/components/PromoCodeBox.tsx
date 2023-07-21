@@ -1,7 +1,11 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
 
-export default function PromoCodeBox({promoCode, children, ...props}) {
+export default function PromoCodeBox({
+  promoCode,
+  children,
+  ...props
+}: any) {
      return (
          <InfoBox heading={promoCode.code} {...props}>
              {promoCode.type === 'PERCENT' && promoCode.amount === 100 && promoCode.uses === 1 ? (

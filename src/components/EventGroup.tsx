@@ -3,7 +3,10 @@ import {Box, Text} from "@codeday/topo/Atom";
 import moment from 'moment';
 import InfoBox from "./InfoBox";
 
-export default function EventGroup({group, ...props}) {
+export default function EventGroup({
+    group,
+    ...props
+}: any) {
     return (
         <a href={`groups/${group.id}`}>
         <InfoBox heading={group.name}>

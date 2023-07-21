@@ -1,11 +1,17 @@
 import React from 'react';
 import InfoBox from "./InfoBox";
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
 import {Calendar, PaymentCash, PaymentDiscount} from "@codeday/topocons/Icon"
 import Alert, {GoodAlert} from "./Alert";
 import moment from "moment-timezone";
 import {Text} from "@codeday/topo/Atom";
 
-export default function TicketBox({ event, children, ...props }) {
+export default function TicketBox({
+    event,
+    children,
+    ...props
+}: any) {
     return (
         <InfoBox headingSize="xl" heading="Pricing" {...props}>
             <Text mb={0}>

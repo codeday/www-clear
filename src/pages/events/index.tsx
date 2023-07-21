@@ -1,4 +1,6 @@
 import React, {useRef, useState} from 'react';
+
+// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'luxo... Remove this comment to see the full error message
 import {DateTime} from 'luxon';
 import {Box, Grid, Heading, List, ListItem, Text, Spinner} from "@codeday/topo/Atom";
 import {useColorModeValue} from '@codeday/topo/Theme'
@@ -8,6 +10,8 @@ import {getSession} from 'next-auth/react';
 import Page from '../../components/Page';
 import {getFetcher} from '../../fetch';
 import Event from '../../components/Event';
+
+// @ts-expect-error TS(2307) FIXME: Cannot find module './index.gql' or its correspond... Remove this comment to see the full error message
 import {getEvents} from './index.gql';
 import getConfig from "next/config";
 import {useRouter} from "next/router";
@@ -16,19 +20,26 @@ import Kbd from '../../components/Kbd';
 const {serverRuntimeConfig} = getConfig();
 
 
-export default function Events({ eventGroups, isAdmin }) {
+export default function Events({
+  eventGroups,
+  isAdmin
+}: any) {
   const router = useRouter()
   const [isLoading, setLoading] = useState(false)
   const searchBar = useRef()
+
+  // @ts-expect-error TS(2532) FIXME: Object is possibly 'undefined'.
   useHotkeys('ctrl+k', () => searchBar.current.focus(), { preventDefault: true } )
+
+  // @ts-expect-error TS(2532) FIXME: Object is possibly 'undefined'.
   useHotkeys('esc', () => searchBar.current.blur(), { enableOnFormTags: true } )
 
   if (!eventGroups) return <Page/>;
   if(isLoading) return <Page><Spinner /></Page>
   const now = DateTime.now().minus({ days: 1 });
-  const events = []
-  eventGroups.forEach(eg => {
-    eg.events.forEach(event => {
+  const events: any = []
+  eventGroups.forEach((eg: any) => {
+    eg.events.forEach((event: any) => {
       events.push({
         label: `${event.name} (${eg.name})`,
         value: event.id,
@@ -41,6 +52,8 @@ export default function Events({ eventGroups, isAdmin }) {
       <Box rounded="md" boxShadow="base" mb={4}>
         <Select
           useBasicStyles
+
+          // @ts-expect-error TS(2322) FIXME: Type 'MutableRefObject<undefined>' is not assignab... Remove this comment to see the full error message
           ref={searchBar}
           boxShadow="base"
           options={events}
@@ -61,12 +74,14 @@ export default function Events({ eventGroups, isAdmin }) {
           }}
           onChange={async (e) => {
             setLoading(true)
+
+            // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
             await router.push(`events/${e.value}`)
             setLoading(false)
           }}
         />
       </Box>
-      {eventGroups.map((eg) => {
+      {eventGroups.map((eg: any) => {
         const hasOther = !isAdmin && eg.otherEvents.length > 0;
         if (eg.events.length === 0 && !hasOther) return;
         if (eg.events.length === 0) {
@@ -77,7 +92,7 @@ export default function Events({ eventGroups, isAdmin }) {
                 <Text mb={4} fontWeight="bold">
                   {eg.otherEvents.length} events (you didn't manage any):
                 </Text>
-                <Text>{eg.otherEvents.map((e) => e.name).join(', ')}</Text>
+                <Text>{eg.otherEvents.map((e: any) => e.name).join(', ')}</Text>
               </Box>
             </Box>
           );
@@ -96,9 +111,7 @@ export default function Events({ eventGroups, isAdmin }) {
                   }}
                   gap={8}
                 >
-                  {eg.events.map((event) => (
-                    <Event key={event.id} m={0} event={event}/>
-                  ))}
+                  {eg.events.map((event: any) => <Event key={event.id} m={0} event={event}/>)}
                 </Grid>
               </Box>
               <Box display={{ base: 'none', lg: hasOther ? 'block' : 'none'}}>
@@ -106,7 +119,7 @@ export default function Events({ eventGroups, isAdmin }) {
                   {eg.otherEvents.length} more this season:
                 </Heading>
                 <List pl={2} styleType="disc" stylePosition="inside">
-                  {eg.otherEvents.map((event) => <ListItem key={event.id}>{event.name}</ListItem>)}
+                  {eg.otherEvents.map((event: any) => <ListItem key={event.id}>{event.name}</ListItem>)}
                 </List>
               </Box>
             </Grid>
@@ -117,12 +130,22 @@ export default function Events({ eventGroups, isAdmin }) {
   );
 }
 
-export async function getServerSideProps({req, res, query}) {
+export async function getServerSideProps({
+  req,
+  res,
+  query
+}: any) {
   const session = await getSession({req});
+
+  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
   const fetch = getFetcher(session);
   if (!session) return {props: {}};
+
+  // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
   const eventResults = await fetch(
     getEvents,
+
+    // @ts-expect-error TS(2532) FIXME: Object is possibly 'undefined'.
     session.isAdmin ? null : { where: [{ managers: { hasSome: [session.user.nickname] } }] }
   );
   return {
