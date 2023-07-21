@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import {Box, Button, Checkbox, Heading, Text} from "@codeday/topo/Atom";
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from "@codeday/topocons/Icon";
+import * as Icon from "@codeday/topocons";
 import {Modal} from "react-responsive-modal";
 import {print} from "graphql";
 

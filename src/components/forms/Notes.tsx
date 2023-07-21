@@ -3,7 +3,7 @@ import InfoBox from "../InfoBox";
 import {Box, Button, Text, Textarea as TextareaInput} from "@codeday/topo/Atom";
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from "@codeday/topocons/Icon"
+import * as Icon from "@codeday/topocons"
 import {useToasts} from "@codeday/topo/utils";
 import {useFetcher} from "../../fetch";
 import {useRouter} from "next/router";

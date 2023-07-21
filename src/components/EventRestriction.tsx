@@ -21,7 +21,7 @@ import {UploadEventRestrictionIconMutation} from "./forms/EventRestriction.gql";
 import Alert from "./Alert";
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import {UiUpload} from "@codeday/topocons/Icon";
+import {UiUpload} from "@codeday/topocons";
 import {useToasts} from "@codeday/topo/utils";
 
 const WARN_FILE_SIZE = 1024 * 1024 * 5

@@ -30,7 +30,7 @@ import CheckinCounter from '../../../../components/CheckinCounter';
 import { CSVLink } from "react-csv";
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import { UiDownload, Camera } from "@codeday/topocons/Icon";
+import { UiDownload, Camera } from "@codeday/topocons";
 import { useRouter } from "next/router";
 import { Icon } from "@chakra-ui/react";
 

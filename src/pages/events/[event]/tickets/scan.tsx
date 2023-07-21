@@ -19,7 +19,7 @@ import { getSession } from "next-auth/react";
 import { getFetcher } from "../../../../fetch";
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import UiSearch from "@codeday/topocons/Icon/UiSearch";
+import UiSearch from "@codeday/topocons/UiSearch";
 
 const BarcodeScannerComponent = dynamic(
   () => import("react-qr-barcode-scanner"),

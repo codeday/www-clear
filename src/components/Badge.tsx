@@ -1,11 +1,15 @@
 import React from 'react';
 import {Box} from "@codeday/topo/Atom";
 import {useColorModeValue} from "@codeday/topo/Theme";
+import { BoxProps } from '@chakra-ui/react';
 
-export default function Badge({
+export type BadgeProps = BoxProps
+
+// TODO: Use chakra Badge component instead, needs to be export from topo
+export function Badge({
     children,
     ...props
-}: any) {
+}: BadgeProps) {
     return (
         <Box
             display="inline-flex"
@@ -22,3 +26,9 @@ export default function Badge({
         </Box>
     );
 }
+
+export function ConfidentialBadge({ ...props }: BadgeProps) {
+    return (
+      <Badge {...props}>CONFIDENTIAL</Badge>
+    );
+  }

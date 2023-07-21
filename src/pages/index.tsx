@@ -2,7 +2,7 @@ import {Box, Grid, Button, Spinner} from '@codeday/topo/Atom';
 import { useSession } from 'next-auth/react';
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import { TransportBusSchool, UiFolder, ToTheMoon } from '@codeday/topocons/Icon';
+import { TransportBusSchool, UiFolder, ToTheMoon } from '@codeday/topocons';
 import Page from '../components/Page';
 
 export default function Index() {

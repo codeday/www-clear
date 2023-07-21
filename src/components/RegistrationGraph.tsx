@@ -3,8 +3,7 @@ import moment from 'moment';
 import {Button, Box, Heading, Text} from '@codeday/topo/Atom';
 import InfoBox from './InfoBox';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import {Eye} from '@codeday/topocons/Icon';
+import {Eye} from '@codeday/topocons';
 import { AspectRatio } from '@chakra-ui/react';
 import { SizeMe } from 'react-sizeme';
 import { Area, AreaChart, XAxis, YAxis, ReferenceLine } from 'recharts';
@@ -32,9 +31,7 @@ export default function RegistrationGraph({
     return (
         <InfoBox heading="Registrations" headingSize="xl" {...props}>
             <Heading>{event.tickets.length} Registrations</Heading>
-            // @ts-expect-error TS(2322): Type '{ children: any[]; m: number; ml: number; si... Remove this comment to see the full error message
-            // @ts-expect-error TS(2322) FIXME: Type '{ children: any[]; m: number; ml: number; si... Remove this comment to see the full error message
-            <Text m={0} ml={.5} size="sm">{event.soldTickets} students; {event.tickets.length - event.soldTickets} staff</Text>
+            <Text m={0} ml={.5} >{event.soldTickets} students; {event.tickets.length - event.soldTickets} staff</Text>
             {children}
             {event.soldTickets > 0 && (
                 <SizeMe>{({ size }) => !(size.width && size.width > 0) ? <div></div> : (

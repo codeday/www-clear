@@ -2,7 +2,7 @@ import React from 'react';
 import {Heading, Link, Text} from '@codeday/topo/Atom';
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import { FileDoc } from '@codeday/topocons/Icon'
+import { FileDoc } from '@codeday/topocons'
 import InfoBox from './InfoBox';
 import {DeleteVenueModal, UpdateVenueModal} from './forms/Venue';
 import ContactBox from './ContactBox';

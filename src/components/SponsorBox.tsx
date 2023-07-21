@@ -19,7 +19,7 @@ import {useFetcher} from "../fetch";
 import Alert, {InfoAlert} from "./Alert";
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import {UiUpload} from "@codeday/topocons/Icon"
+import {UiUpload} from "@codeday/topocons"
 
 const WARN_FILE_SIZE = 1024 * 1024 * 5
 const MAX_FILE_SIZE = 1024 * 1024 * 125

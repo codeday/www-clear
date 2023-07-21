@@ -6,13 +6,12 @@ import {useToasts} from '@codeday/topo/utils';
 
 // @ts-expect-error TS(2307) FIXME: Cannot find module './Ticket.gql' or its correspon... Remove this comment to see the full error message
 import {checkin, checkout, sendWaiverReminder} from './Ticket.gql';
-import Badge from "./Badge";
+import { Badge } from "./Badge";
 import Alert, {GoodAlert} from "./Alert";
 import {useFetcher} from '../fetch';
 import InfoBox from "./InfoBox";
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from "@codeday/topocons/Icon";
+import * as Icon from "@codeday/topocons";
 import {useColorModeValue} from "@codeday/topo/Theme";
 
 export default function Ticket({

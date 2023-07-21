@@ -15,9 +15,8 @@ import {DeleteTicketModal, UpdateTicketModal} from "../../../../../components/fo
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 import InfoBox from "../../../../../components/InfoBox";
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import {DevicePhone, Email, IdCard, Ticket, UiAdd} from "@codeday/topocons/Icon"
-import Confidential from "../../../../../components/Confidential";
+import {DevicePhone, Email, IdCard, Ticket, UiAdd} from "@codeday/topocons"
+import { ConfidentialBadge } from '../../../../../components/Badge';
 import {CreateGuardianModal, DeleteGuardianModal, UpdateGuardianModal} from "../../../../../components/forms/Guardian";
 import moment from "moment";
 import MetadataBox from '../../../../../components/MetadataBox';
@@ -34,7 +33,7 @@ export default function TicketPage({
     return (
         <Page>
             <Breadcrumbs event={ticket.event} ticket={ticket}/>
-            <Confidential />
+            <ConfidentialBadge />
             <Heading display="inline"><Ticket />{ticket.firstName} {ticket.lastName}</Heading>
             <TicketTypeBadge ml={2} ticket={ticket}/>
             <UpdateTicketModal ticket={ticket}/>

@@ -5,7 +5,7 @@ import {Button, Heading, Text, Link} from "@codeday/topo/Atom";
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from '@codeday/topocons/Icon';
+import * as Icon from '@codeday/topocons';
 import {getSession} from 'next-auth/react';
 import Page from '../../../components/Page';
 

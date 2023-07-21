@@ -1,9 +1,10 @@
 import React from 'react';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from '@codeday/topocons/Icon';
-import Badge from './Badge';
+import { UiError, UiInfo, UiOk, UiWarning } from '@codeday/topocons';
+import { Badge, BadgeProps } from './Badge';
 import {useColorModeValue} from "@codeday/topo/Theme";
+
+export type AlertProps = BadgeProps
 
 export default function Alert({
     children,
@@ -17,7 +18,7 @@ export default function Alert({
             borderWidth={useColorModeValue(1, 0)}
             {...props}
         >
-	    <Icon.UiError/>{' '}{children}
+	    <UiError/>{' '}{children}
         </Badge>
     );
 }
@@ -34,7 +35,7 @@ export function InfoAlert({children, ...props}) {
 
             {...props}
         >
-            <Icon.UiInfo/>{' '}{children}
+            <UiInfo/>{' '}{children}
         </Badge>
     );
 }
@@ -50,7 +51,7 @@ export function WarningAlert({children, ...props}) {
             borderWidth={useColorModeValue(1, 0)}
             {...props}
         >
-            <Icon.UiWarning/>{' '}{children}
+            <UiWarning/>{' '}{children}
         </Badge>
     );
 }
@@ -66,7 +67,7 @@ export function GoodAlert({children, ...props}) {
             borderWidth={useColorModeValue(1, 0)}
             {...props}
         >
-            <Icon.UiOk/>{' '}{children}
+            <UiOk/>{' '}{children}
         </Badge>
     );
 }

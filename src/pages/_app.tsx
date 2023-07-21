@@ -13,7 +13,7 @@ export default function CustomApp({
 
     return (
       <SessionProvider session={session} refetchInterval={15 * 60}>
-        <ThemeProvider brandColor="red" cookies={cookies}>
+        <ThemeProvider useSystemColorMode brandColor="red" cookies={cookies}>
             <QueryProvider value={query || {}}>
                 <Component {...pageProps} />
             </QueryProvider>

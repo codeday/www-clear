@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Box, Switch, Text, Checkbox, Stack, Tooltip, Divider} from "@codeday/topo/Atom"
 
 // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import { UiInfo } from "@codeday/topocons/Icon"
+import { UiInfo } from "@codeday/topocons"
 import Alert, {WarningAlert} from "./Alert"
 import InfoBox from "./InfoBox"
 import {useFetcher} from "../fetch";
