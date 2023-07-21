@@ -12,12 +12,13 @@
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^13.4.11",
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.5.1",
     "@codeday/topo": "^9.1.1",
+    "@codeday/topocons": "^1.5.0",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
-    "@codeday/topocons": "^1.5.0",
     "@emotion/utils": "1.0.0",
     "@headwayapp/react-widget": "^0.0.4",
     "@rjsf/antd": "^3.1.0",
@@ -64,14 +65,16 @@
     "react-sizeme": "^3.0.2",
     "recharts": "^2.1.10",
     "swr": "^1.0.1",
-    "three": "^0.134.0"
+    "three": "^0.134.0",
+    "typescript": "^5.1.6"
   },
   "devDependencies": {
     "@codeday/eslint-config": "^2.1.4",
-    "@next/bundle-analyzer": "^12.1.5",
+    "@types/node": "^20.4.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-next": "11.1.0",
-    "npm-check": "^5.9.2"
+    "npm-check": "^5.9.2",
+    "ts-migrate": "^0.1.35"
   }
 }
