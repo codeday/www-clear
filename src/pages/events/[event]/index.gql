@@ -10,7 +10,7 @@
 #import "../../../components/DaysUntilEvent.gql"
 #import "../../../components/EventRestrictionBox.gql"
 
-query getEventQuery($data: ClearEventWhereUniqueInput!) {
+query DashboardGetEventQuery($data: ClearEventWhereUniqueInput!) {
     clear {
         event(where: $data) {
             id

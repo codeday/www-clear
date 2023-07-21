@@ -2,7 +2,7 @@
 #import "../../../../../components/forms/Ticket.gql"
 #import "../../../../../components/forms/Guardian.gql"
 #import "../../../../../components/forms/Notes.gql"
-query getTicket($data: ClearTicketWhereUniqueInput!) {
+query getTicketQuery($data: ClearTicketWhereUniqueInput!) {
     clear {
         ticket(where: $data) {
             id

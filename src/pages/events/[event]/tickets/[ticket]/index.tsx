@@ -3,7 +3,7 @@ import Page from '../../../../../components/Page';
 import {getFetcher} from '../../../../../fetch';
 
 // @ts-expect-error TS(2307) FIXME: Cannot find module './ticket.gql' or its correspon... Remove this comment to see the full error message
-import {getTicket} from './ticket.gql';
+import {getTicketQuery} from './ticket.gql';
 import {Button, Heading, Text} from "@codeday/topo/Atom";
 import {TicketTypeBadge} from "../../../../../components/Ticket";
 import Breadcrumbs from "../../../../../components/Breadcrumbs";
@@ -111,7 +111,7 @@ export default function TicketPage({
                         if (!session) return {props: {}}
 
                         // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-                        const ticketResult = await fetch(getTicket, {data: {id: ticketId}})
+                        const ticketResult = await fetch(getTicketQuery, {data: {id: ticketId}})
                         const ticket = ticketResult?.clear?.ticket
                         if (!ticket) return {
                         redirect: {

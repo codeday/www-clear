@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "generate": "graphql-codegen --config codegen.ts",
+    "prestart": "yarn generate",
+    "predev": "yarn generate",
     "analyze": "cross-env ANALYZE=true next build",
     "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
     "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
@@ -67,6 +70,11 @@
   },
   "devDependencies": {
     "@codeday/eslint-config": "^2.1.4",
+    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/client-preset": "^4.0.1",
+    "@graphql-codegen/plugin-helpers": "^5.0.0",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@types/node": "^20.4.2",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",

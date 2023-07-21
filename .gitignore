@@ -36,3 +36,7 @@ yarn-error.log*
 .env
 .idea
 yalc.lock
+
+# graphql-codegen
+src/gql
+src/graphql
