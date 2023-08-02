@@ -4,3 +4,4 @@
 .eslint*
 README.md
 node_modules/
+test
