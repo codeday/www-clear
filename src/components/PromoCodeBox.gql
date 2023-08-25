@@ -1,9 +1,0 @@
-fragment PromoCodeBoxFragment on ClearPromoCode {
-    code
-    type
-    amount
-    uses
-    usesCount
-    usesRemaining
-    id
-}

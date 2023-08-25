@@ -1,5 +1,0 @@
-fragment SponsorOverviewFragment on ClearEvent {
-    sponsors {
-        amount
-    }
-}

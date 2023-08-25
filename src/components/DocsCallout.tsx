@@ -1,14 +1,9 @@
 import React from 'react';
-import { Box, HStack } from '@codeday/topo/Atom';
-import {useColorModeValue} from "@codeday/topo/Theme";
+import { Box, BoxProps, HStack } from '@codeday/topo/Atom';
+import { useColorModeValue } from '@codeday/topo/Theme';
+import { FileDoc } from '@codeday/topocons';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import { FileDoc } from '@codeday/topocons'
-
-export default function DocsCallout({
-  children,
-  ...props
-}: any) {
+export default function DocsCallout({ children, ...props }: BoxProps) {
   return (
     <Box
       display="inline-flex"
@@ -17,7 +12,7 @@ export default function DocsCallout({
       px={2}
       m={1}
       borderWidth={2}
-      borderColor={useColorModeValue("red.200", "red.800")}
+      borderColor={useColorModeValue('red.200', 'red.800')}
       borderStyle="dashed"
       rounded={10}
       {...props}
@@ -26,10 +21,7 @@ export default function DocsCallout({
         <Box display="inline-block">
           <FileDoc />
         </Box>
-        <Box>
-          {children}
-
-        </Box>
+        <Box>{children}</Box>
       </HStack>
     </Box>
   );

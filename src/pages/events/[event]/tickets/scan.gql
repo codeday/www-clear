@@ -21,7 +21,6 @@ query getTicket($data: ClearTicketWhereUniqueInput!) {
         code
       }
       ...Ticket
-      ...TicketFormFragment
       guardian {
         ...GuardianFormFragment
         firstName

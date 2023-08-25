@@ -1,8 +1,6 @@
-import {
-  Box, Heading, Link, Text,
-} from '@codeday/topo/Atom';
+import { Box, Heading, Link, Text } from '@codeday/topo/Atom';
 import Opossum from '../components/Opossum';
-import Page from '../components/Page';
+import { Page } from '../components/Page';
 
 export default function Unauthorized() {
   return (
@@ -12,7 +10,8 @@ export default function Unauthorized() {
       </Box>
       <Box style={{ textAlign: 'center' }}>
         <Heading>Unauthorized</Heading>
-        <Text>I'm sorry, but I'm not allowed to let you in here.
+        <Text>
+          I'm sorry, but I'm not allowed to let you in here.
           <br />
           If you feel this is in error, please ask your CodeDay point of contact.
         </Text>

@@ -1,38 +1,29 @@
-import NextAuth from 'next-auth';
-import Auth0Provider from "next-auth/providers/auth0"
+import { NextApiRequest, NextApiResponse } from 'next';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import Auth0Provider, { Auth0Profile } from 'next-auth/providers/auth0';
 import getConfig from 'next/config';
-import {generateToken} from '../../../token';
+import { generateToken } from '../../../token';
 
-const {serverRuntimeConfig} = getConfig();
+const { serverRuntimeConfig } = getConfig();
 
-const options = {
-    secret: serverRuntimeConfig.appSecret,
-    providers: [
-        Auth0Provider(serverRuntimeConfig.auth0),
-    ],
-    callbacks: {
-        jwt: async ({
-            token,
-            user,
-            profile
-        }: any) => {
-            if (user) {
-                // This is bad but NextAuth requires it
-                token.user = profile;
-            }
-            return Promise.resolve(token);
-        },
-        session: async ({
-            session,
-            token
-        }: any) => Promise.resolve({
-            ...session,
-
-            // @ts-expect-error TS(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
-            ...(await generateToken(token.user.nickname)),
-            user: token.user,
-        }),
+const options: NextAuthOptions = {
+  secret: serverRuntimeConfig.appSecret,
+  providers: [Auth0Provider(serverRuntimeConfig.auth0)],
+  callbacks: {
+    jwt: async ({ token, user, profile }) => {
+      if (user) {
+        // This is bad but NextAuth requires it
+        token.user = profile as Auth0Profile;
+      }
+      return Promise.resolve(token);
     },
+    session: async ({ session, token }) =>
+      Promise.resolve({
+        ...session,
+        ...(await generateToken((token.user as Auth0Profile).nickname)),
+        user: token.user,
+      }),
+  },
 };
 
-export default (req: any, res: any) => NextAuth(req, res, options);
+export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options);

@@ -1,22 +1,23 @@
 import React from 'react';
+import { IdCard, Email, DevicePhone } from '@codeday/topocons';
+import { InfoBox, InfoBoxProps } from './InfoBox';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from '@codeday/topocons';
-import InfoBox from './InfoBox';
+export type ContactBoxProps = {
+  name?: string | null;
+  email?: string | null;
+  phone?: string | null;
+} & InfoBoxProps;
 
-export default function ContactBox({
-    name,
-    email,
-    phone,
-    children,
-    ...props
-}: any) {
-    return (
-        <InfoBox heading="Contact" {...props}>
-            <Icon.IdCard/> {name}<br/>
-            <Icon.Email/> {email}<br/>
-            <Icon.DevicePhone/> {phone}{children ? <br/> : null}
-            {children}
-        </InfoBox>
-    );
+export function ContactBox({ name, email, phone, children, ...props }: ContactBoxProps) {
+  return (
+    <InfoBox heading="Contact" {...props}>
+      <IdCard /> {name}
+      <br />
+      <Email /> {email}
+      <br />
+      <DevicePhone /> {phone}
+      {children ? <br /> : null}
+      {children}
+    </InfoBox>
+  );
 }

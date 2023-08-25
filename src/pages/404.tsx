@@ -1,8 +1,6 @@
-import {
-  Box, Heading, Link, Text,
-} from '@codeday/topo/Atom';
+import { Box, Heading, Link, Text } from '@codeday/topo/Atom';
 import Opossum from '../components/Opossum';
-import Page from '../components/Page';
+import { Page } from '../components/Page';
 
 export default function NotFound() {
   return (

@@ -1,4 +1,0 @@
-fragment EventRestrictionBoxFragment on CmsEventRestriction {
-    id
-    name
-}
