@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, BoxProps, Spinner } from '@codeday/topo/Atom';
 import seed from 'random-seed';
-import { useTheme as codedayTheme } from '@codeday/topo/utils';
+import { useTheme as useCodeDayTheme } from '@codeday/topo/utils';
 import { DateTime, Interval } from 'luxon';
 import { graphql } from 'generated/gql';
 import { ClearEvent } from 'generated/gql/graphql';
@@ -62,13 +62,13 @@ export type EventCalendarProps = {
 // TODO: Make this better (interactive scheduling, no need to click through to edit, show more details)
 export function EventCalendar({ event: eventData }: EventCalendarProps) {
   const [{ data }] = useQuery({ query, variables: { where: { id: eventData.id } } });
+  const { colors } = useCodeDayTheme();
   const event = data?.clear?.event;
   if (!event) return <Spinner />;
 
   function scheduleItemToCalendarEvent(
     scheduleItem: NonNullable<typeof event>['schedule'] extends Array<infer A> ? A : never,
   ): EventInput {
-    const { colors } = codedayTheme();
     const colorHues = Object.keys(colors);
     const baseColor =
       eventColors[scheduleItem.type || 'Event'] ||

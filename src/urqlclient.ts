@@ -2,7 +2,7 @@ import { Client, fetchExchange } from 'urql';
 import { authExchange } from '@urql/exchange-auth';
 import { getSession } from 'next-auth/react';
 import introspectedSchema from 'generated/gql/urql-introspection.json';
-import { Resolver, Variables, cacheExchange } from '@urql/exchange-graphcache';
+import { cacheExchange } from '@urql/exchange-graphcache';
 import { DateTime } from 'luxon';
 import customScalarsExchange from 'urql-custom-scalars-exchange';
 import { IntrospectionQuery } from 'graphql';
@@ -21,8 +21,9 @@ const auth = authExchange(async (utils) => {
     didAuthError(error) {
       return error.message.startsWith('Access denied!');
     },
-    refreshAuth() {
-      throw new Error("refreshAuth() just got called. This shouldn't have happened");
+    async refreshAuth() {
+      // TODO: Implement something here.
+      // This likely wont get called though, so it's fine empty for now.
     },
   };
 });
@@ -35,6 +36,7 @@ const auth = authExchange(async (utils) => {
 // function getUnique(__typename: string): Resolver {
 //   return (_, args) => ({ __typename, id: idFromArgs(args) });
 // }
+// TODO: improve amount of cache hits by adding resolvers, etc
 const cache = cacheExchange({
   schema: introspectedSchema,
   // keys: {
