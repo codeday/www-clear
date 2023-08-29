@@ -3,8 +3,9 @@ import React from 'react';
 import { UiError, UiInfo, UiOk, UiWarning } from '@codeday/topocons';
 import { Badge } from '@codeday/topo/Atom';
 import { useColorModeValue } from '@codeday/topo/Theme';
+import { BadgeProps } from '@chakra-ui/react';
 
-export function Alert({ children, ...props }: any) {
+export function Alert({ children, ...props }: BadgeProps) {
   return (
     <Badge
       bg={useColorModeValue('red.200', 'darkred')}
@@ -18,8 +19,7 @@ export function Alert({ children, ...props }: any) {
   );
 }
 
-// @ts-expect-error TS(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
-export function InfoAlert({ children, ...props }) {
+export function InfoAlert({ children, ...props }: BadgeProps) {
   return (
     <Badge
       bg={useColorModeValue('gray.50', 'gray.800')}
@@ -33,8 +33,7 @@ export function InfoAlert({ children, ...props }) {
   );
 }
 
-// @ts-expect-error TS(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
-export function WarningAlert({ children, ...props }) {
+export function WarningAlert({ children, ...props }: BadgeProps) {
   return (
     <Badge
       bg={useColorModeValue('orange.50', 'orange.800')}
@@ -48,8 +47,7 @@ export function WarningAlert({ children, ...props }) {
   );
 }
 
-// @ts-expect-error TS(7031) FIXME: Binding element 'children' implicitly has an 'any'... Remove this comment to see the full error message
-export function GoodAlert({ children, ...props }) {
+export function GoodAlert({ children, ...props }: BadgeProps) {
   return (
     <Badge
       bg={useColorModeValue('green.50', 'green.800')}
