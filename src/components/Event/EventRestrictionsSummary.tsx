@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Skeleton } from '@codeday/topo/Atom';
+import { Box, Skeleton, Spinner } from '@codeday/topo/Atom';
 import { graphql } from 'generated/gql';
 import { ClearEvent } from 'generated/gql/graphql';
 import { useQuery } from 'urql';
 import { InfoBox, InfoBoxProps } from '../InfoBox';
 import { InfoAlert } from '../Alert';
 import { EventRestrictionPreview } from '../EventRestriction';
+import { LinkEventRestrictions } from '../forms/LinkEventRestrictions';
 
 const query = graphql(`
   query EventRestrictionsSummary($where: ClearEventWhereUniqueInput!) {
@@ -39,13 +40,18 @@ type EventRestrictionsSummaryProps = {
 export function EventRestrictionSummary({ event: eventData, children, ...props }: EventRestrictionsSummaryProps) {
   const [{ data }] = useQuery({ query, variables: { where: { id: eventData.id } } });
   const event = data?.clear?.event;
-  if (!event) return <Skeleton />;
+  if (!event) return <Spinner />;
   const restrictions = [
     ...event.cmsEventRestrictions,
     ...(event.region?.localizationConfig?.requiredEventRestrictions?.items || []),
   ];
+  console.log(restrictions);
   return (
-    <InfoBox heading="Event Restrictions" {...props}>
+    <InfoBox
+      heading="Event Restrictions"
+      buttons={<LinkEventRestrictions event={event} />}
+      {...props}
+    >
       <Box pl={4}>
         {restrictions.length > 0 ? (
           <Box>

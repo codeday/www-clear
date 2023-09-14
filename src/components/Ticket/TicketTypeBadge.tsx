@@ -57,12 +57,12 @@ export function TicketTypeBadge({ ticket: ticketData, ...props }: TicketTypeBadg
     <Badge
       bg={isLightMode ? ticketTypeStyles[ticket.type].bg : ticketTypeStyles[ticket.type].color}
       color={isLightMode ? ticketTypeStyles[ticket.type].color : ticketTypeStyles[ticket.type].bg}
-      textTransform="lowercase"
+      // textTransform="lowercase"
       fontSize="xs"
-      p={0}
-      position="relative"
-      top="-0.2em"
-      ml={2}
+      // p={1}
+      // position="relative"
+      // top="-0.2em"
+      // ml={2}
       {...props}
     >
       {ticket.type}

@@ -39,7 +39,7 @@ export function TicketWaiverFixLink({ ticket: ticketData, ...props }: TicketWaiv
   const ticket = data?.clear?.ticket;
   if (!ticket) return <Spinner />;
   return (
-    <Tooltip label="This fixes a rare bug that requires the waiver link to be re-generated.">
+    <Tooltip label="This fixes a rare bug that requires the waiver link to be re-generated." shouldWrapChildren>
       <Button
         size="xs"
         mr={2}

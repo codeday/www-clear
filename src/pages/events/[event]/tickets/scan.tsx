@@ -1,55 +1,69 @@
-import React, { useState } from "react";
-import dynamic from "next/dynamic";
-import Page from "../../../../components/Page";
-import {
-  Button,
-  TextInput,
-  InputGroup,
-  InputRightElement,
-  FormControl,
-} from "@codeday/topo/Atom";
-import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import { useColorModeValue } from "@codeday/topo/Theme";
-import Ticket from "../../../../components/Ticket";
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Button, TextInput, InputGroup, InputRightElement, FormControl, Spinner } from '@codeday/topo/Atom';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { useColorModeValue } from '@codeday/topo/Theme';
+import { UiSearch } from '@codeday/topocons';
+import { TicketBox } from 'src/components/Ticket';
 
-// @ts-expect-error TS(2307) FIXME: Cannot find module './scan.gql' or its correspondi... Remove this comment to see the full error message
-import { getEventWithTickets } from "./scan.gql";
-import { getSession } from "next-auth/react";
-import { getFetcher } from "../../../../fetch";
+import { useQuery } from 'urql';
+import { useRouter } from 'next/router';
+import { graphql } from 'generated/gql';
+import NotFound from 'src/pages/404';
+import { Page } from '../../../../components/Page';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import UiSearch from "@codeday/topocons/UiSearch";
+const BarcodeScannerComponent = dynamic(() => import('react-qr-barcode-scanner'), { ssr: false });
 
-const BarcodeScannerComponent = dynamic(
-  () => import("react-qr-barcode-scanner"),
-  { ssr: false }
-);
+const query = graphql(`
+  query ScanTicketPage($where: ClearEventWhereUniqueInput!) {
+    clear {
+      event(where: $where) {
+        id
+        tickets {
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`);
 
-export default function Scan({
-  event
-}: any) {
+export default function Scan() {
+  const router = useRouter();
+  const [{ data, fetching }] = useQuery({ query, variables: { where: { id: router.query.event as string } } });
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-  const [search, setSearch] = useState("");
-  const [tickets, setTickets] = useState(null);
-
+  const [search, setSearch] = useState('');
+  const [tickets, setTickets] = useState(data?.clear?.event?.tickets);
+  const isLightMode = useColorModeValue(true, false);
   const [stopStream, setStopStream] = useState(false);
   const dismissQrReader = () => {
     setStopStream(true);
     setTimeout(() => setOpen(false), 0);
   };
 
+  const event = data?.clear?.event;
+  if (event === null && !fetching) {
+    return <NotFound />;
+  }
+
+  if (!event) {
+    return (
+      <Page>
+        <Spinner />
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setTickets(
-            event?.tickets?.filter((ticket: any) => ticket.lastName.toLowerCase().startsWith(search.toLowerCase())
-            )
-          );
+          setTickets(event.tickets.filter((ticket) => ticket.lastName.toLowerCase().startsWith(search.toLowerCase())));
         }}
       >
         <FormControl>
@@ -69,47 +83,30 @@ export default function Scan({
         </FormControl>
       </form>
       <Button
-        w={"100%"}
+        w="100%"
         onClick={() => {
           setOpen(true);
         }}
       >
         Scan New Ticket
       </Button>
-
-      {tickets &&
-        event &&
-
-        // @ts-expect-error TS(2339) FIXME: Property 'length' does not exist on type 'never'.
-        tickets?.length > 0 &&
-
-        // @ts-expect-error TS(2339) FIXME: Property 'map' does not exist on type 'never'.
-        tickets.map((ticket: any) => <Ticket ticket={ticket} eventId={event?.id}></Ticket>)}
-      // @ts-expect-error TS(2339): Property 'length' does not exist on type 'never'.
-      // @ts-expect-error TS(2339) FIXME: Property 'length' does not exist on type 'never'.
-      {tickets && event && !(tickets?.length > 0) && "Ticket not found"}
-
+      {tickets && event && tickets.length > 0 && tickets.map((ticket) => <TicketBox ticket={ticket} />)}
+      {tickets && event && !(tickets.length > 0) && 'Ticket not found'}
       <Modal
         open={open}
         onClose={onCloseModal}
         center
         styles={{
           modal: {
-            background: useColorModeValue(
-              "white",
-              "var(--chakra-colors-gray-1100)"
-            ),
+            background: isLightMode ? 'white' : 'var(--chakra-colors-gray-1100)',
           },
         }}
       >
         <BarcodeScannerComponent
           onUpdate={async (e, result) => {
             if (result) {
-
-              // @ts-expect-error TS(2345) FIXME: Argument of type 'any[]' is not assignable to para... Remove this comment to see the full error message
-              setTickets([
-                event.tickets.find((ticket: any) => ticket.id == result.getText()),
-              ].filter(n => n));
+              const foundTicket = event.tickets.find((ticket) => ticket.id === result.getText());
+              setTickets(foundTicket ? [foundTicket] : []);
               setOpen(false);
               dismissQrReader();
             }
@@ -119,26 +116,4 @@ export default function Scan({
       </Modal>
     </Page>
   );
-}
-
-export async function getServerSideProps({
-  req,
-  res,
-  query: { event: eventId }
-}: any) {
-  const session = await getSession({ req });
-
-  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-  const fetch = getFetcher(session);
-  if (!session) return { props: {} };
-
-  // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-  const eventResult = await fetch(getEventWithTickets, {
-    data: { id: eventId },
-  });
-  return {
-    props: {
-      event: eventResult.clear.event,
-    },
-  };
 }

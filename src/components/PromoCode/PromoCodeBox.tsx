@@ -1,3 +1,4 @@
+import { forwardRef } from '@chakra-ui/react';
 import { SkeletonText, Spinner } from '@codeday/topo/Atom';
 import { graphql } from 'generated/gql';
 import { ClearPromoCode } from 'generated/gql/graphql';
@@ -25,13 +26,13 @@ export type PromoCodeBoxProps = {
   promoCode: PropFor<ClearPromoCode>;
 } & InfoBoxProps;
 
-export function PromoCodeBox({ promoCode: promoCodeData, ...props }: PromoCodeBoxProps) {
+export const PromoCodeBox = forwardRef<PromoCodeBoxProps, 'div'>(({ promoCode: promoCodeData, ...props }, ref) => {
   const [{ data }] = useQuery({ query, variables: { where: { id: promoCodeData.id } } });
   const promoCode = data?.clear?.promoCode;
   if (!promoCode) return <Spinner />;
 
   return (
-    <InfoBox heading={promoCode.code} {...props}>
+    <InfoBox heading={promoCode.code} ref={ref} {...props}>
       {promoCode.type === 'PERCENT' && promoCode.amount === 100 && promoCode.uses === 1 ? (
         <>
           Scholarship
@@ -58,4 +59,4 @@ export function PromoCodeBox({ promoCode: promoCodeData, ...props }: PromoCodeBo
       )}
     </InfoBox>
   );
-}
+});

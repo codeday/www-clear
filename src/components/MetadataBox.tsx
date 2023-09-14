@@ -33,7 +33,7 @@ function MetadataItem({ mKey, mValue, ...props }: MetadataItemProps) {
           ))}
         </List>
       ) : (
-        <Text fontFamily="mono" display="inline">
+        <Text fontFamily="mono" display="inline" overflowWrap="anywhere">
           {mValue}
         </Text>
       )}
@@ -44,18 +44,29 @@ function MetadataItem({ mKey, mValue, ...props }: MetadataItemProps) {
 export type MetadataBoxProps = {
   metadata: ClearJSON | undefined | null;
   hideChangeNote?: boolean;
+  showNotes?: boolean;
 } & InfoBoxProps;
 
-export function MetadataBox({ metadata, hideChangeNote, children, ...props }: MetadataBoxProps) {
+export function MetadataBox({
+  metadata,
+  hideChangeNote = false,
+  showNotes = false,
+  children,
+  ...props
+}: MetadataBoxProps) {
+  const effectiveMetadata = { ...(metadata || {}) };
+  if (!showNotes) {
+    delete effectiveMetadata.notes;
+  }
   return (
     <InfoBox heading="Metadata" {...props}>
       <List p={1}>
-        <MetadataItem fontSize="xs" mValue={metadata} />
+        <MetadataItem fontSize="xs" mValue={effectiveMetadata} />
       </List>
-      {hideChangeNote && (
-        <Box mt={4} p={1} fontSize="sm" fontStyle="italic">
+      {!hideChangeNote && (
+        <Text mt={4} p={1} w="sm" fontSize="sm" fontStyle="italic">
           Reach out to your CodeDay staff contact if you need to make changes to metadata.
-        </Box>
+        </Text>
       )}
       {children}
     </InfoBox>

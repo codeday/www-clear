@@ -1,5 +1,5 @@
 import { Link } from '@codeday/topo/Atom';
-import Page from '../../components/Page';
+import { Page } from '../../components/Page';
 
 export default function Index() {
   return (

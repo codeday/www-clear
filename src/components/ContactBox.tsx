@@ -11,11 +11,11 @@ export type ContactBoxProps = {
 export function ContactBox({ name, email, phone, children, ...props }: ContactBoxProps) {
   return (
     <InfoBox heading="Contact" {...props}>
-      <IdCard /> {name}
+      <IdCard /> &nbsp;{name}
       <br />
-      <Email /> {email}
+      <Email /> &nbsp;{email}
       <br />
-      <DevicePhone /> {phone}
+      <DevicePhone /> &nbsp; {phone}
       {children ? <br /> : null}
       {children}
     </InfoBox>

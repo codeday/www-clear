@@ -1,52 +1,47 @@
 import React, { useState } from 'react';
-import { Box, Switch, Text, Checkbox, Stack, Tooltip, Divider, Skeleton } from '@codeday/topo/Atom';
+import { Spinner, Box, Switch, Text, Checkbox, Stack, Tooltip, Divider, Skeleton } from '@codeday/topo/Atom';
 import { UiInfo } from '@codeday/topocons';
 import { useToasts } from '@codeday/topo/utils';
-import { getFragmentData, graphql } from 'generated/gql';
-import { ResultOf } from '@graphql-typed-document-node/core';
+import { graphql } from 'generated/gql';
 import { useMutation, useQuery } from 'urql';
-import { allDefined } from 'src/utils';
+import { ClearEvent } from 'generated/gql/graphql';
 import { InfoBox, InfoBoxProps } from '../InfoBox';
-
-export const EventRegistrationsToggleFragment = graphql(`
-  fragment EventRegistrationsToggle on ClearEvent {
-    id
-    registrationsOpen
-    venue {
-      id
-      capacity
-      contactName
-      contactEmail
-      contactPhone
-      address
-      mapLink
-    }
-    eventRestrictions {
-      id
-    }
-    schedule {
-      id
-      finalized
-    }
-    sponsors {
-      id
-    }
-    promoCodes {
-      id
-    }
-    soldTickets
-    soldTicketsStudents: soldTickets(onlyStudents: true)
-    region {
-      countryName
-    }
-  }
-`);
 
 const query = graphql(`
   query EventRegistrationsToggle($where: ClearEventWhereUniqueInput!) {
     clear {
       event(where: $where) {
-        ...EventRegistrationsToggle
+        id
+        registrationsOpen
+        venue {
+          id
+          capacity
+          contactName
+          contactEmail
+          contactPhone
+          address
+          mapLink
+        }
+        eventRestrictions {
+          id
+        }
+        schedule {
+          id
+          finalized
+        }
+        sponsors {
+          id
+        }
+        promoCodes {
+          id
+        }
+        tickets {
+          id
+          type
+        }
+        region {
+          countryName
+        }
       }
     }
   }
@@ -82,7 +77,7 @@ function CheckListItem({ item, nested = false }: CheckListItemProps) {
   if (!item.checklist || !item.check || !item.checklist.map((c) => c.check).includes(false)) {
     return (
       <Checkbox colorScheme="red" size={nested ? 'md' : 'lg'} isFocusable={false} isReadOnly isChecked={item.check}>
-        <Tooltip label={item.description}>
+        <Tooltip label={item.description} shouldWrapChildren>
           <Box>
             {item.name} {item.description ? <UiInfo /> : null}
           </Box>
@@ -105,15 +100,19 @@ function CheckListItem({ item, nested = false }: CheckListItemProps) {
 }
 
 export type EventRegistrationsToggleProps = {
-  event: PartialExcept<ResultOf<typeof EventRegistrationsToggleFragment>, 'id'>;
+  event: PropFor<ClearEvent>;
 } & InfoBoxProps;
 
 export function EventRegistrationsToggle({ event: eventData, ...props }: EventRegistrationsToggleProps) {
   const [{ data }] = useQuery({ query, variables: { where: { id: eventData.id } } });
   const [_, registrationsToggleMutation] = useMutation(mutation);
   const { success, error } = useToasts();
-  const event = getFragmentData(EventRegistrationsToggleFragment, data?.clear?.event) || eventData;
-  
+  const [loading, setLoading] = useState(false);
+
+  const event = data?.clear?.event;
+  if (!event) return <Spinner />;
+  const studentTickets = event.tickets.filter((t) => t.type === 'STUDENT');
+
   // TODO: allow for this to be configurable per event
   const checklist = [
     {
@@ -174,15 +173,15 @@ export function EventRegistrationsToggle({ event: eventData, ...props }: EventRe
         },
         {
           name: 'Your first registration!',
-          check: Boolean((event.soldTicketsStudents || 0) > 0),
+          check: Boolean(studentTickets.length > 0),
         },
         {
           name: '50% of capacity sold out!',
-          check: Boolean((event.soldTicketsStudents || 0) > (event.venue?.capacity || 0) / 2),
+          check: Boolean(studentTickets.length > (event.venue?.capacity || 0) / 2),
         },
         {
           name: '100% of capacity sold out - wow!',
-          check: Boolean((event.soldTickets || -1) >= (event.venue?.capacity || 0)),
+          check: Boolean(event.tickets.length >= (event.venue?.capacity || 0)),
         },
       ],
     },
@@ -193,55 +192,52 @@ export function EventRegistrationsToggle({ event: eventData, ...props }: EventRe
       .map((c) => c.check)
       .includes(false),
   );
-  const [loading, setLoading] = useState(false);
 
   return (
     <InfoBox heading="Event Status" headingSize="xl" {...props}>
-      <Skeleton isLoaded={allDefined(event.soldTickets, event.venue?.capacity || event.venue, event.registrationsOpen)}>
-        <Box fontSize="2xl" fontWeight="bold">
-          <Text as="span">Registrations are&nbsp;</Text>
-          {(event.soldTickets || -1) >= (event.venue?.capacity || 0) ? (
-            <Text as="span" color="red.500">
-              sold out.
-            </Text>
-          ) : event.registrationsOpen ? (
-            <Text as="span" color="green">
-              open.
-            </Text>
-          ) : (
-            <Text as="span" color="gray.500">
-              closed.
-            </Text>
-          )}
-        </Box>
-        <Switch
-          m={2}
-          isChecked={event.registrationsOpen}
-          isDisabled={(disabled && !event.registrationsOpen) || loading}
-          size="lg"
-          colorScheme="green"
-          onChange={async (e) => {
-            setLoading(true);
-            await registrationsToggleMutation({
-              eventWhere: { id: event.id },
-              data: e.target.checked,
-            }).then((result) => {
-              if (result.error) {
-                error(result.error.name, result.error.message);
-              } else {
-                success(`Registrations ${e.target.checked ? 'opened' : 'closed'}`);
-              }
-              setLoading(false);
-            });
-          }}
-        />
-        {event.registrationsOpen && (
-          <Text fontSize="sm">
-            WARNING: Closing registrations will show the event as canceled. Registrations close as sold-out
-            automatically when the venue capacity is reached.
+      <Box fontSize="2xl" fontWeight="bold">
+        <Text as="span">Registrations are&nbsp;</Text>
+        {(event.tickets.length || -1) >= (event.venue?.capacity || 0) ? (
+          <Text as="span" color="red.500">
+            sold out.
+          </Text>
+        ) : event.registrationsOpen ? (
+          <Text as="span" color="green">
+            open.
+          </Text>
+        ) : (
+          <Text as="span" color="gray.500">
+            closed.
           </Text>
         )}
-      </Skeleton>
+      </Box>
+      <Switch
+        m={2}
+        isChecked={event.registrationsOpen}
+        isDisabled={(disabled && !event.registrationsOpen) || loading}
+        size="lg"
+        colorScheme="green"
+        onChange={async (e) => {
+          setLoading(true);
+          await registrationsToggleMutation({
+            eventWhere: { id: event.id },
+            data: e.target.checked,
+          }).then((result) => {
+            if (result.error) {
+              error(result.error.name, result.error.message);
+            } else {
+              success(`Registrations ${e.target.checked ? 'opened' : 'closed'}`);
+            }
+            setLoading(false);
+          });
+        }}
+      />
+      {event.registrationsOpen && (
+        <Text fontSize="sm">
+          WARNING: Closing registrations will show the event as canceled. Registrations close as sold-out automatically
+          when the venue capacity is reached.
+        </Text>
+      )}
       <Divider my={3} />
       {checklist.map((item) => (
         <CheckListItem item={item} />

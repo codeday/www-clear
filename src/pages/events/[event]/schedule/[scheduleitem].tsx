@@ -1,84 +1,85 @@
 import React from 'react';
+import { Flex, Heading, Link, Spinner } from '@codeday/topo/Atom';
+import { IdCard, Email } from '@codeday/topocons';
+import { graphql } from 'generated/gql';
+import { useRouter } from 'next/router';
+import { useQuery } from 'urql';
+import NotFound from 'src/pages/404';
+import { EditMetadata } from 'src/components/forms';
+import { Breadcrumbs } from '../../../../components/Breadcrumbs';
+import { Page } from '../../../../components/Page';
+import { InfoBox } from '../../../../components/InfoBox';
+import { DeleteScheduleItem, UpdateScheduleItem } from '../../../../components/forms/ScheduleItem';
+import { ContactBox } from '../../../../components/ContactBox';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
-import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
-import {Heading, Link} from '@codeday/topo/Atom';
+const query = graphql(`
+  query ScheduleItemPage($where: ClearScheduleItemWhereUniqueInput!) {
+    clear {
+      scheduleItem(where: $where) {
+        id
+        __typename
+        name
+        link
+        displayTimeWithDate
+        hostName
+        hostPronoun
+        type
+        hostEmail
+        description
+        organizerEmail
+        organizerName
+        organizerPhone
+        event {
+          id
+        }
+      }
+    }
+  }
+`);
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from '@codeday/topocons';
-import {getSession} from 'next-auth/react';
-import {getFetcher} from '../../../../fetch';
+export default function ScheduleItem() {
+  const router = useRouter();
+  const [{ data, fetching }] = useQuery({ query, variables: { where: { id: router.query.scheduleitem as string } } });
+  const scheduleitem = data?.clear?.scheduleItem;
 
-// @ts-expect-error TS(2307) FIXME: Cannot find module './scheduleitem.gql' or its cor... Remove this comment to see the full error message
-import {GetScheduleItemQuery} from './scheduleitem.gql';
-import Breadcrumbs from '../../../../components/Breadcrumbs';
-import Page from '../../../../components/Page';
-import InfoBox from '../../../../components/InfoBox';
-import {DeleteScheduleItemModal, UpdateScheduleItemModal} from '../../../../components/forms/ScheduleItem';
-import ContactBox from '../../../../components/ContactBox';
-
-// @ts-expect-error TS(2307) FIXME: Cannot find module '../../../../components/forms/N... Remove this comment to see the full error message
-import {SetScheduleItemNotesMutation} from '../../../../components/forms/Notes.gql';
-import Notes from '../../../../components/forms/Notes';
-
-export default function ScheduleItem({
-    scheduleitem
-}: any) {
-    if (!scheduleitem) return <Page/>;
+  if (scheduleitem === null && !fetching) {
+    return <NotFound />;
+  }
+  if (!scheduleitem) {
     return (
-        <Page title={scheduleitem.name}>
-            <Breadcrumbs event={scheduleitem.event} scheduleitem={scheduleitem}/>
-            <Heading>
-                {scheduleitem.type ? `${scheduleitem.type}: ` : null} {scheduleitem.name}
-                <UpdateScheduleItemModal scheduleitem={scheduleitem}/>
-                <DeleteScheduleItemModal scheduleitem={scheduleitem}/>
-            </Heading>
-            <Heading size="md">
-                {scheduleitem.displayTimeWithDate}
-            </Heading>
-            <Link>{scheduleitem.link}</Link>
-            <ResponsiveMasonry>
-                <Masonry>
-                    <InfoBox heading="Description">
-                        {scheduleitem.description}
-                    </InfoBox>
-                    <InfoBox heading="Host">
-                        <Icon.IdCard/>{scheduleitem.hostName} ({scheduleitem.hostPronoun}) <br/>
-                        <Icon.Email/>{scheduleitem.hostEmail}
-                    </InfoBox>
-                    <InfoBox heading="Internal">
-                        <ContactBox
-                            heading="Organizer"
-                            name={scheduleitem.organizerName}
-                            email={scheduleitem.organizerEmail}
-                            phone={scheduleitem.organizerPhone}
-                        />
-                        <Notes notes={scheduleitem.notes}
-                               updateId={scheduleitem.id}
-                               updateMutation={SetScheduleItemNotesMutation}/>
-                    </InfoBox>
-                </Masonry>
-            </ResponsiveMasonry>
-        </Page>
+      <Page>
+        <Spinner />
+      </Page>
     );
-}
-
-export async function getServerSideProps({
-    req,
-    res,
-    query: {scheduleitem: itemId}
-}: any) {
-    const session = await getSession({req});
-
-    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-    const fetch = getFetcher(session);
-    if (!session) return {props: {}};
-
-    // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-    const scheduleitemResults = await fetch(GetScheduleItemQuery, {data: {id: itemId}});
-    return {
-        props: {
-            scheduleitem: scheduleitemResults.clear.scheduleItem,
-        },
-    };
+  }
+  return (
+    <Page title={scheduleitem.name}>
+      <Breadcrumbs event={scheduleitem.event} scheduleitem={scheduleitem} />
+      <Heading>
+        {scheduleitem.type ? `${scheduleitem.type}: ` : null} {scheduleitem.name}
+        <UpdateScheduleItem />
+        <DeleteScheduleItem />
+      </Heading>
+      <Heading size="md">{scheduleitem.displayTimeWithDate}</Heading>
+      {scheduleitem.link && <Link href={scheduleitem.link}>{scheduleitem.link}</Link>}
+      <Flex>
+        <InfoBox heading="Description">{scheduleitem.description}</InfoBox>
+        <InfoBox heading="Host">
+          <IdCard />
+          {scheduleitem.hostName} ({scheduleitem.hostPronoun}) <br />
+          <Email />
+          {scheduleitem.hostEmail}
+        </InfoBox>
+        <InfoBox heading="Internal">
+          <ContactBox
+            heading="Organizer"
+            name={scheduleitem.organizerName}
+            email={scheduleitem.organizerEmail}
+            phone={scheduleitem.organizerPhone}
+          />
+          <EditMetadata of={scheduleitem} mKey="notes" />
+        </InfoBox>
+      </Flex>
+    </Page>
+  );
 }

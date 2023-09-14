@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Spinner } from '@codeday/topo/Atom';
+import { Text, Heading, Spinner } from '@codeday/topo/Atom';
 import { graphql } from 'generated/gql';
 import { useQuery } from 'urql';
 import { ClearEvent } from 'generated/gql/graphql';
@@ -33,18 +33,24 @@ export function EventScheduleSummary({ event: eventData, children, ...props }: E
   const internalEvents = event.schedule.filter((s) => s.internal).length;
   return (
     <InfoBox heading="Schedule" headingSize="xl" {...props}>
-      <Heading display="inline" color="green">
-        {finalizedExternalEvents}
-      </Heading>{' '}
-      Published Events
-      <Heading display="inline" color="orange">
-        {nonfinalizedExternalEvents}
-      </Heading>{' '}
-      Unpublished Events
-      <Heading display="inline" color="purple">
-        {internalEvents}
-      </Heading>{' '}
-      Internal Events
+      <Text>
+        <Heading display="inline" color="green">
+          {finalizedExternalEvents}
+        </Heading>{' '}
+        Published Events
+      </Text>
+      <Text>
+        <Heading display="inline" color="orange">
+          {nonfinalizedExternalEvents}
+        </Heading>{' '}
+        Unpublished Events
+      </Text>
+      <Text>
+        <Heading display="inline" color="purple">
+          {internalEvents}
+        </Heading>{' '}
+        Internal Events
+      </Text>
       {children}
     </InfoBox>
   );

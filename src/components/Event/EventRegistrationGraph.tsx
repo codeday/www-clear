@@ -51,7 +51,7 @@ const CapacityLabel: ImplicitLabelType = ({ cap, viewBox, ...props }) => {
   );
 };
 
-export default function RegistrationGraph({ event: eventData, children, ...props }: EventRegistrationGraphProps) {
+export function EventRegistrationGraph({ event: eventData, children, ...props }: EventRegistrationGraphProps) {
   const [{ data }] = useQuery({ query, variables: { where: { id: eventData.id } } });
   const event = data?.clear?.event;
   if (!event) return <Spinner />;
@@ -71,9 +71,11 @@ export default function RegistrationGraph({ event: eventData, children, ...props
   return (
     <InfoBox heading="Registrations" headingSize="xl" {...props}>
       <Heading>{event.tickets.length} Registrations</Heading>
-      <Text m={0} ml={0.5}>
-        {`${studentTickets.length} students; ${staffTickets.length} staff`}
-      </Text>
+      {event.tickets.length > 0 && (
+        <Text m={0} ml={0.5}>
+          {`${studentTickets.length} students; ${staffTickets.length} staff`}
+        </Text>
+      )}
       {children}
       {studentTickets.length > 0 && (
         <SizeMe>
@@ -98,7 +100,7 @@ export default function RegistrationGraph({ event: eventData, children, ...props
                   />
                   <Area type="monotone" dataKey="y" yAxisId={0} stroke="#ff686b" fillOpacity={1} fill="url(#colorUv)" />
                   {event.venue?.capacity && event.tickets.length > event.venue.capacity && (
-                    <ReferenceLine y={event.venue.capacity} stroke="#ccc" label={CapacityLabel} strokeDasharray="3 3" />
+                    <ReferenceLine y={event.venue.capacity} stroke="#ccc" strokeDasharray="3 3" />
                   )}
                 </AreaChart>
               </Box>

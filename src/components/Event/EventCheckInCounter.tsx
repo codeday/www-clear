@@ -35,7 +35,6 @@ export function EventCheckinCounter({ event: eventData, ...props }: EventCheckIn
     variables: { where: { id: eventData.id } },
     requestPolicy: 'cache-and-network',
   });
-
   // TODO: Use subscriptions for this instead
   useInterval(() => refresh({ requestPolicy: 'network-only' }), 1000 * 15);
   const event = data?.clear?.event;

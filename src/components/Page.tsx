@@ -5,6 +5,7 @@ import { Header, Menu, SiteLogo, Footer, CustomLinks } from '@codeday/topo/Organ
 import { DefaultSeo } from 'next-seo';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import HeadwayWidget from '@headwayapp/react-widget';
+import { useRouter } from 'next/router';
 
 export type PageProps = {
   title?: string;
@@ -14,6 +15,7 @@ export type PageProps = {
 export function Page({ children, title, slug, ...props }: PageProps) {
   const { data: session, status } = useSession();
   const loading = status === 'loading';
+  const router = useRouter();
 
   if (!session) {
     return (

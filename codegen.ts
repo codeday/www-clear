@@ -36,10 +36,7 @@ const config: CodegenConfig = {
       preset: 'client',
       presetConfig: {
         skipTypename: false,
-        // fragmentMasking: false
-        fragmentMasking: {
-          unmaskFunctionName: 'getFragmentData',
-        },
+        fragmentMasking: false,
       },
       config: {
         namingConvention: 'keep',
@@ -49,6 +46,7 @@ const config: CodegenConfig = {
         scalars: {
           ClearDateTime: 'types/scalars#ClearDateTime',
           ClearJSON: 'types/scalars#ClearJSON',
+          Upload: 'File',
         },
       },
     },

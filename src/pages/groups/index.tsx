@@ -1,47 +1,44 @@
 import React from 'react';
-import {Box, Heading} from "@codeday/topo/Atom";
-import {getSession} from 'next-auth/react';
-import EventGroup from '../../components/EventGroup';
+import { Box, Flex, Heading, Spinner } from '@codeday/topo/Atom';
+import { EventGroupBox } from 'src/components/EventGroup';
 
-// @ts-expect-error TS(2307) FIXME: Cannot find module './index.gql' or its correspond... Remove this comment to see the full error message
-import {getEventGroups} from './index.gql';
-import Page from '../../components/Page';
-import {getFetcher} from '../../fetch';
-import {CreateEventGroupModal} from "../../components/forms/EventGroup";
+import { Page } from 'src/components/Page';
+import { CreateEventGroup } from 'src/components/forms/EventGroup';
+import { graphql } from 'generated/gql';
+import { useQuery } from 'urql';
 
-export default function Groups({
-    groups
-}: any) {
-    if (!groups) return <Page/>;
+const query = graphql(`
+  query EventGroupsPage {
+    clear {
+      eventGroups(orderBy: { startDate: desc }) {
+        id
+      }
+    }
+  }
+`);
+
+export default function Groups() {
+  const [{ data }] = useQuery({ query });
+
+  const groups = data?.clear?.eventGroups;
+  if (!groups) {
     return (
-        <Page title="Event Groups">
-            <Heading>
-                Event Groups
-                <CreateEventGroupModal />
-            </Heading>
-            <Box display="flex">
-                {groups.map((group: any) => <EventGroup m={4} group={group}/>)}
-            </Box>
-        </Page>
+      <Page>
+        <Spinner />
+      </Page>
     );
-}
-
-export async function getServerSideProps({
-    req
-}: any) {
-    const session = await getSession({req});
-
-    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-    const fetch = getFetcher(session);
-    if (!session) return {props: {}};
-
-
-    // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 1.
-    const groupsResult = await fetch(getEventGroups);
-
-    return {
-        props: {
-            groups: groupsResult.clear.eventGroups,
-        },
-    };
+  }
+  return (
+    <Page title="Event Groups">
+      <Heading>
+        Event Groups
+        <CreateEventGroup />
+      </Heading>
+      <Flex flexWrap="wrap">
+        {groups.map((group) => (
+          <EventGroupBox group={group} flexShrink={0} />
+        ))}
+      </Flex>
+    </Page>
+  );
 }

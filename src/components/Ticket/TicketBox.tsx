@@ -58,6 +58,7 @@ export function TicketBox({ ticket: ticketData, ...props }: TicketBoxProps) {
       as="a"
       href={viewLink}
       id={ticket.id}
+      key={ticket.id}
       buttons={
         <Button h={6} as="a" href={viewLink}>
           <Eye />

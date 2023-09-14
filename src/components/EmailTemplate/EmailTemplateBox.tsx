@@ -33,11 +33,11 @@ const query = graphql(`
   }
 `);
 
-export type EmailTemplateProps = {
+export type EmailTemplateBoxProps = {
   emailTemplate: PropFor<ClearEmailTemplate>;
 } & InfoBoxProps;
 
-export function EmailTemplate({ emailTemplate: emailTemplateData, children, ...props }: EmailTemplateProps) {
+export function EmailTemplateBox({ emailTemplate: emailTemplateData, children, ...props }: EmailTemplateBoxProps) {
   const [{ data }] = useQuery({ query, variables: { where: { id: emailTemplateData.id } } });
   const emailTemplate = data?.clear?.emailTemplate;
 

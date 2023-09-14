@@ -47,7 +47,7 @@ export function EventSponsorSummary({ event: eventData, children, ...props }: Ev
             <Eye />
           </Button>
           &nbsp;
-          <CreateSponsor />
+          <CreateSponsor compact event={event} buttonProps={{ h: 6 }}/>
         </>
       }
     >

@@ -1,46 +1,50 @@
 import React from 'react';
-import {Box, Heading} from "@codeday/topo/Atom";
-import {getSession} from 'next-auth/react';
-import Page from '../../../../components/Page';
+import { Box, Heading, Spinner } from '@codeday/topo/Atom';
+import { useRouter } from 'next/router';
+import { useQuery } from 'urql';
+import { graphql } from 'generated/gql';
+import NotFound from 'src/pages/404';
+import { Page } from '../../../../components/Page';
 
-// @ts-expect-error TS(2307) FIXME: Cannot find module './index.gql' or its correspond... Remove this comment to see the full error message
-import {getEventWithSchedule} from './index.gql';
-import {getFetcher} from '../../../../fetch';
-import Breadcrumbs from '../../../../components/Breadcrumbs';
-import Calendar from '../../../../components/Calendar';
-import {CreateScheduleItemModal} from '../../../../components/forms/ScheduleItem';
+import { Breadcrumbs } from '../../../../components/Breadcrumbs';
+import { EventCalendar } from '../../../../components/Event';
+import { CreateScheduleItem } from '../../../../components/forms/ScheduleItem';
 
-export default function Schedule({
-    event
-}: any) {
-    if (!event) return <Page/>;
+const query = graphql(`
+  query EventSchedulePage($where: ClearEventWhereUniqueInput!) {
+    clear {
+      event(where: $where) {
+        id
+        name
+      }
+    }
+  }
+`);
+
+export default function Schedule() {
+  const router = useRouter();
+  const [{ data, fetching }] = useQuery({ query, variables: { where: { id: router.query.event as string } } });
+  const event = data?.clear?.event;
+
+  if (event === null && !fetching) {
+    return <NotFound />;
+  }
+  if (!event) {
     return (
-        <Page title={event.name}>
-            <Breadcrumbs event={event}/>
-            <Heading>{event.name} - Schedule <CreateScheduleItemModal event={event}/> </Heading>
-            <Box display="inline-block">
-                <Calendar event={event}/>
-            </Box>
-        </Page>
+      <Page>
+        <Spinner />
+      </Page>
     );
-}
-
-export async function getServerSideProps({
-    req,
-    res,
-    query: {event: eventId}
-}: any) {
-    const session = await getSession({req});
-
-    // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-    const fetch = getFetcher(session);
-    if (!session) return {props: {}};
-
-    // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-    const eventResults = await fetch(getEventWithSchedule, {data: {id: eventId}});
-    return {
-        props: {
-            event: eventResults.clear.event,
-        },
-    };
+  }
+  return (
+    <Page title={event.name}>
+      <Breadcrumbs event={event} />
+      <Heading>
+        {event.name} - Schedule <CreateScheduleItem />{' '}
+      </Heading>
+      <Box display="inline-block">
+        <EventCalendar event={event} />
+      </Box>
+    </Page>
+  );
 }

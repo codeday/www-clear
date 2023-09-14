@@ -64,7 +64,7 @@ export function EventRestrictionPreview({
   const eventRestriction = data?.cms?.eventRestrictions?.items[0];
   if (!eventRestriction) return <Skeleton h="100" />;
   return (
-    <Box {...props}>
+    <Box boxShadow="base" p={2} m={1} {...props}>
       <Image src={eventRestriction.icon?.url || undefined} width={24} display="block" ml="auto" mr="auto" mb={5} />
       <Text bold>{ReactHtmlParser(DOMPurify.sanitize(marked.parse(eventRestriction.title || '')), { transform })}</Text>
       <Text>{ReactHtmlParser(DOMPurify.sanitize(marked.parse(eventRestriction.details || '')), { transform })}</Text>

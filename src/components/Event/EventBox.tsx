@@ -55,7 +55,7 @@ export function EventBox({ event: eventData, ...props }: EventBoxProps) {
       id={event.id}
       as="a"
       href={`/events/${event.id}`}
-      opacity={event.endDate.diffNow().milliseconds > 0 ? 0.5 : 1}
+      opacity={event.endDate.diffNow().milliseconds < 0 ? 0.5 : 1}
       {...props}
     >
       <Flex>

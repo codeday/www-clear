@@ -3,7 +3,7 @@ import { Box, Flex, Text, BoxProps } from '@codeday/topo/Atom';
 import { useColorModeValue } from '@codeday/topo/Theme';
 import { forwardRef } from '@chakra-ui/react';
 
-type InfoBoxProps = Partial<{
+export type InfoBoxProps = Partial<{
   heading: React.ReactNode;
   subHeading: string;
   headingSize: BoxProps['fontSize'];
@@ -21,10 +21,11 @@ export const InfoBox = forwardRef<InfoBoxProps, 'div'>(
       <Box
         ref={ref}
         display="block"
+        flexGrow={2}
         borderWidth={0}
         rounded={nested ? 1 : 3}
         boxShadow="base"
-        m={nested ? 0 : 2}
+        m={nested ? 0 : 2}      
         {...props}
       >
         {heading && (
