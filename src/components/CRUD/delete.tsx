@@ -1,9 +1,8 @@
-import { Box, Button, Heading, HStack } from '@codeday/topo/Atom';
-import { useColorModeValue } from '@codeday/topo/Theme';
+import { Box, Button, HStack } from '@codeday/topo/Atom';
 import { UiTrash, UiX } from '@codeday/topocons';
 import { VariablesOf } from '@graphql-typed-document-node/core';
 import { OperationDefinitionNode } from 'graphql';
-import React, { useState } from 'react';
+import React from 'react';
 import { camelToTilte } from 'src/utils';
 import { TypedDocumentNode, useMutation } from 'urql';
 import {
@@ -19,9 +18,8 @@ import {
   ButtonProps,
 } from '@chakra-ui/react';
 import { useToasts } from '@codeday/topo/utils';
-import { Alert } from '../Alert';
 
-export type DeleteModalProps<T extends TypedDocumentNode<any, { where: { id: string } }>> = {
+export type DeleteModalProps<T extends TypedDocumentNode<{}, { where: { id: string } }>> = {
   mutation: T;
   where: VariablesOf<T>['where'];
   onSubmit?: () => void;
@@ -43,7 +41,7 @@ export function DeleteModal({
   headingProps,
   buttonProps,
   ...props
-}: DeleteModalProps<TypedDocumentNode<any, { where: { id: string } }>>) {
+}: DeleteModalProps<TypedDocumentNode<{}, { where: { id: string } }>>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [deleteResult, doDelete] = useMutation(mutation);
   const { success, error } = useToasts();
@@ -54,7 +52,7 @@ export function DeleteModal({
   const title = t || prettyOperationName;
   return (
     <Box display="inline" m={1} {...props}>
-      <Button onClick={onOpen} { ...buttonProps }>
+      <Button onClick={onOpen} {...buttonProps}>
         <>
           <UiTrash />
           {!compact && <>&nbsp;{title}</>}

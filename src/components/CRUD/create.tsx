@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Box, BoxProps, Button, Text, Heading, HeadingProps } from '@codeday/topo/Atom';
-import { useColorModeValue } from '@codeday/topo/Theme';
-import { UiAdd, UiX } from '@codeday/topocons';
+import { Box, BoxProps, Button, Heading, HeadingProps } from '@codeday/topo/Atom';
+import { UiAdd } from '@codeday/topocons';
 import { StrictRJSFSchema } from '@rjsf/utils';
 import { UiSchema } from '@rjsf/chakra-ui';
 import assert from 'assert';
@@ -17,6 +16,7 @@ import {
   ClearEnumEmailWhenFromFieldUpdateOperationsInput,
   ClearEnumTicketTypeFieldUpdateOperationsInput,
   ClearEnumWebhookServiceFieldUpdateOperationsInput,
+  ClearEventCreatemanagersInput,
   ClearEventUpdatemanagersInput,
   ClearFloatFieldUpdateOperationsInput,
   ClearIntFieldUpdateOperationsInput,
@@ -24,6 +24,7 @@ import {
   ClearNullableIntFieldUpdateOperationsInput,
   ClearNullableStringFieldUpdateOperationsInput,
   ClearStringFieldUpdateOperationsInput,
+  InputMaybe,
 } from 'generated/gql/graphql';
 import {
   ButtonProps,
@@ -38,7 +39,7 @@ import {
 import { useToasts } from '@codeday/topo/utils';
 import { CustomForm as Form } from './CustomForm/CustomForm';
 
-type ClearFieldUpdateInput =
+export type ClearFieldUpdateInput =
   | ClearStringFieldUpdateOperationsInput
   | ClearDateTimeFieldUpdateOperationsInput
   | ClearBoolFieldUpdateOperationsInput
@@ -54,36 +55,46 @@ type ClearFieldUpdateInput =
   | ClearEnumWebhookServiceFieldUpdateOperationsInput
   | ClearEventUpdatemanagersInput;
 
+type Connect = { connect?: {} | null | undefined };
+type Create = { connect?: {} | null | undefined };
+type CreateOrConnect = Create & Connect & { createOrConnect?: {} | null | undefined };
+
+export type FieldTypes =
+  | Boolean
+  | string
+  | number
+  | DateTime
+  | ClearFieldUpdateInput
+  | ClearEventCreatemanagersInput
+  | Connect
+  | Create
+  | CreateOrConnect;
+
 type ScalarToTypeString<T> = T extends string
   ? 'string'
-  : T extends number
+  : T extends Number
   ? 'number'
   : T extends DateTime
   ? 'date-time'
-  : T extends boolean
+  : T extends Boolean
   ? 'boolean'
   : null;
 
-// "T extends object?" feels redundant, and there's probably a better solution to this, but otherwise this doesn't work for optional special types
-type IsConnect<T> = T extends object ? ('connect' extends keyof T ? 'connect' : null) : null;
-type IsCreate<T> = T extends object ? ('create' extends keyof T ? 'create' : null) : null;
-type IsCreateMany<T> = T extends object ? ('createMany' extends keyof T ? 'createMany' : null) : null;
-type IsConnectOrCreate<T> = T extends object ? ('connectOrCreate' extends keyof T ? 'connectOrCreate' : null) : null;
-type IsArray<T> = T extends object
-  ? 'set' extends keyof T
-    ? T['set'] extends Array<any>
-      ? 'array'
-      : null
-    : null
+type IsConnect<T> = T extends Connect ? 'connect' : null;
+type IsCreate<T> = T extends Create ? 'create' : null;
+type IsCreateMany<T> = T extends { createMany?: {} | null | undefined } ? 'createMany' : null;
+type IsCreateOrConnect<T> = T extends CreateOrConnect ? 'createOrConnect' : null;
+type IsArray<T> = T extends { set: string[] } ? 'array' : null;
+
+type IsUpdate<T> = T extends ClearFieldUpdateInput
+  ? // eslint-disable-next-line no-use-before-define
+    NonNullable<ScalarToTypeString<T['set']> | IsSpecialType<T['set']>>
   : null;
-type IsUpdate<T> = T extends ClearFieldUpdateInput ? 'update' : null;
-type IsSpecialType<T> = ScalarToTypeString<T> extends null
-  ? IsConnect<T> | IsCreate<T> | IsConnectOrCreate<T> | IsCreateMany<T> | IsArray<T> | IsUpdate<T>
-  : null;
+type IsSpecialType<T> = IsConnect<T> | IsCreate<T> | IsCreateOrConnect<T> | IsCreateMany<T> | IsArray<T> | IsUpdate<T>;
 
 type ConnectConfig<T> = { id: string } | Array<{ id: string; name: string }>;
 
-type CreateConfig<T> = 'create' extends keyof T
+type CreateConfig<T> = T extends { create: {} }
   ? {
       // eslint-disable-next-line no-use-before-define
       fields: FieldConfiguration<T['create']>;
@@ -92,25 +103,16 @@ type CreateConfig<T> = 'create' extends keyof T
 
 type CreateManyConfig<T> = CreateConfig<T>;
 
-type ArrayConfig<T> = T extends object
-  ? 'set' extends keyof T
-    ? T['set'] extends Array<infer A>
-      ? // eslint-disable-next-line no-use-before-define
-        FieldConfiguration<A>
-      : never
-    : never
+type ArrayConfig<T> = T extends { set: Array<infer A extends FieldTypes> }
+  ? // eslint-disable-next-line no-use-before-define
+    FieldConfiguration<A>
   : never;
 
-// eslint-disable-next-line no-use-before-define
-type UpdateConfig<T extends ClearFieldUpdateInput> = FieldConfiguration<T['set']> & {
-  // @ts-ignore
-  // eslint-disable-next-line prettier/prettier
-  schema: { default: (typeof T['set']) extends DateTime ? string : T['set'] };
-};
-
-type FieldConfiguration<T> =
+export type FieldConfiguration<
+  T extends FieldTypes | InputMaybe<FieldTypes | undefined> = FieldTypes | InputMaybe<FieldTypes | undefined>,
+> =
   // T extends Array<infer A> ? { _type: 'array', items: FieldConfiguration<A> } :
-  (T extends undefined ? { required?: boolean } : { required: true }) & {
+  (T extends any | undefined ? { required?: boolean } : { required: true }) & {
     _type: NonNullable<IsSpecialType<T> | ScalarToTypeString<T>>;
     schema?: StrictRJSFSchema;
     uiSchema?: UiSchema;
@@ -120,10 +122,14 @@ type FieldConfiguration<T> =
     (IsConnect<T> extends null ? {} : { connect?: ConnectConfig<T> }) &
     (IsCreate<T> extends null ? {} : { create?: CreateConfig<T> }) &
     (IsCreateMany<T> extends null ? {} : { createMany?: CreateManyConfig<T> }) &
-    (IsUpdate<T> extends null ? {} : T extends ClearFieldUpdateInput ? { set: UpdateConfig<T> } : {});
+    (IsUpdate<T> extends null
+      ? {}
+      : T extends ClearFieldUpdateInput
+      ? { update: true; schema: { default: T['set'] extends DateTime ? string : T['set'] } }
+      : {});
 // & ( IsConnectOrCreate<T> extends never ? {} : { connectOrCreate?: ConnectOrCreateConfig<T> } )
 
-type FieldsConfiguration<T extends TypedDocumentNode<any, any>> = {
+export type FieldsConfiguration<T extends TypedDocumentNode<any, any>> = {
   [Variable in keyof VariablesOf<T>]: {
     [Field in keyof Omit<
       VariablesOf<T>[Variable],
@@ -147,10 +153,10 @@ export type CreateModalProps<T extends TypedDocumentNode<any, any>> = {
   onSubmit?: (formData: FormData) => void;
 } & BoxProps;
 
-function makeField(field: FieldConfiguration<any>, title: string): { schema: StrictRJSFSchema; uiSchema: UiSchema } {
+function makeField(field: FieldConfiguration, title: string): { schema: StrictRJSFSchema; uiSchema: UiSchema } {
   const titlePretty = field.title || camelToTilte(title);
-  const schema: StrictRJSFSchema = field.schema || {};
-  const uiSchema: UiSchema = field.uiSchema || {};
+  let schema: StrictRJSFSchema = { ...field.schema };
+  let uiSchema: UiSchema = { ...field.uiSchema };
   schema.title = titlePretty;
   if (field._type === 'string') {
     schema.type = 'string';
@@ -168,16 +174,16 @@ function makeField(field: FieldConfiguration<any>, title: string): { schema: Str
     schema.type = 'object';
     schema.title = '';
     // @ts-ignore
-    const f = makeField(field.items as unknown as FieldConfiguration<any>, '');
+    const f = makeField(field.items as unknown as FieldConfiguration, '');
     schema.properties = {
       set: {
         title: '',
         description: titlePretty,
         type: 'array',
-        items: f.schema,
+        items: { ...f.schema },
       },
     };
-    uiSchema.set = f.uiSchema;
+    uiSchema.set = { ...f.uiSchema };
   } else if (field._type === 'connect') {
     if (!field.connect) throw new Error('Field with connect type must have connect key');
     schema.title = '';
@@ -225,30 +231,36 @@ function makeField(field: FieldConfiguration<any>, title: string): { schema: Str
         },
       };
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (field._type === 'create') {
-  } else if (field._type === 'connectOrCreate') {
-  } else if (field._type === 'createMany') {
-  } else if (field._type === 'update') {
-    schema.type = 'object';
-    schema.title = '';
-    // @ts-ignore
-    const f = makeField(field.set, title);
-    // @ts-ignore
-    if (field.set._type === 'array') {
-      // this needs to be treated differently because otherwise it results in set.set
-      schema.properties = f.schema.properties;
-      uiSchema.set = f.uiSchema.set;
-    } else {
-      schema.properties = {
-        set: f.schema,
-      };
-      // @ts-ignore
-      schema.properties.set.type = [f.schema.type, 'null'];
-      uiSchema.set = f.uiSchema;
-    }
+    // } else if (field._type === 'connectOrCreate') {
+    // } else if (field._type === 'createMany') {
   } else {
     schema.type = 'null';
     schema.description = `unsupported: ${field._type}`;
+  }
+  // @ts-ignore
+  if (field.update) {
+    const setSchema = { ...schema };
+    const setUiSchema = { ...uiSchema };
+    if (field._type === 'array') {
+      // this needs to be treated differently because otherwise it results in set.set
+      schema = { ...setSchema.properties };
+      uiSchema = { set: { ...setUiSchema.set } };
+    } else {
+      schema = {
+        type: 'object',
+        title: '',
+        properties: {
+          set: {
+            ...setSchema,
+          },
+        },
+      };
+      // @ts-ignore
+      schema.properties.set.type = [setSchema.type, 'null'];
+      uiSchema = { set: { ...setUiSchema } };
+    }
   }
   return {
     schema,
@@ -282,17 +294,17 @@ function makeFormProps<T extends TypedDocumentNode>(
           // @ts-ignore
           if (fields[variable][field].required) schema.properties[variable].required.push(field);
           // @ts-ignore
-          const fieldSchema = makeField(fields[variable][field] as FieldConfiguration<any>, field.toString());
+          const fieldSchema = makeField(fields[variable][field] as FieldConfiguration, field.toString());
           // @ts-ignore
           assert(schema.properties[variable].properties !== undefined);
           // @ts-ignore
-          schema.properties[variable].properties[field] = fieldSchema.schema;
-          uiSchema[variable][field] = fieldSchema.uiSchema;
+          schema.properties[variable].properties[field] = { ...fieldSchema.schema };
+          uiSchema[variable][field] = { ...fieldSchema.uiSchema };
         }
       }
     }
   }
-  console.log(uiSchema);
+  console.log(fields, schema, uiSchema);
   return {
     schema,
     uiSchema,
@@ -349,6 +361,8 @@ export function CreateModal<T extends TypedDocumentNode<any, any>>({
                   setIsSubmitting(false);
                   if (res.error) {
                     error(res.error.name, res.error.message);
+                  } else {
+                    success('Created!');
                   }
                   onClose();
                 }

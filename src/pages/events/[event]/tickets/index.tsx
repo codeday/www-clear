@@ -291,7 +291,7 @@ export default function Tickets() {
     <Page title={`${event.name} Tickets`}>
       <Breadcrumbs event={event} />
       <Heading>{event.name} Tickets</Heading>
-      <CreateTicket event={event} onSubmit={refreshTickets} />
+      <CreateTicket event={event} onSubmit={() => refreshTickets({ requestPolicy: 'network-only' })} />
       <CSVExport display="inline" m={1} data={csv} headers={headers} filename="tickets.csv" />
       <Button
       m={1}

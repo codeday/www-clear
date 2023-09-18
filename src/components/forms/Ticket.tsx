@@ -1,8 +1,9 @@
 import { Spinner } from '@codeday/topo/Atom';
 import { graphql } from 'generated/gql';
 import { ClearEvent, ClearTicket, ClearTicketType } from 'generated/gql/graphql';
+import { injectUpdateFields } from 'src/utils';
 import { useQuery } from 'urql';
-import { CreateModal, CreateModalProps } from '../CRUD/create';
+import { CreateModal, CreateModalProps, FieldsConfiguration } from '../CRUD/create';
 import { DeleteModal, DeleteModalProps } from '../CRUD/delete';
 import { UpdateModal, UpdateModalProps } from '../CRUD/update';
 
@@ -19,14 +20,51 @@ const createTicketMutation = graphql(`
   }
 `);
 
+const fields: Omit<FieldsConfiguration<typeof createTicketMutation>['data'], 'event'> = {
+  firstName: {
+    _type: 'string',
+    required: true,
+  },
+  lastName: {
+    _type: 'string',
+    required: true,
+  },
+  age: {
+    _type: 'number',
+  },
+  email: {
+    _type: 'string',
+  },
+  phone: {
+    _type: 'string',
+  },
+  whatsApp: {
+    _type: 'string',
+  },
+  type: {
+    _type: 'string',
+    schema: {
+      enum: Object.keys(ClearTicketType),
+    },
+  },
+  username: {
+    _type: 'string',
+    uiSchema: {
+      'ui:help':
+        'Username from account.codeday.org. RECOMMENDED FOR STAFF as this affects how you are displayed to the public on event pages.',
+    },
+  },
+};
+
 export type CreateTicketProps = {
   event: PropFor<ClearEvent>;
 } & Omit<CreateModalProps<typeof createTicketMutation>, 'fields' | 'mutation'>;
 
-export function CreateTicket({ event }: CreateTicketProps) {
+export function CreateTicket({ event, ...props }: CreateTicketProps) {
   return (
     <CreateModal
       headingProps={{ mb: -12 }}
+      {...props}
       mutation={createTicketMutation}
       fields={{
         data: {
@@ -37,36 +75,7 @@ export function CreateTicket({ event }: CreateTicketProps) {
               id: event.id,
             },
           },
-          firstName: {
-            _type: 'string',
-            required: true,
-          },
-          lastName: {
-            _type: 'string',
-            required: true,
-          },
-          age: {
-            _type: 'number',
-          },
-          email: {
-            _type: 'string',
-          },
-          phone: {
-            _type: 'string',
-          },
-          whatsApp: {
-            _type: 'string',
-          },
-          type: {
-            _type: 'string',
-          },
-          username: {
-            _type: 'string',
-            uiSchema: {
-              'ui:help':
-                'Username from account.codeday.org. RECOMMENDED FOR STAFF as this affects how you are displayed to the public on event pages.',
-            },
-          },
+          ...fields,
         },
       }}
     />
@@ -122,83 +131,7 @@ export function UpdateTicket({ ticket: ticketData, ...props }: UpdateTicketProps
       mutation={updateTicketMutation}
       fields={{
         data: {
-          firstName: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.firstName,
-              },
-            },
-          },
-          lastName: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.lastName,
-              },
-            },
-          },
-          age: {
-            _type: 'update',
-            set: {
-              _type: 'number',
-              schema: {
-                default: ticket.age,
-              },
-            },
-          },
-          email: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.email,
-              },
-            },
-          },
-          phone: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.phone,
-              },
-            },
-          },
-          whatsApp: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.whatsApp,
-              },
-            },
-          },
-          type: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.type,
-                enum: Object.keys(ClearTicketType)
-              },
-            },
-          },
-          username: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: ticket.username,
-              },
-              uiSchema: {
-                'ui:help':
-                  'Username from account.codeday.org. RECOMMENDED FOR STAFF as this affects how you are displayed to the public on event pages.',
-              },
-            },
-          },
+          ...injectUpdateFields(fields, ticket),
         },
         where: {
           id: {
