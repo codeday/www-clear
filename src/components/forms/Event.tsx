@@ -562,9 +562,10 @@ export function UpdateEvent({ event: eventData, ...props }: UpdateEventProps) {
             },
           },
           managers: {
-            _type: 'update',
+            // @ts-ignore TODO:  typing error
+            _type: 'array',
+            update: true,
             set: {
-              // @ts-ignore TODO: Fix typing error
               _type: 'array',
               items: {
                 _type: 'string',

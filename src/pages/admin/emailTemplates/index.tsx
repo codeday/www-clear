@@ -3,9 +3,9 @@ import { graphql } from 'generated/gql';
 import { useQuery } from 'urql';
 import { Spinner, Flex } from '@codeday/topo/Atom';
 import {
-  CreateEmailTemplateModal,
-  DeleteEmailTemplateModal,
-  UpdateEmailTemplateModal,
+  CreateEmailTemplate,
+  DeleteEmailTemplate,
+  UpdateEmailTemplate,
 } from '../../../components/forms/EmailTemplate';
 
 import { Page } from '../../../components/Page';
@@ -36,14 +36,14 @@ export default function Index() {
   return (
     <Page>
       <Breadcrumbs />
-      <CreateEmailTemplateModal />
+      <CreateEmailTemplate />
       <Flex>
         {emailTemplates.map((e) => (
           <EmailTemplateBox
             emailTemplate={e}
             buttons={
               <>
-                <UpdateEmailTemplateModal emailtemplate={e} /> <DeleteEmailTemplateModal emailtemplate={e} />
+                <UpdateEmailTemplate emailTemplate={e} /> <DeleteEmailTemplate emailTemplate={e} />
               </>
             }
           />

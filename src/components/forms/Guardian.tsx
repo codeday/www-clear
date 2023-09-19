@@ -1,6 +1,7 @@
 import { Spinner } from '@codeday/topo/Atom';
 import { graphql } from 'generated/gql';
 import { ClearPerson, ClearTicket } from 'generated/gql/graphql';
+import { BaseFieldsConfiguration, injectUpdateFields } from 'src/utils';
 import { useQuery } from 'urql';
 import { CreateModal, CreateModalProps } from '../CRUD/create';
 import { DeleteModal, DeleteModalProps } from '../CRUD/delete';
@@ -23,6 +24,7 @@ const guardianFragment = graphql(`
   }
 `);
 
+
 const createGuardianMutation = graphql(`
   mutation CreateGuardian($data: ClearPersonCreateInput!) {
     clear {
@@ -32,6 +34,26 @@ const createGuardianMutation = graphql(`
     }
   }
 `);
+
+const fields: BaseFieldsConfiguration<typeof createGuardianMutation> = {
+  firstName: {
+    _type: 'string',
+    required: true,
+  },
+  lastName: {
+    _type: 'string',
+    required: true,
+  },
+  email: {
+    _type: 'string',
+  },
+  phone: {
+    _type: 'string',
+  },
+  whatsApp: {
+    _type: 'string',
+  },
+}
 
 export type CreateGuardianProps = {
   ticket: PropFor<ClearTicket>;
@@ -43,23 +65,7 @@ export function CreateGuardian({ ticket, ...props }: CreateGuardianProps) {
       mutation={createGuardianMutation}
       fields={{
         data: {
-          firstName: {
-            _type: 'string',
-            required: true,
-          },
-          lastName: {
-            _type: 'string',
-            required: true,
-          },
-          email: {
-            _type: 'string',
-          },
-          phone: {
-            _type: 'string',
-          },
-          whatsApp: {
-            _type: 'string',
-          },
+          ...fields,
           Ticket: {
             _type: 'connect',
             connect: {
@@ -118,51 +124,7 @@ export function UpdateGuardian({ guardian: guardianData, ...props }: UpdateGuard
           },
         },
         data: {
-          firstName: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: guardian.firstName,
-              },
-            },
-          },
-          lastName: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: guardian.lastName,
-              },
-            },
-          },
-          email: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: guardian.email,
-              },
-            },
-          },
-          phone: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: guardian.phone,
-              },
-            },
-          },
-          whatsApp: {
-            _type: 'update',
-            set: {
-              _type: 'string',
-              schema: {
-                default: guardian.whatsApp,
-              },
-            },
-          },
+          ...injectUpdateFields(fields, guardian),
         },
       }}
       {...props}

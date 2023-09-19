@@ -4,56 +4,28 @@
 // import { Modal } from 'react-responsive-modal';
 // import 'react-responsive-modal/styles.css';
 
+import { ButtonProps } from '@chakra-ui/react';
+import { Spinner, Button } from '@codeday/topo/Atom';
+import { useToasts } from '@codeday/topo/utils';
 import { graphql } from 'generated/gql';
-import CreateModal from '../CRUD/create';
+import { ClearDiscountType, ClearEvent, ClearPromoCode } from 'generated/gql/graphql';
+import { useRouter } from 'next/router';
+import { BaseFieldsConfiguration, injectUpdateFields } from 'src/utils';
+import { useMutation, useQuery } from 'urql';
+import { CreateModal, CreateModalProps } from '../CRUD/create';
+import { DeleteModal, DeleteModalProps } from '../CRUD/delete';
+import { UpdateModal, UpdateModalProps } from '../CRUD/update';
 
-// // @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-// import * as Icon from '@codeday/topocons';
+// eslint-disable-next-line no-secrets/no-secrets
+const characters = 'ABCDEFGHKPQRSTUVWXYZ';
+function generatePromoCode(length: number): string {
+  let result = '';
+  for (let i = 0; i < length; i += 1) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 
-// // @ts-expect-error TS(2307) FIXME: Cannot find module './PromoCode.gql' or its corres... Remove this comment to see the full error message
-// import { useToasts } from '@codeday/topo/utils';
-// import { useRouter } from 'next/router';
-// import { useSession } from 'next-auth/react';
-// import { useColorModeValue } from '@codeday/topo/Theme';
-// import {
-//   CreatePromoCodeMutation,
-//   DeletePromoCodeMutation,
-//   UpdatePromoCodeMutation,
-//   SetPromoCodeMetatataMutation,
-// } from './PromoCode.gql';
-// import { useFetcher } from '../../urqlclient';
-
-// const characters = 'ABCDEFGHKPQRSTUVWXYZ';
-// function generatePromoCode(length: any) {
-//   let result = '';
-//   for (let i = 0; i < length; i++) {
-//     result += characters.charAt(Math.floor(Math.random() * characters.length));
-//   }
-//   return result;
-// }
-
-// const schema = {
-//   type: 'object',
-//   properties: {
-//     code: {
-//       type: 'string',
-//       title: 'Code',
-//     },
-//     type: {
-//       type: 'string',
-//       title: 'Type',
-//       enum: ['SUBTRACT', 'PERCENT'],
-//       enumNames: ['Subtract Fixed Value', 'Percent Discount'],
-//     },
-//     amount: {
-//       type: 'number',
-//       multipleOf: 0.01,
-//     },
-//     uses: {
-//       type: 'number',
-//       multipleOf: 1,
-//       title: 'Uses',
-//     },
 //     enablesUber: {
 //       type: 'boolean',
 //       title: 'Enables requesting a free Uber ride?',
@@ -80,307 +52,81 @@ import CreateModal from '../CRUD/create';
 //   },
 // };
 
-// export function CreatePromoCodeModal({ event, children, ...props }: any) {
-//   const [open, setOpen] = useState(false);
-//   const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
-//   const { data: session } = useSession();
+const promoCodeFormFragment = graphql(`
+  fragment PromoCodeForm on ClearPromoCode {
+    id
+    code
+    type
+    amount
+    uses
+  }
+`);
 
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const onOpenModal = () => setOpen(true);
-//   const onCloseModal = () => setOpen(false);
-//   const router = useRouter();
-
-//   return (
-//     <Box {...props}>
-//       <Button onClick={onOpenModal}>
-//         {children || (
-//           <>
-//             <Icon.UiAdd />
-//             Add Promo Code
-//           </>
-//         )}
-//       </Button>
-//       <Modal
-//         open={open}
-//         onClose={onCloseModal}
-//         center
-//         styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-//       >
-//         <Heading>Create Promo Code</Heading>
-//         <Form
-//           uiSchema={uiSchema}
-//           // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { code: { type: ... Remove this comment to see the full error message
-//           schema={schema}
-//           formData={formData}
-//           onChange={(data) => setFormData(data.formData)}
-//         >
-//           <Button
-//             isLoading={loading}
-//             disabled={loading}
-//             onClick={async () => {
-//               setLoading(true);
-//               try {
-//                 // @ts-expect-error TS(2339) FIXME: Property 'enablesUber' does not exist on type 'und... Remove this comment to see the full error message
-//                 const { enablesUber, enablesLaptops, ...baseData } = formData;
-
-//                 // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//                 await fetch(CreatePromoCodeMutation, {
-//                   data: {
-//                     ...baseData,
-//                     metadata: {
-//                       ...(enablesUber ? { uber: 'true' } : {}),
-//                       ...(enablesLaptops ? { laptop: 'true' } : {}),
-//                     },
-//                     event: {
-//                       connect: {
-//                         id: event.id,
-//                       },
-//                     },
-//                   },
-//                 });
-//                 await router.replace(router.asPath);
-//                 success('Promo Code Created');
-//                 onCloseModal();
-//               } catch (ex) {
-//                 // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//                 error(ex.toString());
-//               }
-//               setLoading(false);
-//             }}
-//           >
-//             Submit
-//           </Button>
-//         </Form>
-//       </Modal>
-//     </Box>
-//   );
-// }
-
-// export function UpdatePromoCodeModal({ promocode, children, ...props }: any) {
-//   const [open, setOpen] = useState(false);
-//   const [formData, setFormData] = useState(promocode);
-//   const { data: session } = useSession();
-
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const onOpenModal = () => setOpen(true);
-//   const onCloseModal = () => setOpen(false);
-//   const router = useRouter();
-
-//   function formDataToUpdateInput(formData: any) {
-//     const ret = {};
-//     Object.keys(schema.properties).map((key) => {
-//       // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-//       if (formData[key] !== promocode[key]) ret[key] = { set: formData[key] };
-//     });
-//     return ret;
-//   }
-
-//   return (
-//     <Box display="inline" {...props}>
-//       <Button display="inline" onClick={onOpenModal}>
-//         {children || <Icon.UiEdit />}
-//       </Button>
-//       <Modal
-//         open={open}
-//         onClose={onCloseModal}
-//         center
-//         styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-//       >
-//         <Form
-//           uiSchema={uiSchema}
-//           // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { code: { type: ... Remove this comment to see the full error message
-//           schema={schema}
-//           formData={formData}
-//           onChange={(data) => setFormData(data.formData)}
-//         >
-//           <Button
-//             isLoading={loading}
-//             disabled={loading}
-//             onClick={async () => {
-//               setLoading(true);
-
-//               // @ts-expect-error TS(2339) FIXME: Property 'enablesUber' does not exist on type '{}'... Remove this comment to see the full error message
-//               const { enablesUber, enablesLaptops, ...baseData } = formDataToUpdateInput(formData);
-//               try {
-//                 // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//                 await fetch(UpdatePromoCodeMutation, {
-//                   where: { id: promocode.id },
-//                   data: baseData,
-//                 });
-//                 if (typeof enablesUber !== 'undefined') {
-//                   // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//                   await fetch(SetPromoCodeMetatataMutation, {
-//                     id: promocode.id,
-//                     key: 'uber',
-//                     value: enablesUber.set ? 'true' : '',
-//                   });
-//                 }
-//                 if (typeof enablesLaptops !== 'undefined') {
-//                   // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//                   await fetch(SetPromoCodeMetatataMutation, {
-//                     id: promocode.id,
-//                     key: 'laptop',
-//                     value: enablesLaptops.set ? 'true' : '',
-//                   });
-//                 }
-//                 await router.replace(router.asPath);
-//                 success('Promo Code Updated');
-//                 onCloseModal();
-//               } catch (ex) {
-//                 console.error(ex);
-
-//                 // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//                 error(ex.toString());
-//               }
-//               setLoading(false);
-//             }}
-//           >
-//             Submit
-//           </Button>
-//         </Form>
-//       </Modal>
-//     </Box>
-//   );
-// }
-
-// export function DeletePromoCodeModal({ promocode, children, ...props }: any) {
-//   const [open, setOpen] = useState(false);
-//   const { data: session } = useSession();
-
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const onOpenModal = () => setOpen(true);
-//   const onCloseModal = () => setOpen(false);
-//   const router = useRouter();
-
-//   return (
-//     <Box display="inline" {...props}>
-//       <Button display="inline" onClick={onOpenModal}>
-//         {children || <Icon.UiTrash />}
-//       </Button>
-//       <Modal
-//         open={open}
-//         onClose={onCloseModal}
-//         center
-//         styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-//       >
-//         <Heading>Remove PromoCode</Heading>
-//         <Text>
-//           Are you sure you want to delete this Promo Code?
-//           <br />
-//           There's no turning back!
-//         </Text>
-//         <Button
-//           colorScheme="red"
-//           disabled={loading}
-//           isLoading={loading}
-//           onClick={async () => {
-//             setLoading(true);
-//             try {
-//               // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//               await fetch(DeletePromoCodeMutation, { where: { id: promocode.id } });
-//               await router.replace(router.asPath);
-//               success('Promo Code Deleted');
-//               onCloseModal();
-//             } catch (ex) {
-//               // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//               error(ex.toString());
-//             }
-//             setLoading(false);
-//           }}
-//         >
-//           <Icon.UiTrash />
-//           <b>Delete Promo Code</b>
-//         </Button>
-//         <Button onClick={onCloseModal}>
-//           <Icon.UiX />
-//           Cancel
-//         </Button>
-//       </Modal>
-//     </Box>
-//   );
-// }
-
-// export function CreateScholarshipCodeButton({ event, children, ...props }: any) {
-//   const { data: session } = useSession();
-
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const router = useRouter();
-
-//   return (
-//     <Button
-//       display="inline"
-//       isLoading={loading}
-//       disabled={loading}
-//       onClick={async () => {
-//         setLoading(true);
-//         try {
-//           // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//           const result = await fetch(CreatePromoCodeMutation, {
-//             data: {
-//               code: generatePromoCode(6),
-//               type: 'PERCENT',
-//               amount: 100,
-//               uses: 1,
-//               event: {
-//                 connect: {
-//                   id: event.id,
-//                 },
-//               },
-//             },
-//           });
-//           await router.push(`/events/${event.id}/promoCodes/${result.clear.createPromoCode.id}`);
-//           success('Promo Code Created');
-//         } catch (ex) {
-//           // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//           error(ex.toString());
-//         }
-//         setLoading(false);
-//       }}
-//     >
-//       Generate Scholarship Code
-//     </Button>
-//   );
-// }
-
-const CreatePromoCodeMutation = graphql(`
+const createPromoCodeMutation = graphql(`
   mutation CreatePromoCode($data: ClearPromoCodeCreateInput!) {
     clear {
       createPromoCode(data: $data) {
-        id
+        ...PromoCodeForm
       }
     }
   }
 `);
 
-export function CreatePromoCode() {
+const fields: BaseFieldsConfiguration<typeof createPromoCodeMutation> = {
+  code: {
+    _type: 'string',
+    required: true,
+  },
+  amount: {
+    _type: 'number',
+    required: true,
+    schema: {
+      multipleOf: 0.01,
+    },
+  },
+  type: {
+    _type: 'string',
+    schema: {
+      anyOf: [
+        {
+          enum: ['SUBTRACT'],
+          title: 'Subtract Fixed Value',
+        },
+        {
+          enum: ['PERCENT'],
+          title: 'Percent discount',
+        },
+      ],
+    },
+  },
+  uses: {
+    _type: 'number',
+    schema: {
+      multipleOf: 1,
+    },
+    uiSchema: {
+      'ui:help': 'Leave blank for infinite uses',
+    },
+  },
+};
+
+export type CreatePromoCodeProps = {
+  event: PropFor<ClearEvent>;
+} & Omit<CreateModalProps<typeof createPromoCodeMutation>, 'fields' | 'mutation'>;
+
+export function CreatePromoCode({ event, ...props }: CreatePromoCodeProps) {
   return (
     <CreateModal
-      mutation={CreatePromoCodeMutation}
+      {...props}
+      mutation={createPromoCodeMutation}
       fields={{
         data: {
-          amount: {
-            _type: 'number',
-            required: true,
-          },
-          code: {
-            _type: 'string',
-            required: true,
-          },
-          type: {
-            _type: 'string',
-            required: true,
+          ...fields,
+          event: {
+            _type: 'connect',
+            connect: {
+              id: event.id,
+            },
           },
         },
       }}
@@ -388,6 +134,120 @@ export function CreatePromoCode() {
   );
 }
 
-export const UpdatePromoCode = CreatePromoCode;
-export const DeletePromoCode = CreatePromoCode;
-export const CreateScholarshipCodeButton = CreatePromoCode;
+const updatePromoCodeMutation = graphql(`
+  mutation UpdatePromoCode($where: ClearPromoCodeWhereUniqueInput!, $data: ClearPromoCodeUpdateInput!) {
+    clear {
+      updatePromoCode(where: $where, data: $data) {
+        ...PromoCodeForm
+      }
+    }
+  }
+`);
+
+const updatePromoCodeQuery = graphql(`
+  query PromoCodeForUpdate($where: ClearPromoCodeWhereUniqueInput!) {
+    clear {
+      promoCode(where: $where) {
+        ...PromoCodeForm
+      }
+    }
+  }
+`);
+
+export type UpdatePromoCodeProps = {
+  promoCode: PropFor<ClearPromoCode>;
+} & Omit<UpdateModalProps<typeof updatePromoCodeMutation>, 'fields' | 'mutation'>;
+
+export function UpdatePromoCode({ promoCode: promoCodeData, ...props }: UpdatePromoCodeProps) {
+  const [{ data }] = useQuery({ query: updatePromoCodeQuery, variables: { where: { id: promoCodeData.id } } });
+  const promoCode = data?.clear?.promoCode;
+
+  if (!promoCode) {
+    return <Spinner />;
+  }
+
+  return (
+    <UpdateModal
+      {...props}
+      mutation={updatePromoCodeMutation}
+      fields={{
+        where: {
+          id: {
+            _type: 'string',
+            schema: {
+              default: promoCode.id,
+              writeOnly: true,
+            },
+            uiSchema: {
+              'ui:widget': 'hidden',
+            },
+          },
+        },
+        data: {
+          // @ts-ignore FIXME
+          ...injectUpdateFields(fields, promoCode),
+        },
+      }}
+    />
+  );
+}
+
+const deletePromoCodeMutation = graphql(`
+  mutation DeletePromoCode($where: ClearPromoCodeWhereUniqueInput!) {
+    clear {
+      deletePromoCode(where: $where) {
+        ...PromoCodeForm
+      }
+    }
+  }
+`);
+
+export type DeletePromoCodeProps = {
+  promoCode: PropFor<ClearPromoCode>;
+} & Omit<DeleteModalProps<typeof deletePromoCodeMutation>, 'where' | 'mutation'>;
+
+export function DeletePromoCode({ promoCode, ...props }: DeletePromoCodeProps) {
+  return <DeleteModal {...props} where={{ id: promoCode.id }} mutation={deletePromoCodeMutation} />;
+}
+
+export type CreateScholarshipCodeButtonProps = {
+  event: PropFor<ClearEvent>;
+} & ButtonProps;
+export function CreateScholarshipCodeButton({ event, ...props }: CreateScholarshipCodeButtonProps) {
+  const [createCodeResult, doCreateCode] = useMutation(createPromoCodeMutation);
+  const router = useRouter();
+  const { success, error } = useToasts();
+
+  return (
+    <Button
+      display="inline"
+      m={1}
+      isLoading={createCodeResult.fetching}
+      isDisabled={createCodeResult.fetching}
+      onClick={async () => {
+        const result = await doCreateCode({
+          data: {
+            code: generatePromoCode(6),
+            type: ClearDiscountType.PERCENT,
+            amount: 100,
+            uses: 1,
+            event: {
+              connect: {
+                id: event.id,
+              },
+            },
+          },
+        });
+        if (result.error) {
+          error(result.error.name, result.error.message);
+        } else {
+          success('Scholarship Code Created');
+          await router.push(`/events/${event.id}/promoCodes/${result.data?.clear?.createPromoCode.id}`);
+        }
+      }}
+      {...props}
+    >
+      Generate Scholarship Code
+    </Button>
+  );
+}

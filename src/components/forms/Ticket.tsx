@@ -1,7 +1,8 @@
 import { Spinner } from '@codeday/topo/Atom';
+import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { graphql } from 'generated/gql';
 import { ClearEvent, ClearTicket, ClearTicketType } from 'generated/gql/graphql';
-import { injectUpdateFields } from 'src/utils';
+import { BaseFieldsConfiguration, injectUpdateFields } from 'src/utils';
 import { useQuery } from 'urql';
 import { CreateModal, CreateModalProps, FieldsConfiguration } from '../CRUD/create';
 import { DeleteModal, DeleteModalProps } from '../CRUD/delete';
@@ -20,7 +21,8 @@ const createTicketMutation = graphql(`
   }
 `);
 
-const fields: Omit<FieldsConfiguration<typeof createTicketMutation>['data'], 'event'> = {
+// @ts-ignore FIXME
+const fields: BaseFieldsConfiguration<typeof createTicketMutation> = {
   firstName: {
     _type: 'string',
     required: true,

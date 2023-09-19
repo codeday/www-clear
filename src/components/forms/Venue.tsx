@@ -1,310 +1,109 @@
-// import React, { useState } from 'react';
-// import Form from '@rjsf/chakra-ui';
-// import { Box, Button, Heading, Text } from '@codeday/topo/Atom';
-// import { Modal } from 'react-responsive-modal';
-// import 'react-responsive-modal/styles.css';
-
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { Spinner } from '@codeday/topo/Atom';
 import { graphql } from 'generated/gql';
-import { ClearVenue } from 'generated/gql/graphql';
-import { client } from 'src/urqlclient';
-import { CreateModal } from '../CRUD/create';
-import { UpdateModal } from '../CRUD/update';
-// import * as Icon from '@codeday/topocons';
-// import { useToasts } from '@codeday/topo/utils';
-// import { useRouter } from 'next/router';
-// import { useSession } from 'next-auth/react';
+import { ClearEvent, ClearVenue } from 'generated/gql/graphql';
+import { BaseFieldsConfiguration, injectUpdateFields } from 'src/utils';
+import { useQuery } from 'urql';
+import { CreateModal, CreateModalProps } from '../CRUD/create';
+import { DeleteModal, DeleteModalProps } from '../CRUD/delete';
+import { UpdateModal, UpdateModalProps } from '../CRUD/update';
 
-// // @ts-expect-error TS(2307) FIXME: Cannot find module './Venue.gql' or its correspond... Remove this comment to see the full error message
-// import { useColorModeValue } from '@codeday/topo/Theme';
-// import { CreateVenueMutation, DeleteVenueMutation, UpdateVenueMutation } from './Venue.gql';
-// import { useFetcher } from '../../urqlclient';
-// import { InfoAlert } from '../Alert';
+const venueFormFragment = graphql(`
+  fragment VenueForm on ClearVenue {
+    id
+    name
+    capacity
+    addressLine1
+    addressLine2
+    addressLine3
+    city
+    state
+    stateAbbreviation
+    zipCode
+    country
+    countryAbbreviation
+    mapLink
+    contactName
+    contactEmail
+    contactPhone
+  }
+`);
 
-// const schema = {
-//   type: 'object',
-//   properties: {
-//     name: {
-//       type: 'string',
-//       title: 'Name',
-//     },
-//     capacity: {
-//       type: 'integer',
-//       title: 'Capacity',
-//     },
-//     addressLine1: {
-//       type: 'string',
-//       title: 'Address Line 1',
-//     },
-//     addressLine2: {
-//       type: 'string',
-//       title: 'Address Line 2',
-//     },
-//     addressLine3: {
-//       type: 'string',
-//       title: 'Address Line 3',
-//     },
-//     city: {
-//       type: 'string',
-//       title: 'City',
-//     },
-//     state: {
-//       type: 'string',
-//       title: 'State',
-//     },
-//     stateAbbreviation: {
-//       type: 'string',
-//       title: 'State Abbreviation',
-//     },
-//     zipCode: {
-//       type: 'string',
-//       title: 'ZIP code',
-//     },
-//     country: {
-//       type: 'string',
-//       title: 'Country',
-//     },
-//     countryAbbreviation: {
-//       type: 'string',
-//       title: 'Country Abbreviation',
-//     },
-//     mapLink: {
-//       type: 'string',
-//       title: 'Map link',
-//     },
-//     contactName: {
-//       type: 'string',
-//       title: 'Contact Name',
-//     },
-//     contactEmail: {
-//       type: 'string',
-//       title: 'Contact Email',
-//     },
-//     contactPhone: {
-//       type: 'string',
-//       title: 'Contact Phone',
-//     },
-//   },
-// };
-
-// export function CreateVenueModal({ event, children, ...props }: any) {
-//   const [open, setOpen] = useState(false);
-//   const [formData, setFormData] = useState();
-//   const { data: session } = useSession();
-
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const onOpenModal = () => setOpen(true);
-//   const onCloseModal = () => setOpen(false);
-//   const router = useRouter();
-
-//   return (
-//     <Box {...props}>
-//       <Button h={6} onClick={onOpenModal}>
-//         {children || (
-//           <>
-//             <Icon.UiAdd />
-//             Add Venue
-//           </>
-//         )}
-//       </Button>
-//       <Modal
-//         open={open}
-//         onClose={onCloseModal}
-//         center
-//         styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-//       >
-//         <Heading>Create Venue</Heading>
-//         <InfoAlert>You can leave anything you aren't sure of yet blank and edit later!</InfoAlert>
-//         <Form
-//           // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { type: ... Remove this comment to see the full error message
-//           schema={schema}
-//           formData={formData}
-//           onChange={(data) => setFormData(data.formData)}
-//         >
-//           <Button
-//             isLoading={loading}
-//             disabled={loading}
-//             onClick={async () => {
-//               setLoading(true);
-//               try {
-//                 // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//                 const venueResp = await fetch(CreateVenueMutation, {
-//                   data: {
-//                     // @ts-expect-error TS(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
-//                     ...formData,
-//                     events: {
-//                       connect: [{ id: event.id }],
-//                     },
-//                   },
-//                 });
-//                 await router.replace(router.asPath);
-//                 success('Venue Created');
-//                 onCloseModal();
-//               } catch (ex) {
-//                 // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//                 error(ex.toString());
-//               }
-//               setLoading(false);
-//             }}
-//           >
-//             Submit
-//           </Button>
-//         </Form>
-//       </Modal>
-//     </Box>
-//   );
-// }
-
-// export function UpdateVenueModal({ venue, children, ...props }: any) {
-//   const [open, setOpen] = useState(false);
-//   const [formData, setFormData] = useState(venue);
-//   const { data: session } = useSession();
-
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const onOpenModal = () => setOpen(true);
-//   const onCloseModal = () => setOpen(false);
-//   const router = useRouter();
-
-//   function formDataToUpdateInput(formData: any) {
-//     const ret = {};
-//     Object.keys(schema.properties).map((key) => {
-//       // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-//       if (formData[key] !== venue[key]) ret[key] = { set: formData[key] };
-//     });
-//     return ret;
-//   }
-
-//   return (
-//     <Box display="inline" {...props}>
-//       <Button h={6} display="inline" onClick={onOpenModal}>
-//         {children || <Icon.UiEdit />}
-//       </Button>
-//       <Modal
-//         open={open}
-//         onClose={onCloseModal}
-//         center
-//         styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-//       >
-//         <Form
-//           // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { type: ... Remove this comment to see the full error message
-//           schema={schema}
-//           formData={formData}
-//           onChange={(data) => setFormData(data.formData)}
-//         >
-//           <Button
-//             isLoading={loading}
-//             disabled={loading}
-//             onClick={async () => {
-//               setLoading(true);
-//               try {
-//                 // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//                 const venueResp = await fetch(UpdateVenueMutation, {
-//                   where: { id: venue.id },
-//                   data: formDataToUpdateInput(formData),
-//                 });
-//                 await router.replace(router.asPath);
-//                 success('Venue Updated');
-//                 onCloseModal();
-//               } catch (ex) {
-//                 // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//                 error(ex.toString());
-//               }
-//               setLoading(false);
-//             }}
-//           >
-//             Submit
-//           </Button>
-//         </Form>
-//       </Modal>
-//     </Box>
-//   );
-// }
-
-// export function DeleteVenueModal({ venue, children, ...props }: any) {
-//   const [open, setOpen] = useState(false);
-//   const { data: session } = useSession();
-
-//   // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-//   const fetch = useFetcher(session);
-//   const [loading, setLoading] = useState(false);
-//   const { success, error } = useToasts();
-//   const onOpenModal = () => setOpen(true);
-//   const onCloseModal = () => setOpen(false);
-//   const router = useRouter();
-
-//   return (
-//     <Box display="inline">
-//       <Button h={6} display="inline" onClick={onOpenModal}>
-//         {children || <Icon.UiTrash />}
-//       </Button>
-//       <Modal
-//         open={open}
-//         onClose={onCloseModal}
-//         center
-//         styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-//       >
-//         <Heading>Remove Venue</Heading>
-//         <Text>
-//           Are you sure you want to delete this venue?
-//           <br />
-//           There's no turning back!
-//         </Text>
-//         <Button
-//           colorScheme="red"
-//           disabled={loading}
-//           isLoading={loading}
-//           onClick={async () => {
-//             setLoading(true);
-//             try {
-//               // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-//               await fetch(DeleteVenueMutation, { where: { id: venue.id } });
-//               await router.replace(router.asPath);
-//               success('Venue Deleted');
-//               onCloseModal();
-//             } catch (ex) {
-//               // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-//               error(ex.toString());
-//             }
-//             setLoading(false);
-//           }}
-//         >
-//           <Icon.UiTrash />
-//           <b>Delete Venue</b>
-//         </Button>
-//         <Button onClick={onCloseModal}>
-//           <Icon.UiX />
-//           Cancel
-//         </Button>
-//       </Modal>
-//     </Box>
-//   );
-// }
-
-export const CreateVenueMutation = graphql(`
+export const createVenueMutation = graphql(`
   mutation CreateVenue($data: ClearVenueCreateInput!) {
     clear {
       createVenue(data: $data) {
-        id
+        ...VenueForm
       }
     }
   }
 `);
 
-export function CreateVenue({ ...props }) {
+const fields: BaseFieldsConfiguration<typeof createVenueMutation> = {
+  name: {
+    _type: 'string',
+    required: true,
+  },
+  capacity: {
+    _type: 'number',
+    required: true,
+  },
+  addressLine1: {
+    _type: 'string',
+  },
+  addressLine2: {
+    _type: 'string',
+  },
+  addressLine3: {
+    _type: 'string',
+  },
+  city: {
+    _type: 'string',
+  },
+  state: {
+    _type: 'string',
+  },
+  stateAbbreviation: {
+    _type: 'string',
+  },
+  zipCode: {
+    _type: 'string',
+  },
+  country: {
+    _type: 'string',
+  },
+  countryAbbreviation: {
+    _type: 'string',
+  },
+  mapLink: {
+    _type: 'string',
+  },
+  contactName: {
+    _type: 'string',
+  },
+  contactEmail: {
+    _type: 'string',
+  },
+  contactPhone: {
+    _type: 'string',
+  },
+};
+
+export type CreateVenueProps = {
+  event: PropFor<ClearEvent>;
+} & Omit<CreateModalProps<typeof createVenueMutation>, 'fields' | 'mutation'>;
+
+export function CreateVenue({ event, ...props }: CreateVenueProps) {
   return (
     <CreateModal
-      mutation={CreateVenueMutation}
+      mutation={createVenueMutation}
       fields={{
         data: {
-          name: {
-            _type: 'string',
-            required: true,
+          ...fields,
+          events: {
+            _type: 'connect',
+            connect: {
+              id: event.id,
+            },
           },
         },
       }}
@@ -313,11 +112,21 @@ export function CreateVenue({ ...props }) {
   );
 }
 
-const UpdateVenueMutation = graphql(`
+const updateVenueMutation = graphql(`
   mutation UpdateVenue($data: ClearVenueUpdateInput!, $where: ClearVenueWhereUniqueInput!) {
     clear {
       updateVenue(data: $data, where: $where) {
-        id
+        ...VenueForm
+      }
+    }
+  }
+`);
+
+const updateVenueQuery = graphql(`
+  query VenueForUpdate($where: ClearVenueWhereUniqueInput!) {
+    clear {
+      venue(where: $where) {
+        ...VenueForm
       }
     }
   }
@@ -325,21 +134,51 @@ const UpdateVenueMutation = graphql(`
 
 export type UpdateVenueProps = {
   venue: PropFor<ClearVenue>;
-};
+} & Omit<UpdateModalProps<typeof updateVenueMutation>, 'fields' | 'mutation'>;
 export function UpdateVenue({ venue: venueData, ...props }: UpdateVenueProps) {
+  const [{ data }] = useQuery({ query: updateVenueQuery, variables: { where: { id: venueData.id } } });
+  const venue = data?.clear?.venue;
+  if (!venue) return <Spinner />;
   return (
     <UpdateModal
-      mutation={UpdateVenueMutation}
+    {...props}
+      mutation={updateVenueMutation}
       fields={{
         where: {
           id: {
             _type: 'string',
-            // value: venueData.id,
+            schema: {
+              default: venue.id,
+              writeOnly: true,
+            },
+            uiSchema: {
+              'ui:widget': 'hidden',
+            },
           },
         },
-        data: {},
+        data: {
+          // @ts-ignore FIXME
+          ...injectUpdateFields(fields, venue),
+        },
       }}
     />
   );
 }
-export const DeleteVenue = CreateVenue;
+
+const deleteVenueMutation = graphql(`
+  mutation DeleteVenue($where: ClearVenueWhereUniqueInput!) {
+    clear {
+      deleteVenue(where: $where) {
+        ...VenueForm
+      }
+    }
+  }
+`);
+
+export type DeleteVenueProps = {
+  venue: PropFor<ClearVenue>;
+} & Omit<DeleteModalProps<typeof deleteVenueMutation>, 'where' | 'mutation'>;
+
+export function DeleteVenue({ venue, ...props }: DeleteVenueProps) {
+  return <DeleteModal { ...props } where={{ id: venue.id }} mutation={deleteVenueMutation} />;
+}

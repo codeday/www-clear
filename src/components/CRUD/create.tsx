@@ -4,7 +4,7 @@ import { UiAdd } from '@codeday/topocons';
 import { StrictRJSFSchema } from '@rjsf/utils';
 import { UiSchema } from '@rjsf/chakra-ui';
 import assert from 'assert';
-import { TypedDocumentNode, VariablesOf } from '@graphql-typed-document-node/core';
+import { ResultOf, TypedDocumentNode, VariablesOf } from '@graphql-typed-document-node/core';
 import { OperationDefinitionNode } from 'graphql';
 import { DateTime } from 'luxon';
 import { camelToTilte } from 'src/utils';
@@ -24,6 +24,8 @@ import {
   ClearNullableIntFieldUpdateOperationsInput,
   ClearNullableStringFieldUpdateOperationsInput,
   ClearStringFieldUpdateOperationsInput,
+  ClearWebhookType,
+  CreateTicketMutation,
   InputMaybe,
 } from 'generated/gql/graphql';
 import {
@@ -37,6 +39,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useToasts } from '@codeday/topo/utils';
+import { DocumentType, graphql } from 'generated/gql';
 import { CustomForm as Form } from './CustomForm/CustomForm';
 
 export type ClearFieldUpdateInput =
@@ -55,12 +58,12 @@ export type ClearFieldUpdateInput =
   | ClearEnumWebhookServiceFieldUpdateOperationsInput
   | ClearEventUpdatemanagersInput;
 
-type Connect = { connect?: {} | null | undefined };
-type Create = { connect?: {} | null | undefined };
-type CreateOrConnect = Create & Connect & { createOrConnect?: {} | null | undefined };
+export type Connect = { connect?: {} | null | undefined };
+export type Create = { create?: {} | null | undefined };
+export type CreateOrConnect = Create & Connect & { createOrConnect?: {} | null | undefined };
 
 export type FieldTypes =
-  | Boolean
+  | boolean
   | string
   | number
   | DateTime
@@ -76,7 +79,7 @@ type ScalarToTypeString<T> = T extends string
   ? 'number'
   : T extends DateTime
   ? 'date-time'
-  : T extends Boolean
+  : T extends boolean
   ? 'boolean'
   : null;
 
@@ -84,7 +87,7 @@ type IsConnect<T> = T extends Connect ? 'connect' : null;
 type IsCreate<T> = T extends Create ? 'create' : null;
 type IsCreateMany<T> = T extends { createMany?: {} | null | undefined } ? 'createMany' : null;
 type IsCreateOrConnect<T> = T extends CreateOrConnect ? 'createOrConnect' : null;
-type IsArray<T> = T extends { set: string[] } ? 'array' : null;
+type IsArray<T> = T extends { set?: string[] | null | undefined } ? 'array' : null;
 
 type IsUpdate<T> = T extends ClearFieldUpdateInput
   ? // eslint-disable-next-line no-use-before-define
@@ -92,7 +95,7 @@ type IsUpdate<T> = T extends ClearFieldUpdateInput
   : null;
 type IsSpecialType<T> = IsConnect<T> | IsCreate<T> | IsCreateOrConnect<T> | IsCreateMany<T> | IsArray<T> | IsUpdate<T>;
 
-type ConnectConfig<T> = { id: string } | Array<{ id: string; name: string }>;
+type ConnectConfig<T> = T extends Connect ? { id: string } | Array<{ id: string; name: string }> : never;
 
 type CreateConfig<T> = T extends { create: {} }
   ? {
@@ -108,9 +111,9 @@ type ArrayConfig<T> = T extends { set: Array<infer A extends FieldTypes> }
     FieldConfiguration<A>
   : never;
 
-export type FieldConfiguration<
-  T extends FieldTypes | InputMaybe<FieldTypes | undefined> = FieldTypes | InputMaybe<FieldTypes | undefined>,
-> =
+export type StringIfEnum<T> = T extends string ? string : T;
+
+export type FieldConfiguration<T = InputMaybe<FieldTypes | undefined>> =
   // T extends Array<infer A> ? { _type: 'array', items: FieldConfiguration<A> } :
   (T extends any | undefined ? { required?: boolean } : { required: true }) & {
     _type: NonNullable<IsSpecialType<T> | ScalarToTypeString<T>>;
@@ -120,12 +123,12 @@ export type FieldConfiguration<
     title?: string;
   } & (IsArray<T> extends null ? {} : { items?: ArrayConfig<T> }) & // & ( ScalarToTypeString<T> extends never ? { _type: IsSpecialType<T> } : { _type: ScalarToTypeString<T> } )
     (IsConnect<T> extends null ? {} : { connect?: ConnectConfig<T> }) &
-    (IsCreate<T> extends null ? {} : { create?: CreateConfig<T> }) &
-    (IsCreateMany<T> extends null ? {} : { createMany?: CreateManyConfig<T> }) &
+    // (IsCreate<T> extends null ? {} : { create?: CreateConfig<T> }) &
+    // (IsCreateMany<T> extends null ? {} : { createMany?: CreateManyConfig<T> }) &
     (IsUpdate<T> extends null
       ? {}
       : T extends ClearFieldUpdateInput
-      ? { update: true; schema: { default: T['set'] extends DateTime ? string : T['set'] } }
+      ? { update: true; schema: { default: T['set'] extends DateTime ? string : StringIfEnum<T['set']> } }
       : {});
 // & ( IsConnectOrCreate<T> extends never ? {} : { connectOrCreate?: ConnectOrCreateConfig<T> } )
 
@@ -133,7 +136,7 @@ export type FieldsConfiguration<T extends TypedDocumentNode<any, any>> = {
   [Variable in keyof VariablesOf<T>]: {
     [Field in keyof Omit<
       VariablesOf<T>[Variable],
-      Variable extends 'where' ? undefined : 'id' | 'metadata' | 'createdAt' | 'updatedAt'
+      Variable extends 'where' ? never : 'id' | 'metadata' | 'createdAt' | 'updatedAt'
     >]: FieldConfiguration<VariablesOf<T>[Variable][Field]>;
   };
 };
@@ -150,7 +153,7 @@ export type CreateModalProps<T extends TypedDocumentNode<any, any>> = {
   buttonProps?: ButtonProps;
   compact?: boolean;
   openButtonIcon?: React.ReactNode;
-  onSubmit?: (formData: FormData) => void;
+  onSubmit?: (res: ResultOf<T>) => void;
 } & BoxProps;
 
 function makeField(field: FieldConfiguration, title: string): { schema: StrictRJSFSchema; uiSchema: UiSchema } {
@@ -356,8 +359,8 @@ export function CreateModal<T extends TypedDocumentNode<any, any>>({
               onSubmit={async () => {
                 if (formData) {
                   setIsSubmitting(true);
-                  if (onSubmit) onSubmit(formData);
                   const res = await client.mutation(mutation, { ...formData });
+                  if (onSubmit) onSubmit(res);
                   setIsSubmitting(false);
                   if (res.error) {
                     error(res.error.name, res.error.message);

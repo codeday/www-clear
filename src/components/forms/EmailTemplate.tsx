@@ -1,343 +1,246 @@
-import React, { useState } from 'react';
-import Form from '@rjsf/chakra-ui';
-import { Box, Button, Heading, Text } from '@codeday/topo/Atom';
-import { Modal } from 'react-responsive-modal';
-import 'react-responsive-modal/styles.css';
+import { Spinner } from '@codeday/topo/Atom';
+import { graphql } from 'generated/gql';
+import { ClearEmailTemplate, ClearTicketType } from 'generated/gql/graphql';
+import { JSONSchema7Definition } from 'json-schema';
+import { BaseFieldsConfiguration, injectUpdateFields } from 'src/utils';
+import { useQuery } from 'urql';
+import { CreateModal, CreateModalProps, FieldsConfiguration } from '../CRUD/create';
+import { DeleteModal, DeleteModalProps } from '../CRUD/delete';
+import { UpdateModal, UpdateModalProps } from '../CRUD/update';
 
-// @ts-expect-error TS(7016) FIXME: Could not find a declaration file for module '@cod... Remove this comment to see the full error message
-import * as Icon from '@codeday/topocons';
-import { useSession } from 'next-auth/react';
-import { useToasts } from '@codeday/topo/utils';
-import { useRouter } from 'next/router';
-import { useColorModeValue } from '@codeday/topo/Theme';
-import { ticketTypeEnum } from './Ticket';
-import {
-  CreateEmailTemplateMutation,
-  DeleteEmailTemplateMutation,
-  UpdateEmailTemplateMutation,
-  // @ts-expect-error TS(2307) FIXME: Cannot find module './EmailTemplate.gql' or its co... Remove this comment to see the full error message
-} from './EmailTemplate.gql';
-import { useFetcher } from '../../urqlclient';
+const emailTemplateFormFragment = graphql(`
+  fragment EmailTemplateForm on ClearEmailTemplate {
+    id
+    name
+    automatic
+    fromName
+    fromEmail
+    replyTo
+    subject
+    template
+    sendText
+    textMsg
+    sendTo
+    when
+    whenFrom
+    sendLate
+    sendInWorkHours
+    sendAfterEvent
+    sendParent
+    marketing
+  }
+`);
 
-const schema = {
-  type: 'object',
-  properties: {
-    name: {
-      title: 'Name (internal)',
-      type: 'string',
-    },
-    automatic: {
-      title: 'Automatic?',
-      type: 'boolean',
+const createEmailTemplateMutation = graphql(`
+  mutation CreateEmailTemplate($data: ClearEmailTemplateCreateInput!) {
+    clear {
+      createEmailTemplate(data: $data) {
+        ...EmailTemplateForm
+      }
+    }
+  }
+`);
+
+const fields: BaseFieldsConfiguration<typeof createEmailTemplateMutation> = {
+  name: {
+    _type: 'string',
+    required: true,
+    title: 'Name (internal)',
+  },
+  automatic: {
+    _type: 'boolean',
+    schema: {
       default: false,
     },
-    fromName: {
-      title: 'From Name',
-      type: 'string',
+  },
+  fromName: {
+    _type: 'string',
+    required: true,
+    schema: {
       default: 'John Peter',
     },
-    fromEmail: {
-      title: 'From Email',
-      type: 'string',
+  },
+  fromEmail: {
+    _type: 'string',
+    required: true,
+    schema: {
       default: 'team@codeday.org',
     },
-    subject: {
-      title: 'Subject',
-      type: 'string',
+  },
+  subject: {
+    _type: 'string',
+    required: true,
+  },
+  template: {
+    _type: 'string',
+    title: 'Email Text',
+    required: true,
+    uiSchema: {
+      'ui:widget': 'textarea',
     },
-    template: {
-      title: 'Email Text',
-      type: 'string',
+  },
+  sendText: {
+    _type: 'boolean',
+    title: 'Send as SMS?',
+    uiSchema: {
+      'ui:help': "If we don't have a number on hand, an email will be sent instead.",
     },
-    sendText: {
-      title: 'Send as text?',
-      type: 'boolean',
-      default: false,
-    },
-    textMsg: {
-      title: 'Text message',
-      type: 'string',
-    },
-    sendTo: {
-      title: 'Send to',
-      type: 'string',
+  },
+  textMsg: {
+    _type: 'string',
+    title: 'SMS Contents',
+  },
+  sendTo: {
+    _type: 'string',
+    required: true,
+    schema: {
       default: 'STUDENT',
-      anyOf: ticketTypeEnum,
+      enum: Object.keys(ClearTicketType),
     },
-    when: {
-      type: 'string',
-      title: 'Time offset',
+  },
+  when: {
+    _type: 'string',
+    title: 'Time Offset',
+    required: true,
+    uiSchema: {
+      'ui:help': 'Ex. -3d for 3 days before Time Offset Source',
     },
-    whenFrom: {
-      type: 'string',
-      title: 'Time offset source',
+  },
+  whenFrom: {
+    _type: 'string',
+    title: 'Time Offset Source',
+    required: true,
+    schema: {
       default: 'REGISTER',
       anyOf: [
         {
-          type: 'string',
           title: 'Registration',
           enum: ['REGISTER'],
         },
         {
-          type: 'string',
-          title: 'Event Start',
+          title: 'EventStart',
           enum: ['EVENTSTART'],
         },
         {
-          type: 'string',
           title: 'Event End',
           enum: ['EVENTEND'],
         },
       ],
     },
-    sendLate: {
-      title: 'Send Late?',
-      type: 'boolean',
-      default: false,
-    },
-    sendInWorkHours: {
-      title: 'Wait to send until work hours?',
-      type: 'boolean',
-      default: false,
-    },
-    sendAfterEvent: {
-      title: 'Send after event?',
-      type: 'boolean',
-      default: false,
-    },
-    sendParent: {
-      title: 'Send to parents?',
-      type: 'boolean',
-      default: false,
-    },
-    marketing: {
-      title: 'Marketing email?',
-      type: 'boolean',
-      default: false,
-    },
-    // extraFilters: {
-    //     title: 'Extra filters (prisma `where`)',
-    //     type: 'string'
-    // }
-    // Dropped feature to save dev time, unimplemented on backend. Might add at some point
-  },
-  required: ['name', 'fromName', 'fromEmail', 'subject', 'sendTo', 'when', 'whenFrom', 'template'],
-};
-
-const uiSchema = {
-  template: {
-    'ui:widget': 'textarea',
-  },
-  when: {
-    'ui:help': 'Ex. -3d for 3 days before offset source time',
-  },
-  sendText: {
-    'ui:help': "If we don't have a number on hand, an email will be sent instead",
   },
   sendLate: {
-    'ui:help':
-      'Only applies if time source is event start - if true, retroactively sends emails if people register after email sent to others',
+    _type: 'boolean',
+    uiSchema: {
+      'ui:help':
+        'Only applies if time source is event start - if true, retroactively sends emails if people register after email sent to others.',
+    },
+  },
+  sendInWorkHours: {
+    _type: 'boolean',
+    title: 'Wait to send until work hours?',
   },
   sendAfterEvent: {
-    'ui:help': '**All** Email Templates without this option are barred from being sent if the event has ended',
+    _type: 'boolean',
+    uiSchema: {
+      'ui:help': '**All** Email Templates without this option are barred from being sent if the event has ended',
+    },
   },
   sendParent: {
-    'ui:help': 'If selected, this email will only be sent to parents - to send to both, create two Email Templates',
+    _type: 'boolean',
+    title: 'Send to guardian?',
+    uiSchema: {
+      'ui:help': 'If selected, this email will only be sent to guardians - to send to both, create two Email Templates',
+    },
+  },
+  marketing: {
+    _type: 'boolean',
   },
 };
 
-export function CreateEmailTemplateModal({ children, ...props }: any) {
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState(/* if you need to set default values, do so here */);
-  const { data: session } = useSession();
+type CreateEmailTemplateProps = Omit<CreateModalProps<typeof createEmailTemplateMutation>, 'fields' | 'mutation'>;
 
-  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-  const fetch = useFetcher(session);
-  const [loading, setLoading] = useState(false);
-  const { success, error } = useToasts();
-  const onOpenModal = () => setOpen(true);
-  const onCloseModal = () => setOpen(false);
-  const router = useRouter();
-
+export function CreateEmailTemplate({ ...props }: CreateEmailTemplateProps) {
   return (
-    <Box {...props}>
-      <Button onClick={onOpenModal}>
-        {children || (
-          <>
-            <Icon.UiAdd />
-            Add EmailTemplate
-          </>
-        )}
-      </Button>
-      <Modal
-        open={open}
-        onClose={onCloseModal}
-        center
-        styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-      >
-        <Heading>Create EmailTemplate</Heading>
-        <Form
-          uiSchema={uiSchema}
-          // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
-          schema={schema}
-          formData={formData}
-          onChange={(data) => setFormData(data.formData)}
-        >
-          <Button
-            isLoading={loading}
-            disabled={loading}
-            onClick={async () => {
-              setLoading(true);
-              try {
-                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-                await fetch(CreateEmailTemplateMutation, {
-                  data: formData,
-                  /* need to connect the new object
-                                    to a parent object? do so here */
-                });
-                await router.replace(router.asPath);
-                success('EmailTemplate Created');
-                onCloseModal();
-              } catch (ex) {
-                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-                error(ex.toString());
-              }
-              setLoading(false);
-            }}
-          >
-            Submit
-          </Button>
-        </Form>
-      </Modal>
-    </Box>
+    <CreateModal
+      {...props}
+      mutation={createEmailTemplateMutation}
+      fields={{
+        data: {
+          ...fields,
+        },
+      }}
+    />
   );
 }
 
-export function UpdateEmailTemplateModal({ emailtemplate, children, ...props }: any) {
-  const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState(emailtemplate);
-  const { data: session } = useSession();
-
-  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-  const fetch = useFetcher(session);
-  const [loading, setLoading] = useState(false);
-  const { success, error } = useToasts();
-  const onOpenModal = () => setOpen(true);
-  const onCloseModal = () => setOpen(false);
-  const router = useRouter();
-
-  function formDataToUpdateInput(formData: any) {
-    const ret = {};
-    Object.keys(schema.properties).map((key) => {
-      // @ts-expect-error TS(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-      if (formData[key] !== emailtemplate[key]) ret[key] = { set: formData[key] };
-    });
-    return ret;
+const updateEmailTemplateMutation = graphql(`
+  mutation UpdateEmailTemplate($where: ClearEmailTemplateWhereUniqueInput!, $data: ClearEmailTemplateUpdateInput!) {
+    clear {
+      updateEmailTemplate(data: $data, where: $where) {
+        ...EmailTemplateForm
+      }
+    }
   }
+`);
 
+const updateEmailTemplateQuery = graphql(`
+  query EmailTemplateForUpdate($where: ClearEmailTemplateWhereUniqueInput!) {
+    clear {
+      emailTemplate(where: $where) {
+        ...EmailTemplateForm
+      }
+    }
+  }
+`);
+
+export type UpdateEmailTemplateProps = {
+  emailTemplate: PropFor<ClearEmailTemplate>;
+} & Omit<UpdateModalProps<typeof updateEmailTemplateMutation>, 'fields' | 'mutation'>;
+
+export function UpdateEmailTemplate({ emailTemplate: emailTemplateData, ...props }: UpdateEmailTemplateProps) {
+  const [{ data }] = useQuery({ query: updateEmailTemplateQuery, variables: { where: { id: emailTemplateData.id } } });
+  const emailTemplate = data?.clear?.emailTemplate;
+  if (!emailTemplate) return <Spinner />;
   return (
-    <Box display="inline" {...props}>
-      <Button display="inline" onClick={onOpenModal}>
-        {children || <Icon.UiEdit />}
-      </Button>
-      <Modal
-        open={open}
-        onClose={onCloseModal}
-        center
-        styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-      >
-        <Form
-          uiSchema={uiSchema}
-          // @ts-expect-error TS(2322) FIXME: Type '{ type: string; properties: { name: { title:... Remove this comment to see the full error message
-          schema={schema}
-          formData={formData}
-          onChange={(data) => setFormData(data.formData)}
-        >
-          <Button
-            isLoading={loading}
-            disabled={loading}
-            onClick={async () => {
-              setLoading(true);
-              try {
-                // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-                await fetch(UpdateEmailTemplateMutation, {
-                  where: { id: emailtemplate.id },
-                  data: formDataToUpdateInput(formData),
-                });
-                await router.replace(router.asPath);
-                success('EmailTemplate Updated');
-                onCloseModal();
-              } catch (ex) {
-                // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-                error(ex.toString());
-              }
-              setLoading(false);
-            }}
-          >
-            Submit
-          </Button>
-        </Form>
-      </Modal>
-    </Box>
+    <UpdateModal
+      {...props}
+      mutation={updateEmailTemplateMutation}
+      fields={{
+        where: {
+          id: {
+            _type: 'string',
+            schema: {
+              default: emailTemplate.id,
+              writeOnly: true,
+            },
+            uiSchema: {
+              'ui:widget': 'hidden',
+            },
+          },
+        },
+        data: {
+          // @ts-expect-error
+          ...injectUpdateFields(fields, emailTemplate),
+        },
+      }}
+    />
   );
 }
 
-export function DeleteEmailTemplateModal({ emailtemplate, children, ...props }: any) {
-  const [open, setOpen] = useState(false);
-  const { data: session } = useSession();
+const deleteEmailTemplateMutation = graphql(`
+  mutation DeleteEmailTemplate($where: ClearEmailTemplateWhereUniqueInput!) {
+    clear {
+      deleteEmailTemplate(where: $where) {
+        ...EmailTemplateForm
+      }
+    }
+  }
+`);
 
-  // @ts-expect-error TS(2554) FIXME: Expected 2 arguments, but got 1.
-  const fetch = useFetcher(session);
-  const [loading, setLoading] = useState(false);
-  const { success, error } = useToasts();
-  const onOpenModal = () => setOpen(true);
-  const onCloseModal = () => setOpen(false);
-  const router = useRouter();
+export type DeleteEmailTemplateProps = {
+  emailTemplate: PropFor<ClearEmailTemplate>;
+} & Omit<DeleteModalProps<typeof deleteEmailTemplateMutation>, 'where' | 'mutation'>;
 
-  return (
-    <Box display="inline" {...props}>
-      <Button display="inline" onClick={onOpenModal}>
-        {children || <Icon.UiTrash />}
-      </Button>
-      <Modal
-        open={open}
-        onClose={onCloseModal}
-        center
-        styles={{ modal: { background: useColorModeValue('white', 'var(--chakra-colors-gray-1100)') } }}
-      >
-        <Heading>Remove EmailTemplate</Heading>
-        <Text>
-          Are you sure you want to delete this EmailTemplate?
-          <br />
-          There's no turning back!
-        </Text>
-        <Button
-          colorScheme="red"
-          disabled={loading}
-          isLoading={loading}
-          onClick={async () => {
-            setLoading(true);
-            try {
-              // @ts-expect-error TS(2554) FIXME: Expected 3 arguments, but got 2.
-              await fetch(DeleteEmailTemplateMutation, { where: { id: emailtemplate.id } });
-              await router.replace(router.asPath);
-              success('EmailTemplate Deleted');
-              onCloseModal();
-            } catch (ex) {
-              // @ts-expect-error TS(2571) FIXME: Object is of type 'unknown'.
-              error(ex.toString());
-            }
-            setLoading(false);
-          }}
-        >
-          <Icon.UiTrash />
-          <b>Delete EmailTemplate</b>
-        </Button>
-        <Button onClick={onCloseModal}>
-          <Icon.UiX />
-          Cancel
-        </Button>
-      </Modal>
-    </Box>
-  );
-}
+export function DeleteEmailTemplate({ emailTemplate, ...props }: DeleteEmailTemplateProps) {
+  return <DeleteModal {...props} mutation={deleteEmailTemplateMutation} where={{ id: emailTemplate.id }} />;
+};
