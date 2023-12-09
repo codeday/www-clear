@@ -1,13 +1,15 @@
 import React from "react";
 import Page from "../../../components/Page";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import {Heading, Text} from "@codeday/topo/Atom"
+import {Heading, Link, Text} from "@codeday/topo/Atom"
 import {getSession} from "next-auth/react";
 import {getFetcher} from "../../../fetch";
 import {UiInfo} from "@codeday/topocons/Icon"
 import EditSpecificMetadata from "../../../components/forms/EditSpecificMetadata";
 import { SetEventMetadataMutation } from "../../../components/forms/EditSpecificMetadata.gql"
 import { getEventAdvancedConfigQuery } from "./advancedConfig.gql"
+import DocsCallout from '../../../components/DocsCallout';
+
 export default function AdvancedConfig({event}) {
     if (!event) return <Page />
     return (
@@ -91,6 +93,31 @@ export default function AdvancedConfig({event}) {
                 description="Sponsor trademark notice or other required legal text."
                 metadataKey="legal"
                 value={event.legal}
+                setMutation={SetEventMetadataMutation}
+                updateId={event.id}
+            />
+            <EditSpecificMetadata
+                displayKeyAs="Disable theme"
+                description="Do not show a theme on event.codeday.org or present.codeday.org"
+                metadataKey="theme.disable"
+                value={event.disableTheme}
+                setMutation={SetEventMetadataMutation}
+                updateId={event.id}
+            />
+            <DocsCallout>Read <Link color="brand" to="https://www.notion.so/codeday/Setting-a-custom-theme-87d8785497f3451aab32a395338ee467">this</Link> before setting a custom theme or it <b>will not work.</b></DocsCallout>
+            <EditSpecificMetadata
+                displayKeyAs="Custom theme text"
+                description="Override the theme from Contentful"
+                metadataKey="theme.custom.text"
+                value={event.customTheme}
+                setMutation={SetEventMetadataMutation}
+                updateId={event.id}
+            />
+            <EditSpecificMetadata
+                displayKeyAs="Custom theme backgrounds"
+                description=""
+                metadataKey="theme.custom.backgrounds"
+                value={event.customThemeBackgrounds}
                 setMutation={SetEventMetadataMutation}
                 updateId={event.id}
             />
