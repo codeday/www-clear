@@ -80,6 +80,8 @@ export default function Tickets({ event }) {
     "waiverSigned",
     "waiverUrl",
     "organization",
+    "checkedIn",
+    "checkedOut",
     ...surveyHeaders,
   ];
   const csv = (data?.clear?.event?.tickets || [])
@@ -100,6 +102,8 @@ export default function Tickets({ event }) {
         t.waiverSigned ? 'signed' : 'not signed',
         t.waiverUrl,
         t.organization || "",
+        t.checkedIn || "",
+        t.checkedOut || "",
         ...surveyHeaders.map((h) => t.surveyResponses?.[h] || '').map((s) => s.replace(/,/g, ';')),
       ].join(",")
     )

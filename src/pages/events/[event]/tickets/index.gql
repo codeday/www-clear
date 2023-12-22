@@ -21,6 +21,8 @@ query getTickets($data: ClearEventWhereUniqueInput!) {
                 email
                 phone
                 type
+                checkedIn
+                checkedOut
                 guardian {
                     firstName
                     lastName
