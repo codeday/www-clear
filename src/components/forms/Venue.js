@@ -63,6 +63,14 @@ const schema = {
             type: 'string',
             title: 'Map link',
         },
+        wifiSsid: {
+            type: 'string',
+            title: 'Wifi SSID',
+        },
+        wifiPassword: {
+            type: 'string',
+            title: 'Wifi Password',
+        },
         contactName: {
             type: 'string',
             title: 'Contact Name',
