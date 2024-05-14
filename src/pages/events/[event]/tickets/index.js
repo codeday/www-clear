@@ -27,6 +27,7 @@ import { CSVLink } from "react-csv";
 import { UiDownload, Camera } from "@codeday/topocons/Icon";
 import { useRouter } from "next/router";
 import { Icon } from "@chakra-ui/react";
+import TicketSurveyBreakdown from "../../../../components/TicketSurveyBreakdown";
 
 function sortFn(sort, tickets) {
   switch (sort) {
@@ -163,9 +164,9 @@ export default function Tickets({ event }) {
               .filter((ticket) => ticket.type == "STUDENT")
               .reduce((partialSum, ticket) => partialSum + ticket.age, 0) /
               (data?.clear?.event?.tickets.filter((ticket) => ticket.type == "STUDENT") || [])
-                .length) *
+              .length) *
               10
-          ) / 10}
+            ) / 10}
         </Text>
         <Text>Total Tickets:&nbsp;{tickets.length}</Text>
         <Text>
@@ -177,6 +178,7 @@ export default function Tickets({ event }) {
           {tickets.filter((ticket) => ticket.type != "STUDENT").length}
         </Text>
       </HStack>
+      <TicketSurveyBreakdown tickets={tickets || []} />
       <Grid
         templateColumns={{
           base: "1fr",
@@ -184,6 +186,7 @@ export default function Tickets({ event }) {
           lg: "repeat(3, 1fr)",
         }}
       >
+        {/* TODO: figure out css to make the vertical spacing look less bad with mismatched Ticket heights  */}
         {tickets.map((ticket) => (
           <Ticket id={ticket.id} ticket={ticket} />
         ))}

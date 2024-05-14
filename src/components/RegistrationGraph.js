@@ -13,7 +13,6 @@ export default function RegistrationGraph({ event, children, ...props }) {
     const graphStart = now.clone().subtract(DAYS, 'days');
     const data = [];
     const ticketsWithDate = event.tickets.map((e) => ({ ...e, createdAt: moment(e.createdAt) }));
-
     for (let current = graphStart.clone(); current < now; current = current.add({ day: 1 })) {
       data.push({
         x: -1 * Math.floor(now.diff(current, 'days')),

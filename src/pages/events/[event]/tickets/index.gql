@@ -1,4 +1,5 @@
 #import "../../../../components/Ticket.gql"
+#import "../../../../components/TicketSurveyBreakdown.gql"
 query getEvent($data: ClearEventWhereUniqueInput!) {
     clear {
         event(where: $data) {
@@ -13,6 +14,7 @@ query getTickets($data: ClearEventWhereUniqueInput!) {
         event(where: $data) {
             tickets(orderBy:[{lastName:asc}]) {
                 ...Ticket
+                ...TicketSurveyBreakdown
                 id
                 createdAt
                 firstName

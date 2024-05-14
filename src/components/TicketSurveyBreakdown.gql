@@ -1,0 +1,6 @@
+fragment TicketSurveyBreakdown on ClearTicket {
+    id
+    age
+    surveyResponses
+    type
+}

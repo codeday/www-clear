@@ -5,7 +5,7 @@ import {Box, Button, Text} from "@codeday/topo/Atom";
 import {useToasts} from '@codeday/topo/utils';
 import {checkin, checkout, sendWaiverReminder} from './Ticket.gql';
 import Badge from "./Badge";
-import Alert, {GoodAlert} from "./Alert";
+import Alert, {GoodAlert, InfoAlert} from "./Alert";
 import {useFetcher} from '../fetch';
 import InfoBox from "./InfoBox";
 import * as Icon from "@codeday/topocons/Icon";
@@ -92,6 +92,10 @@ export default function Ticket({ticket, eventId, ...props}) {
                     <br />
                 </Box>
             )}
+            {(ticket.surveyResponses?.dietary || 'none') !== 'none' && <InfoAlert fontSize="sm">Dietary restrictions: {ticket.surveyResponses.dietary}</InfoAlert>}
+            {ticket.surveyResponses?.laptop == 'yes' && <InfoAlert fontSize="sm">Requested laptop</InfoAlert>}
+            {(ticket.event.overnightMinAge && ticket.age < ticket.event.overnightMinAge) && <InfoAlert>Can't stay overnight</InfoAlert>}
+            <br />
             {session && (
               <Button
                   isLoading={loading}

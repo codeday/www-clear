@@ -13,11 +13,13 @@ fragment Ticket on ClearTicket {
     checkedIn
     checkedOut
     vaccineVerified: getMetadata(key: "vaccineVerified")
+    surveyResponses
     promoCode {
       code
     }
     event {
       id
+      overnightMinAge
     }
 }
 
