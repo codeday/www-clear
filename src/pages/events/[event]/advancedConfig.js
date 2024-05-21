@@ -104,7 +104,7 @@ export default function AdvancedConfig({event}) {
                 setMutation={SetEventMetadataMutation}
                 updateId={event.id}
             />
-            <DocsCallout>Read <Link color="brand" to="https://www.notion.so/codeday/Setting-a-custom-theme-87d8785497f3451aab32a395338ee467">this</Link> before setting a custom theme or it <b>will not work.</b></DocsCallout>
+            <DocsCallout>Read <Link color="brand" href="https://www.notion.so/codeday/Setting-a-custom-theme-87d8785497f3451aab32a395338ee467">this</Link> before setting a custom theme or it <b>will not work.</b></DocsCallout>
             <EditSpecificMetadata
                 displayKeyAs="Custom theme text"
                 description="Override the theme from Contentful"
