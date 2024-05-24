@@ -100,6 +100,8 @@ export default function Event({event}) {
                         }
                     />
                     <InfoBox heading="Actions">
+                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://shop.codeday.org/collections/event-supplies?ls=qmhpQke26HVHE0eW6f0Qp`}>Order Supplies</Button>
+                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://shop.codeday.org/products/id-badge?ls=_tm1AmIIlRfi1ZblDQWFu`}>Order ID Badge</Button>
                       <Button w="100%" mb={2} as="a" href={`${event.id}/tickets/scan`}>Check-In/Out</Button>
                       <Button w="100%" mb={2} as="a" href={`${event.id}/notification`}>Send Notification</Button>
                       <Button w="100%" mb={2} as="a" href={`${event.id}/advancedConfig`}>Edit Advanced Config</Button>
