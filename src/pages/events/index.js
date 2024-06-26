@@ -121,6 +121,7 @@ export async function getServerSideProps({req, res, query}) {
   const session = await getSession({req});
   const fetch = getFetcher(session);
   if (!session) return {props: {}};
+  if(!session.clearAuthToken) return {redirect: { destination:'/unauthorized', permanent:false }}
   const eventResults = await fetch(
     getEvents,
     session.isAdmin ? null : { where: [{ managers: { hasSome: [session.user.nickname] } }] }

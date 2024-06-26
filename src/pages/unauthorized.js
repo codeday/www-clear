@@ -13,7 +13,6 @@ export default function Unauthorized() {
                 <Text>I'm sorry, but I'm not allowed to let you in here.
                 <br/>
                 If you feel this is in error, please ask your CodeDay point of contact.</Text>
-                <Link href="/">Go home</Link>
             </Box>
         </Page>
     );
