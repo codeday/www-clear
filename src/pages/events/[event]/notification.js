@@ -7,6 +7,8 @@ import {getSession} from "next-auth/react";
 import {SendNotification, getEventQuery} from "./notification.gql"
 import {useFetcher, getFetcher} from "../../../fetch";
 
+const MAX_SMS_LENGTH = 280
+
 export default function Notification({event}) {
     const fetch = useFetcher();
     const [emailSubject, setEmailSubject] = useState('');
@@ -36,14 +38,15 @@ export default function Notification({event}) {
               mb={2}
             />
             <Textarea
-              placeholder="SMS/WhatsApp Body"
+              placeholder={`SMS/WhatsApp Body (Max ${MAX_SMS_LENGTH} char})`}
               value={smsBody}
               onChange={(e) => setSmsBody(e.target.value)}
               mb={2}
+              isInvalid={smsBody.length > MAX_SMS_LENGTH}
             />
             <Button
               isLoading={isLoading}
-              disabled={!(smsBody || (emailBody && emailSubject))}
+              disabled={smsBody.length <= MAX_SMS_LENGTH || !(smsBody || (emailBody && emailSubject))}
               onClick={async () => {
                 success(`Notification sent.`);
                 setIsLoading(true);
