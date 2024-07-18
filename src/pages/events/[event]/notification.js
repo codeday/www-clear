@@ -46,7 +46,7 @@ export default function Notification({event}) {
             />
             <Button
               isLoading={isLoading}
-              disabled={smsBody.length <= MAX_SMS_LENGTH || !(smsBody || (emailBody && emailSubject))}
+              disabled={smsBody.length <= MAX_SMS_LENGTH && !(smsBody || (emailBody && emailSubject))}
               onClick={async () => {
                 success(`Notification sent.`);
                 setIsLoading(true);
