@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import Page from "../../../components/Page";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { useToasts } from "@codeday/topo/utils";
-import {Heading, Text, TextInput, Textarea, Checkbox, Button} from "@codeday/topo/Atom";
+import {Heading, Text, TextInput, Textarea, Checkbox, Button, FormErrorMessage} from "@codeday/topo/Atom";
 import {getSession} from "next-auth/react";
 import {SendNotification, getEventQuery} from "./notification.gql"
 import {useFetcher, getFetcher} from "../../../fetch";
+import Alert from "../../../components/Alert";
 
 const MAX_SMS_LENGTH = 280
 
@@ -38,15 +39,16 @@ export default function Notification({event}) {
               mb={2}
             />
             <Textarea
-              placeholder={`SMS/WhatsApp Body (Max ${MAX_SMS_LENGTH} char})`}
+              placeholder={`SMS/WhatsApp Body (Max ${MAX_SMS_LENGTH} char)`}
               value={smsBody}
               onChange={(e) => setSmsBody(e.target.value)}
               mb={2}
               isInvalid={smsBody.length > MAX_SMS_LENGTH}
             />
+            { smsBody.length > MAX_SMS_LENGTH ? <Alert>SMS/WhatsApp Body must be {MAX_SMS_LENGTH} characters or less</Alert> : <></>}
             <Button
               isLoading={isLoading}
-              disabled={smsBody.length <= MAX_SMS_LENGTH && !(smsBody || (emailBody && emailSubject))}
+              isDisabled={(smsBody.length >= MAX_SMS_LENGTH) || !(smsBody || (emailBody && emailSubject))}
               onClick={async () => {
                 success(`Notification sent.`);
                 setIsLoading(true);
@@ -65,7 +67,7 @@ export default function Notification({event}) {
                 setIsLoading(false);
               }}
             >
-              Send
+              Send {smsBody.length}
             </Button>
             <Checkbox ml={2} mt={2} checked={guardian} onChange={(e) => setGuardian(e.target.checked)}>Send to guardian instead.</Checkbox>
         </Page>
