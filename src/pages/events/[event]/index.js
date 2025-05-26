@@ -106,8 +106,8 @@ export default function Event({event}) {
                       <Button w="100%" mb={2} as="a" href={`${event.id}/notification`}>Send Notification</Button>
                       <Button w="100%" mb={2} as="a" href={`${event.id}/advancedConfig`}>Edit Advanced Config</Button>
                       <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/projects/all/event=${event.id}`}>View Projects</Button>
-                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/upload-photos`}>Upload Photos</Button>
-                    </InfoBox>
+                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/vote/${event.id}/results`}>View Peer Judging Results</Button>
+                      <Button w="100%" mb={2} as="a" target="_blank" href={`https://showcase.codeday.org/upload-photos`}>Upload Photos</Button>                    </InfoBox>
                     <MetadataBox metadata={event.metadata}>
                       <Link href={`${event.id}/advancedConfig`}>Set metadata (advanced)</Link>
                     </MetadataBox>
