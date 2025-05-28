@@ -175,7 +175,8 @@ export default function Tickets({ event }) {
         </Text>
         <Text>
           Staff:&nbsp;
-          {tickets.filter((ticket) => ticket.type != "STUDENT").length}
+          {tickets.filter((ticket) => ticket.type != "STUDENT").length}{" "}
+          ({tickets.filter((ticket) => ticket.type != "STUDENT" && ticket.checkedIn && !ticket.checkedOut).length} here)
         </Text>
       </HStack>
       <TicketSurveyBreakdown tickets={tickets || []} />
