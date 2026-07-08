@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Heading} from "@codeday/topo/Atom";
+import {Grid, Heading} from "@codeday/topo/Atom";
 import {getSession} from 'next-auth/react';
 import EventGroup from '../../components/EventGroup';
 import {getEventGroups} from './index.gql';
@@ -15,11 +15,11 @@ export default function Groups({groups}) {
                 Event Groups
                 <CreateEventGroupModal />
             </Heading>
-            <Box display="flex">
-                {groups.map((group) => (
-                    <EventGroup m={4} group={group}/>
+            <Grid templateColumns={{base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)'}} gap={4}>
+                {groups.sort((a, b) => new Date(b.startDate) - new Date(a.startDate)).map((group) => (
+                    <EventGroup key={group.id} group={group}/>
                 ))}
-            </Box>
+            </Grid>
         </Page>
 
     );
